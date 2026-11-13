@@ -30,6 +30,17 @@ Only the public anon key belongs in the browser. Never put a Supabase service ro
 | `npm run build`| Production build |
 | `npm run preview` | Preview production build |
 
+## Testing, debugging, and performance
+
+The project currently has no automated test script. Use these approaches when checking changes:
+
+- **Black-box testing** — verify behavior through the app without relying on its implementation details. For example, open a template, edit and save a design, export it, create a share link, submit a booking request, and check the relevant screens with signed-in, admin, and guest accounts.
+- **White-box testing** — inspect implementation paths and data rules. Review state updates in `src/context/AppContext.jsx`, booking operations in `src/lib/bookingRequests.js`, share behavior, and the row-level security policies in `supabase/schema.sql`. Add focused unit or integration tests when introducing a test framework.
+- **Debugging** — use the browser developer console for React/runtime errors, the Network panel for failed requests and slow responses, and the terminal running Vite for development/build errors. Check Supabase responses and auth state when cloud operations fail.
+- **Performance testing** — run Lighthouse or Chrome DevTools Performance on key routes. Check initial load, template and image rendering, canvas editing responsiveness, and PNG export time. Repeat measurements on representative desktop and mobile viewports and compare before/after changes.
+
+These are recommended QA techniques; no black-box, white-box, or performance test results are claimed by this README.
+
 ## Features
 
 - **Design Studio** — layered canvas with flowers, backdrops, furniture, lighting, fabrics, and props; drag / resize / rotate; undo / redo; themes; venue floor-plan mode; PNG / JSON export
@@ -56,6 +67,10 @@ src/
 ```
 
 Without Supabase credentials, sign-in and cloud persistence are unavailable; the optional offline workspace is temporary. User workspace records and guest shares are stored in Supabase; the Supabase client separately manages the auth session in the browser.
+
+## System diagrams
+
+See [`docs/diagrams.md`](docs/diagrams.md) for the architecture, domain class model, use cases, behavior flows, and development lifecycle diagrams.
 
 ## Tech
 
