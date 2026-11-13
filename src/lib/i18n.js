@@ -1,6 +1,6 @@
 const dict = {
     en: {
-        brand: 'Decorly',
+        brand: 'Vedika',
         tagline: 'Event Decorations Design Studio',
         overview: 'Overview',
         templates: 'Explore Templates',

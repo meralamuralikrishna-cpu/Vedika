@@ -46,7 +46,7 @@ export function Auth() {
     try {
       const result = mode === 'login' ? await signIn(email, password) : await signUp(email, password, name);
       if (result.error) setError(getAuthErrorMessage(result.error));
-      else if (mode === 'signup' && !result.session) setMessage('Account created. Confirm your email, then return here and sign in. If confirmation opens Decorly automatically, you are already signed in.');
+      else if (mode === 'signup' && !result.session) setMessage('Account created. Confirm your email, then return here and sign in. If confirmation opens Vedika automatically, you are already signed in.');
     } catch (err) {
       setError(getAuthErrorMessage(err));
     } finally { setBusy(false); }

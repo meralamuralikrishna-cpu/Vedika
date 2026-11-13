@@ -218,7 +218,7 @@ export function DesignStudio() {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${designName.replace(/\s+/g, '-').toLowerCase() || 'decorly-design'}.json`;
+        a.download = `${designName.replace(/\s+/g, '-').toLowerCase() || 'vedika-design'}.json`;
         a.click();
         URL.revokeObjectURL(url);
         toast('Exported design JSON', 'success');
@@ -233,7 +233,7 @@ export function DesignStudio() {
             await nextPaint();
             if (!canvasRef.current)
                 throw new Error('Canvas unmounted');
-            const filename = `${designName.replace(/\s+/g, '-').toLowerCase() || 'decorly-design'}.png`;
+            const filename = `${designName.replace(/\s+/g, '-').toLowerCase() || 'vedika-design'}.png`;
             await exportNodeAsPng(canvasRef.current, filename);
             toast('Downloaded PNG — ready to share on WhatsApp', 'success');
         }

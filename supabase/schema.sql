@@ -1,5 +1,5 @@
 -- Run this in the Supabase SQL Editor.
--- Decorly saves one private JSON workspace per account. Booking requests use
+-- Vedika saves one private JSON workspace per account. Booking requests use
 -- the shared booking_requests table below so admins can review them across users.
 create table if not exists public.user_data (
   user_id uuid primary key references auth.users(id) on delete cascade,
@@ -44,7 +44,7 @@ create policy "Users can update their own data" on public.user_data
   with check ((select auth.uid()) = user_id);
 
 comment on table public.user_data is
-  'Private Decorly workspace data, stored as one JSON document per authenticated user.';
+  'Private Vedika workspace data, stored as one JSON document per authenticated user.';
 comment on column public.user_data.payload is
   'JSON object containing designs, moodboards, profile, favorites, locale, notifications, and active design.';
 

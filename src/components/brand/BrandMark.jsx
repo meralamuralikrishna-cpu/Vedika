@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-/** Signature floral arch — Decorly's visual motif */
+/** Signature floral arch — Vedika's visual motif */
 export function BrandMark({ className, tone = 'ink', animated = false }) {
     const stroke = tone === 'soft' ? '#D2A6A2' : tone === 'light' ? '#F0F4F1' : '#10241E';
     const fill = tone === 'soft' ? 'rgba(181,107,110,0.35)' : tone === 'light' ? 'rgba(240,244,241,0.12)' : 'rgba(210,166,162,0.35)';

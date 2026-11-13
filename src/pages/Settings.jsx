@@ -36,7 +36,7 @@ export function Settings() {
         Settings
       </h1>
       <p className="text-sm text-charcoal/60 mb-8">
-        Your profile and planning data are saved with your Decorly account when Supabase is connected.
+        Your profile and planning data are saved with your Vedika account when Supabase is connected.
       </p>
 
       <form onSubmit={onSave} className="space-y-6">

@@ -1,0 +1,321 @@
+VEDIKA PROJECT OVERVIEW
+========================
+
+ABOUT THIS DOCUMENT
+-------------------
+This document describes the Vedika codebase as it exists in the repository. It is a text-only guide for developers and project reviewers. It is not a user manual or a statement that every screen is connected to a live service.
+
+PROJECT SUMMARY
+---------------
+Vedika is a browser-based event decoration design workspace. It is built for planning visual concepts for weddings, celebrations, and other events. Users can compose a decoration scene from reusable visual elements, start from editable layouts, manage design and moodboard records, and optionally collaborate through guest share links. The app also includes booking request screens and an admin review flow.
+
+The interface is branded around event styling and uses a responsive application shell, a sidebar/header, reusable UI components, and an illustrated design canvas. Its interface supports English and Telugu. The project is a front-end single-page application; Supabase is an optional backend for authentication and persistence.
+
+TECHNOLOGY
+----------
+- React 19 and React DOM for the UI.
+- JavaScript ES modules with JSX.
+- Vite 7 for development and production bundling.
+- Tailwind CSS 4 through the Vite integration, plus project CSS.
+- React Router for client-side navigation.
+- Supabase JavaScript client for optional authentication and database access.
+- lucide-react for icons, clsx for class composition, uuid for identifiers, and html-to-image for PNG canvas export.
+- Vercel rewrite configuration routes browser paths back to the single-page app entry point.
+
+RUNNING LOCALLY
+---------------
+Requirements: a compatible Node.js/npm installation.
+
+1. Install dependencies from the project root:
+   npm install
+2. Start the Vite development server:
+   npm run dev
+3. Open the local URL printed by Vite (typically http://localhost:5173).
+
+Available scripts:
+- npm run dev: start the local development server.
+- npm run build: create the production bundle in dist/.
+- npm run preview: serve the built bundle locally for preview.
+
+SUPABASE CONFIGURATION
+----------------------
+Supabase is optional for launching the front end. To enable real accounts and cloud features, create a Supabase project and set these environment variables in a local .env file:
+- VITE_SUPABASE_URL
+- VITE_SUPABASE_PUBLISHABLE_KEY
+
+The older VITE_SUPABASE_ANON_KEY variable is also accepted. The browser app must only use a public/publishable anon key; a service-role secret must never be put in client-side configuration.
+
+Run supabase/schema.sql in the Supabase SQL editor. Configure the local and deployed app URLs in Supabase Auth redirect/site settings. Booking approvals require an admin user's trusted app_metadata role to be set to admin; the user should sign out and back in after the claim is changed. Database row-level security policies also enforce access for workspace data and booking decisions.
+
+Without valid Supabase credentials, the Supabase client is null. Sign-up, sign-in, cloud saving, booking submission, and guest share creation then report that they need Supabase. An optional offline demo mode is present in the app, but workspace state in that mode is temporary and is not durable cloud storage.
+
+APPLICATION ROUTES
+------------------
+- / : Overview dashboard.
+- /studio : Design Studio canvas and editing tools.
+- /templates : Explore Templates catalog with search/filter/favorites and launch into the studio.
+- /designs : My Designs workspace listing.
+- /moodboards : Moodboard records.
+- /decorators : Find Decorators screen.
+- /bookings : User booking requests.
+- /admin and /admin/bookings : Admin booking request review (the latter redirects to /admin).
+- /settings : Profile and preferences.
+- /login : Sign in/account creation.
+- /share/:shareId : Guest-facing view of a shared design, including feedback actions.
+
+MAIN FEATURES
+-------------
+1. Design Studio
+   - Layered event-decoration scene editor with visual elements for flowers, backdrops, furniture, fabrics, lighting, and props.
+   - Add elements to a canvas, select and manipulate them (including drag, resize, and rotate), and edit properties. 
+   - Theme presets, arrangement/design settings, zoom and preview controls, and undo/redo support.
+   - Venue/floor-plan mode with optional plan image and dimensions/grid settings.
+   - Export the canvas as PNG and design data as JSON; save designs to the workspace when cloud persistence is available.
+
+2. Templates and visual library
+   - Bundled starter layouts are editable examples, rather than real client/event records.
+   - Template discovery includes search, filters, favorites, and opening a template in the editor.
+   - Data files define a library of reusable decoration elements and theme palettes.
+   - Local template images live under public/images/templates/.
+
+3. Workspace and dashboard
+   - Overview surfaces recent designs, event/workspace information, and palette ideas.
+   - My Designs and Moodboards are workspace collections with create/save/delete/favorite flows where implemented.
+   - Settings maintain profile and language preferences.
+   - The app context holds current workspace data and exposes actions to pages/components.
+
+4. Sharing and feedback
+   - Signed-in users can create a share snapshot and URL at /share/:shareId.
+   - A guest can view the shared design and submit comments or approve/request changes.
+   - Share snapshots are stored in the shared_designs table; the share UUID functions as the link credential.
+
+5. Booking requests and administration
+   - Signed-in users can submit and manage event booking requests with event date/type, venue, notes, and optional design/vendor details.
+   - Admins can review requests and set their status to confirmed or declined.
+   - This feature is a request/approval workflow; the project does not implem
+Using chmod 777 is generally considered a major security risk, especially on shared systems or web servers.
+Anyone can alter your scripts: If you set a Bash script to 777, anyent payment processing or a functioning vendor marketplace/directory.
+
+6. Language and layout
+   - English and Telugu interface language options are supported by app locale state and translation helpers.
+   - Responsive layout components provide desktop navigation and mobile navigation.
+
+DATA AND SECURITY MODEL
+-----------------------
+- public.user_data stores one JSON workspace payload per authenticated user. Its row is keyed by auth.users.id and protected so a user can access only their own row.
+- The workspace payload contains items such as designs, moodboards, profile, favorites, locale, notifications, and active design selection.
+- public.booking_requests stores individual requests. Owners can read/delete their own requests; users can submit pending requests; only accounts with the trusted admin role can review all requests and change status.
+- public.shared_designs stores design snapshots and guest feedback. Anonymous visitors can read by share id and update feedback fields under the schema's policies. Share links therefore should be treated as public-to-anyone-who-has-the-link.
+- Supabase Auth manages the browser auth session. Database row-level security is defined in supabase/schema.sql.
+
+SOURCE TREE GUIDE
+-----------------
+- src/main.jsx: React application entry point and global style loading.
+- src/App.jsx: route table and provider composition.
+- src/context/AppContext.jsx: authentication/session state, workspace data, preferences, and app-level operations.
+- src/pages/: route-level screens such as Overview, DesignStudio, ExploreTemplates, Bookings, Auth, Settings, and ShareView.
+- src/components/layout/: application shell, sidebar, and header.
+- src/components/ui/: reusable buttons, cards, inputs, dialogs, badges, toasts, and related controls.
+- src/components/studio/: canvas, element library, toolbar, properties panel, and visual rendering for design objects.
+- src/data/: starter layouts, themes, and decoration library data.
+- src/hooks/useUndoRedo.js: undo/redo state helper.
+- src/lib/: Supabase setup, booking/share data access, PNG export, localization, and utilities.
+- src/types/index.js: currently only an empty module placeholder; this is a JavaScript project, not a typed TypeScript application.
+- supabase/schema.sql: database tables, grants, and row-level security policies.
+- public/: static assets, including template photos and favicon.
+- index.html: document shell, app title, and font loading.
+- vite.config.js: React/Tailwind plugins and @ alias to src.
+- vercel.json: SPA fallback rewrite for Vercel hosting.
+
+DESIGN AND CONTENT NOTES
+------------------------
+Theme presets include Blush Romance, Ivory Elegance, Sage Garden, Royal Gold, and Traditional Marigold. Starter designs and decoration elements include culturally varied event styling such as wedding mandaps, marigolds, rangoli, diyas, floral arches, balloons, lighting, and seating. The canvas is a visual planning aid: item placements and any dimensions are illustrative and should not be interpreted as a construction plan or vendor quote.
+
+CURRENT PRODUCT LIMITS
+----------------------
+- There is no vendor directory with verified decorator listings.
+- There is no market pricing engine, quote generation, or payment processing.
+- Starter layouts are examples, not persisted event records.
+- Cloud storage, account access, bookings, and share links depend on Supabase configuration and the deployed database schema.
+- Offline demo state is temporary and should not be treated as saved data.
+
+KEY FILES
+---------
+README.md                 Setup notes and concise feature summary.
+package.json              Project scripts and dependency list.
+src/App.jsx               Route configuration.
+src/context/AppContext.jsx App-wide state and persistence behavior.
+src/pages/DesignStudio.jsx Main design editing screen.
+src/data/starterLayouts.js Editable example layouts and defaults.
+src/data/library.js       Available canvas element definitions.
+src/data/themes.js        Theme palettes and default design settings.
+src/lib/supabase.js       Optional Supabase client configuration.
+src/lib/share.js          Guest share read/write operations.
+src/lib/bookingRequests.js Booking request data operations.
+supabase/schema.sql       Database schema and access policies.
+
+PRESENTATION-READY PROJECT STORY
+===============================
+
+SHORT PITCH
+-----------
+Vedika is a digital workspace for turning event decoration ideas into editable visual plans. It brings inspiration, a visual canvas, reusable design elements, and feedback into one workflow so a person planning an event can communicate a look before the event is set up.
+
+THE PROBLEM
+-----------
+Event decoration ideas are often spread across reference images, messages, notes, and conversations. That makes it difficult to explain how a space should look, compare variations, or collect feedback from family and collaborators. A written description alone may not communicate layout, colors, or the relationship between décor elements.
+
+THE VEDIKA APPROACH
+--------------------
+Vedika provides a visual planning workspace. Users can start from a template or a blank canvas, arrange decoration pieces, adjust the design, save it, and share a snapshot for comments or approval. The app also keeps related moodboards and booking requests in the same workspace. It focuses on concept planning and communication; it does not claim to replace a professional event planner, a venue survey, or a vendor quotation.
+
+WHO IT IS FOR
+-------------
+Primary users:
+- People planning weddings, birthdays, cultural celebrations, and other events.
+- Families and collaborators who need to discuss and approve a visual concept.
+- Event decoration professionals who want a lightweight way to sketch and share a concept (the project does not currently provide a verified vendor marketplace).
+
+USER NEEDS ADDRESSED
+--------------------
+- Explore a starting look without building a design from scratch.
+- Make visual changes by placing and arranging elements on a canvas.
+- Keep a design and moodboard together in a workspace.
+- Share a design with guests or collaborators for feedback.
+- Track a booking request and let an administrator review it.
+- Use the interface in English or Telugu.
+
+TYPICAL USER JOURNEY
+--------------------
+1. The user opens Vedika and reviews the overview.
+2. They browse templates or open the Design Studio directly.
+3. They choose a theme and add flowers, backdrops, furniture, lighting, fabrics, and props.
+4. They position and adjust the objects, refine the visual arrangement, and use undo/redo as needed.
+5. They save the design, export a PNG/JSON when appropriate, or create a guest share link.
+6. A collaborator views the shared snapshot, comments, approves it, or asks for changes.
+7. If relevant, the user submits a booking request for administrative review.
+
+PRODUCT VALUE
+-------------
+- Visual clarity: a canvas makes a concept easier to discuss than text alone.
+- Faster iteration: templates and a reusable object library provide a starting point.
+- Collaboration: a share view collects comments and a simple approval/request-changes response.
+- Organization: designs, moodboards, preferences, and requests are grouped in the workspace.
+- Accessibility of context: responsive navigation and English/Telugu options support different devices and users.
+
+WHAT MAKES THE PROJECT DISTINCT (BASED ON THE IMPLEMENTATION)
+-------------------------------------------------------------
+- It combines an editable decoration canvas with template discovery and guest feedback in one app.
+- Its bundled library includes both broadly familiar styling objects and South Asian celebration details such as mandaps, marigolds, rangoli, diyas, torans, and kalash.
+- It supports a lightweight booking request workflow alongside visual planning.
+- It can run as a front-end demo without a configured backend, while durable accounts and cloud workflows require Supabase.
+
+PRESENTATION SLIDE OUTLINE
+--------------------------
+Suggested 7-slide presentation for a 5–7 minute project walkthrough:
+
+Slide 1 — Vedika: Design the celebration before the day
+Purpose: Introduce the product in one sentence.
+Visual: Vedika title with a screenshot of a completed design canvas or template.
+Speaker point: “Vedika is a visual workspace for planning and sharing event decoration concepts.”
+
+Slide 2 — The planning challenge
+Purpose: Explain why the product is useful.
+Visual: A simple journey showing ideas scattered across photos, chat, and notes, then a single visual plan.
+Speaker point: Event styling can be hard to communicate when details are distributed across references and conversations.
+
+Slide 3 — The solution and user journey
+Purpose: Show how a user gets from an idea to shared feedback.
+Visual: Browse template → customize canvas → save/share → receive feedback.
+Speaker point: Vedika supports the planning conversation from first concept through review.
+
+Slide 4 — Design Studio
+Purpose: Demonstrate the central product capability.
+Visual: Screenshot of the canvas with element library and properties panel visible.
+Speaker point: Users compose a scene from reusable décor pieces, change the arrangement, use themes, and export a visual result.
+
+Slide 5 — More than a canvas
+Purpose: Show supporting workflows.
+Visual: Template browsing, moodboard, guest share, and booking request screen thumbnails.
+Speaker point: Templates help users begin; guest sharing supports review; workspace and booking screens keep related planning tasks together.
+
+Slide 6 — Technology and implementation
+Purpose: Explain how the project is built.
+Visual: React/Vite front end connected to optional Supabase Auth and database, with row-level security.
+Speaker point: The app is a React single-page application. Supabase provides authentication and persistence when configured; database policies scope user data and admin actions.
+
+Slide 7 — Current scope and next steps
+Purpose: Set honest expectations and close with potential.
+Visual: “Available now” and “Future opportunities” columns.
+Available now: editable canvas, templates, themes, PNG/JSON export, sharing feedback, workspace records, booking review flow.
+Future opportunities (ideas, not implemented): richer collaboration, broader asset catalog, vendor integrations, price estimates, and production-ready floor-plan planning.
+Speaker point: The current project is a concept-planning tool. Any future feature should be described as a possibility, not as an existing capability.
+
+LIVE DEMO TALK TRACK
+--------------------
+Use this sequence if presenting the application itself:
+1. Open Explore Templates and point out the event-style examples, search, and filters.
+2. Open one template in the Design Studio.
+3. Add an element from the library and move/resize/rotate it; briefly show theme or property controls.
+4. Demonstrate undo/redo, then show PNG or JSON export if available in the configured environment.
+5. Show how a saved design can be shared and where guest comments/approval appear. Explain that this cloud workflow requires Supabase setup.
+6. Finish on the booking request/admin review screens and clarify that this is a request workflow, not payments or a live vendor marketplace.
+
+PRESENTATION PROMPT (COPY AND PASTE)
+====================================
+Create a polished 7-slide presentation about the software project Vedika, a browser-based event decoration design workspace. The audience is a class, project-review panel, or non-technical stakeholder. The goal is to explain the problem, product idea, user journey, implemented features, technical architecture, and current scope in clear language.
+
+Use this narrative: people planning events often collect decoration ideas across images, notes, and conversations, making layouts and feedback difficult to communicate. Vedika brings visual concept planning into one workspace. Users can browse editable starter layouts, compose a scene on a layered canvas using flowers/backdrops/furniture/fabrics/lighting/props, adjust objects and themes, save designs, export PNG or JSON, and share snapshots for comments or approval. Supporting screens include overview, designs, moodboards, booking requests, settings, and English/Telugu language selection.
+
+Build the slides in this order:
+1. Title and one-sentence product pitch.
+2. The event-decoration planning problem.
+3. Vedika’s solution and typical user journey.
+4. Design Studio walkthrough and core editing tools.
+5. Supporting features: templates, workspace/moodboards, guest feedback, booking request review.
+6. Technical overview: React 19, JavaScript, Vite, Tailwind CSS 4, React Router, optional Supabase Auth/database, and row-level security.
+7. Current scope, limitations, and realistic future opportunities.
+
+For each slide provide: a short title, no more than 3–5 concise bullets, a visual suggestion, and 2–3 sentences of speaker notes. Keep the tone professional, clear, and presentation-friendly. Use Vedika’s exact visual identity palette listed in the COLOR PALETTE FOR PRESENTATIONS section below, with strong visual hierarchy. Prefer screenshots or mockups of the actual app and simple diagrams over dense paragraphs. Do not invent user numbers, business results, customer testimonials, pricing, or market research. Be explicit that Supabase must be configured for durable cloud accounts, bookings, and sharing. State that the current project does not include a verified vendor directory, price estimation, payments, or construction-grade venue plans. Mark vendor integrations, richer collaboration, pricing tools, and expanded planning capabilities as possible future work only. End with a concise takeaway: Vedika helps people turn event décor inspiration into an editable visual concept that is easier to share and discuss.
+
+PRESENTATION ACCURACY CHECKLIST
+------------------------------
+- Call Vedika an event decoration concept-planning workspace, not a complete event-management or marketplace platform.
+- Distinguish implemented features from proposed future work.
+- Do not claim real users, customer outcomes, revenue, adoption, or performance metrics; none are documented in this repository.
+- Describe Supabase as optional configuration, not a built-in hosted account supplied by the repository.
+- Booking requests are not vendor bookings with payment or guaranteed availability.
+- Floor-plan mode is a visual planning aid; do not describe it as a verified architectural or construction tool.
+- Use screenshots captured from the running project for product slides when possible. Do not imply that mockups show functionality beyond the implementation.
+
+
+COLOR PALETTE FOR PRESENTATIONS
+===============================
+Use these colors to make presentation slides feel consistent with the Vedika interface. The first group is the brand/UI palette taken from src/index.css; the second group contains representative decoration-theme colors from src/data/themes.js.
+
+BRAND AND UI COLORS
+-------------------
+- Deep Forest — #0B1F19: primary dark backgrounds, title slides, navigation, and strong text on light areas.
+- Forest Green — #14332A and #1A3B32: supporting dark green tones for gradients, cards, or section backgrounds.
+- Ivory Mist — #EBF0EC: main light background and negative space.
+- Sage — #7E9A8C: secondary accents, diagrams, labels, and supporting graphics.
+- Celadon — #B7C9B8: soft green panels and subtle highlights.
+- Blush — #CFA09C: warm floral accent for callouts and selected highlights.
+- Muted Rose — #A85B5F: accent color for buttons, emphasis, or small contrast elements.
+- Charcoal — #17221E: body text and dark neutral details.
+
+DECORATION THEME COLORS
+-----------------------
+- Champagne Gold — #C5A46D: elegant metallic accent used across theme examples.
+- Soft Blush — #E8C7C4: romantic floral highlight.
+- Warm Ivory — #FAF7F2: light floral/background color in the design presets.
+- Sage Green — #A8B5A0: natural greenery accent in theme presets.
+- Deep Green — #243D35: rich foliage/backdrop color.
+- Marigold — #E8A838: festive traditional accent.
+- Terracotta — #C45C26: warm complementary color for marigold styling.
+
+PRESENTATION COLOR GUIDANCE
+---------------------------
+Use Deep Forest (#0B1F19) with Ivory Mist (#EBF0EC) as the main presentation foundation. Use Sage (#7E9A8C) and Celadon (#B7C9B8) for diagrams and secondary panels, with Blush (#CFA09C) or Muted Rose (#A85B5F) for occasional highlights. Champagne Gold (#C5A46D) can add a restrained event-styling accent. Keep text readable and use dark text on pale backgrounds or light text on dark green backgrounds. Use Marigold (#E8A838) and Terracotta (#C45C26) only when illustrating the Traditional Marigold theme.
+
+Note: The UI brand palette and the editor’s theme palette serve different purposes. Use the theme colors only on slides that explain that design preset.

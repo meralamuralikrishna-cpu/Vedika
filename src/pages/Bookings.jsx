@@ -87,7 +87,7 @@ export function Bookings() {
         ]}/>
       </div>
 
-      {filtered.length === 0 ? (<EmptyState title="No booking requests" description="Submit a request to send it to the Decorly admin team for review." action={<Button onClick={() => setAddOpen(true)}>New request</Button>}/>) : (<ul className="space-y-4">
+      {filtered.length === 0 ? (<EmptyState title="No booking requests" description="Submit a request to send it to the Vedika admin team for review." action={<Button onClick={() => setAddOpen(true)}>New request</Button>}/>) : (<ul className="space-y-4">
           {filtered.map((b) => (<li key={b.id}>
               <Card>
                 <CardBody className="pt-5">

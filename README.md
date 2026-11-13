@@ -1,11 +1,11 @@
-# Decorly — Event Decorations Design Studio
+# Vedika — Event Decorations Design Studio
 
-Decorly is an event decoration design studio built with **React**, **JavaScript**, **Vite**, **Tailwind CSS**, and Supabase Auth. Designs, moodboards, and bookings sync to a signed-in user’s Supabase account. New workspaces start empty; editable starter layouts are provided for the canvas.
+Vedika is an event decoration design studio built with **React**, **JavaScript**, **Vite**, **Tailwind CSS**, and Supabase Auth. Designs, moodboards, and bookings sync to a signed-in user’s Supabase account. New workspaces start empty; editable starter layouts are provided for the canvas.
 
 ## Setup
 
 ```bash
-cd decorly
+cd vedika
 npm install
 npm run dev
 ```
@@ -40,7 +40,7 @@ Only the public anon key belongs in the browser. Never put a Supabase service ro
 - **My Designs / Moodboards / Decorators / Settings** — saved workspace records and empty states
 - **EN / తెలుగు** language toggle in the header
 
-Decorly does not ship a vendor directory, market pricing, or payment processing. Starter layouts are editable design examples, not real event records.
+Vedika does not ship a vendor directory, market pricing, or payment processing. Starter layouts are editable design examples, not real event records.
 
 ## Project structure
 

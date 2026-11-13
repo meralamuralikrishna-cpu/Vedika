@@ -6,10 +6,10 @@ const sizes = {
     hero: 'text-6xl sm:text-7xl md:text-8xl lg:text-[6.5rem]',
 };
 /**
- * Decorly wordmark — Fraunces with a hollow “o” ring (stroke only)
+ * Vedika wordmark — Fraunces with a hollow “o” ring (stroke only)
  * sized to x-height, sitting on the baseline, letter-spacing 0.
  */
-export function Wordmark({ text = 'Decorly', className, size = 'md', light }) {
+export function Wordmark({ text = 'Vedika', className, size = 'md', light }) {
     const isLatin = /^[A-Za-z]+$/.test(text);
     const colorClass = light ? 'text-ivory' : 'text-forest';
     const ringColor = light ? '#D2A6A2' : '#B56B6E';

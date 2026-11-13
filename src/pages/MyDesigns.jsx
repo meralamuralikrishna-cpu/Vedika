@@ -28,7 +28,7 @@ export function MyDesigns() {
         });
     }, [designs, q, favOnly]);
     return (<div className="p-6 md:p-10 animate-fade-in max-w-6xl mx-auto">
-      <PageHeader kicker="Library" title="My Designs" description={canSaveData ? 'Your designs are saved to your Decorly account.' : 'Designs are temporary until you connect an account and sign in.'} action={<Link to="/studio" onClick={() => setActiveDesignId(null)}>
+      <PageHeader kicker="Library" title="My Designs" description={canSaveData ? 'Your designs are saved to your Vedika account.' : 'Designs are temporary until you connect an account and sign in.'} action={<Link to="/studio" onClick={() => setActiveDesignId(null)}>
             <Button>
               <Plus className="h-4 w-4"/>
               New design

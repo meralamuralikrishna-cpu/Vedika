@@ -39,7 +39,7 @@ export function AdminBookings() {
       <div className="mb-8">
         <p className="section-kicker mb-2">Administration</p>
         <h1 className="font-display text-4xl text-forest tracking-tight">Booking requests</h1>
-        <p className="text-sm text-charcoal/60 mt-2">Review requests from all Decorly users and confirm or decline them.</p>
+        <p className="text-sm text-charcoal/60 mt-2">Review requests from all Vedika users and confirm or decline them.</p>
       </div>
 
       {pending.length === 0 ? (
