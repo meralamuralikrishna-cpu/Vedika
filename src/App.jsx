@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { AppProvider } from '@/context/AppContext';
 import { ToastProvider } from '@/components/ui/Toast';
 import { AppShell } from '@/components/layout/AppShell';
@@ -14,28 +14,27 @@ import { AdminBookings } from '@/pages/AdminBookings';
 import { Settings } from '@/pages/Settings';
 import { ShareView } from '@/pages/ShareView';
 import { Auth } from '@/pages/Auth';
+const router = createBrowserRouter([
+  { path: 'share/:shareId', element: <ShareView /> },
+  { path: 'login', element: <Auth /> },
+  {
+    element: <AppShell />,
+    children: [
+      { index: true, element: <Overview /> },
+      { path: 'studio', element: <DesignStudio /> },
+      { path: 'templates', element: <ExploreTemplates /> },
+      { path: 'designs', element: <MyDesigns /> },
+      { path: 'designs/:designId/plan', element: <ImplementationPlan /> },
+      { path: 'moodboards', element: <Moodboards /> },
+      { path: 'decorators', element: <FindDecorators /> },
+      { path: 'bookings', element: <Bookings /> },
+      { path: 'admin', element: <AdminBookings /> },
+      { path: 'admin/bookings', element: <Navigate to="/admin" replace /> },
+      { path: 'settings', element: <Settings /> },
+    ],
+  },
+]);
+
 export default function App() {
-    return (<AppProvider>
-      <ToastProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="share/:shareId" element={<ShareView />}/>
-            <Route path="login" element={<Auth />}/>
-            <Route element={<AppShell />}>
-              <Route index element={<Overview />}/>
-              <Route path="studio" element={<DesignStudio />}/>
-              <Route path="templates" element={<ExploreTemplates />}/>
-              <Route path="designs" element={<MyDesigns />}/>
-              <Route path="designs/:designId/plan" element={<ImplementationPlan />}/>
-              <Route path="moodboards" element={<Moodboards />}/>
-              <Route path="decorators" element={<FindDecorators />}/>
-              <Route path="bookings" element={<Bookings />}/>
-              <Route path="admin" element={<AdminBookings />}/>
-              <Route path="admin/bookings" element={<Navigate to="/admin" replace />}/>
-              <Route path="settings" element={<Settings />}/>
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </ToastProvider>
-    </AppProvider>);
+  return <AppProvider><ToastProvider><RouterProvider router={router} /></ToastProvider></AppProvider>;
 }

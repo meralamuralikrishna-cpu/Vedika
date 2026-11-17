@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useBlocker, useSearchParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { DEFAULT_SETTINGS, getTheme, THEME_PRESETS } from '@/data/themes';
 import { STARTER_TEMPLATES } from '@/data/starterLayouts';
@@ -23,7 +23,7 @@ const EMPTY = {
     venuePlan: DEFAULT_VENUE_PLAN(),
 };
 export function DesignStudio() {
-    const { designs, saveDesign, activeDesignId, setActiveDesignId, canSaveData } = useApp();
+    const { designs, saveDesign, activeDesignId, setActiveDesignId, canSaveData, cloudSaveStatus } = useApp();
     const { toast } = useToast();
     const [params] = useSearchParams();
     const { present, set, undo, redo, reset, canUndo, canRedo, commitSnapshot } = useUndoRedo(EMPTY);
@@ -41,6 +41,7 @@ export function DesignStudio() {
     const savedSnapshot = useRef(null);
     const currentSnapshot = JSON.stringify({ name: designName, elements: present.elements, settings: present.settings, venuePlan: present.venuePlan });
     const isDirty = savedSnapshot.current !== null && savedSnapshot.current !== currentSnapshot;
+    const navigationBlocker = useBlocker(isDirty);
     useEffect(() => {
         if (hydrated)
             return;
@@ -116,6 +117,11 @@ export function DesignStudio() {
         window.addEventListener('beforeunload', warnBeforeLeave);
         return () => window.removeEventListener('beforeunload', warnBeforeLeave);
     }, [isDirty]);
+    useEffect(() => {
+        if (navigationBlocker.state !== 'blocked') return;
+        if (window.confirm('You have unsaved design changes. Leave this page and discard them?')) navigationBlocker.proceed();
+        else navigationBlocker.reset();
+    }, [navigationBlocker]);
     useEffect(() => {
         const onKey = (e) => {
             if ((e.metaKey || e.ctrlKey) && e.key === 'z' && !e.shiftKey) {
@@ -197,6 +203,7 @@ export function DesignStudio() {
             eventDate: existing?.eventDate,
             notes: existing?.notes,
             venuePlan: present.venuePlan,
+            implementationPlan: existing?.implementationPlan,
         };
     };
     const handleSave = () => {
@@ -267,7 +274,7 @@ export function DesignStudio() {
         }
     };
     return (<div className="flex flex-col h-[calc(100vh-4rem)]">
-      <StudioToolbar canUndo={canUndo} canRedo={canRedo} zoom={zoom} floorPlanMode={present.venuePlan.enabled} saveStatus={isDirty ? 'Unsaved changes' : 'Saved'} onUndo={undo} onRedo={redo} onZoomIn={() => setZoom((z) => clamp(z + 0.1, 0.5, 1.5))} onZoomOut={() => setZoom((z) => clamp(z - 0.1, 0.5, 1.5))} onReset={() => setResetOpen(true)} onPreview={() => setPreviewOpen(true)} onExportJson={handleExportJson} onExportPng={() => void handleExportPng()} onSave={handleSave} onShareGuest={handleShareGuest} onToggleFloorPlan={() => {
+      <StudioToolbar canUndo={canUndo} canRedo={canRedo} zoom={zoom} floorPlanMode={present.venuePlan.enabled} saveStatus={isDirty ? 'Unsaved changes' : !canSaveData ? 'Temporary session' : cloudSaveStatus === 'saving' ? 'Saving to account…' : cloudSaveStatus === 'error' ? 'Account save failed' : 'Saved to account'} onUndo={undo} onRedo={redo} onZoomIn={() => setZoom((z) => clamp(z + 0.1, 0.5, 1.5))} onZoomOut={() => setZoom((z) => clamp(z - 0.1, 0.5, 1.5))} onReset={() => setResetOpen(true)} onPreview={() => setPreviewOpen(true)} onExportJson={handleExportJson} onExportPng={() => void handleExportPng()} onSave={handleSave} onShareGuest={handleShareGuest} onToggleFloorPlan={() => {
             const next = !present.venuePlan.enabled;
             set((s) => ({
                 ...s,

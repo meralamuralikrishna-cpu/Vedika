@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { CANVAS_H, CANVAS_W } from '@/components/studio/DesignCanvas';
@@ -79,14 +79,35 @@ export function ImplementationPlan() {
   const { designs, saveDesign, canSaveData } = useApp();
   const { toast } = useToast();
   const design = designs.find((item) => item.id === designId);
+  const planDesignId = useRef(design?.id);
   const [plan, setPlan] = useState(() => design ? (design.implementationPlan || makePlan(design)) : null);
   const [newMaterial, setNewMaterial] = useState('');
   const [dirty, setDirty] = useState(() => !!design && !design.implementationPlan);
 
   useEffect(() => {
-    setPlan(design ? (design.implementationPlan || makePlan(design)) : null);
-    setDirty(!!design && !design.implementationPlan);
-  }, [design?.id]);
+    if (!design) { setPlan(null); setDirty(false); return; }
+    const generated = makePlan(design);
+    if (planDesignId.current !== design.id) {
+      planDesignId.current = design.id;
+      setPlan(design.implementationPlan || generated);
+      setDirty(!design.implementationPlan);
+      return;
+    }
+    setPlan((current) => {
+      if (!current) return design.implementationPlan || generated;
+      const priorById = new Map(current.materials.map((item) => [item.id, item]));
+      const materials = generated.materials.map((item) => {
+        const prior = priorById.get(item.id);
+        if (!prior) return item;
+        priorById.delete(item.id);
+        const previousCount = prior.designCount || 0;
+        return { ...item, ...prior, designCount: item.designCount, quantity: Math.max(0, Number(prior.quantity || 0) + item.designCount - previousCount) };
+      });
+      // Keep user-added supplies; remove materials no longer present on canvas.
+      return { ...current, materials: [...materials, ...[...priorById.values()].filter((item) => item.id.startsWith('custom-'))] };
+    });
+    setDirty(true);
+  }, [design?.id, design?.elements, design?.venuePlan]);
 
   useEffect(() => {
     if (!dirty) return;

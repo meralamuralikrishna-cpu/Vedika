@@ -10,11 +10,13 @@ function fromRow(row) {
     designId: row.design_id,
     designName: row.design_name,
     designType: row.design_type,
+    designSnapshot: row.design_snapshot,
     eventDate: row.event_date,
     eventType: row.event_type,
     venue: row.venue,
     notes: row.notes,
     status: row.status,
+    statusNote: row.status_note,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -42,6 +44,7 @@ export async function createBookingRequest(input) {
     design_id: input.designId || null,
     design_name: input.designName || null,
     design_type: input.designType || null,
+    design_snapshot: input.designSnapshot || null,
     event_date: input.eventDate,
     event_type: input.eventType,
     venue: input.venue || null,
@@ -51,10 +54,10 @@ export async function createBookingRequest(input) {
   return fromRow(data);
 }
 
-export async function updateBookingRequestStatus(id, status) {
+export async function updateBookingRequestStatus(id, status, statusNote = '') {
   if (!supabase) throw new Error('Supabase is not configured.');
   const { data, error } = await supabase.from('booking_requests')
-    .update({ status, updated_at: new Date().toISOString() })
+    .update({ status, status_note: statusNote.trim() || null, updated_at: new Date().toISOString() })
     .eq('id', id).select('*').single();
   if (error) throw error;
   return fromRow(data);

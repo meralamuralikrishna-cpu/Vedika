@@ -11,13 +11,16 @@ import { ConfirmDialog, Modal } from '@/components/ui/Modal';
 import { Badge } from '@/components/ui/Badge';
 import { formatDate, cn } from '@/lib/utils';
 import { Link, useSearchParams } from 'react-router-dom';
+import { STARTER_TEMPLATES } from '@/data/starterLayouts';
+import { DEFAULT_VENUE_PLAN } from '@/lib/share';
+const EVENT_TYPES = ['Wedding', 'Reception', 'Haldi', 'Mehendi', 'Sangeet', 'Birthday', 'Baby shower', 'Engagement', 'Anniversary', 'Corporate event', 'Other celebration', "Valentine's Day", 'Diwali'];
 const STATUS_STYLE = {
     pending: 'bg-champagne/25 text-charcoal',
     confirmed: 'bg-sage/40 text-forest',
     declined: 'bg-red-100 text-red-800',
 };
 export function Bookings() {
-    const { bookings, deleteBooking, saveBooking, canSaveData } = useApp();
+    const { bookings, designs, deleteBooking, saveBooking, canSaveData } = useApp();
     const { toast } = useToast();
     const [searchParams] = useSearchParams();
     const [q, setQ] = useState('');
@@ -25,13 +28,17 @@ export function Bookings() {
     const [deleteId, setDeleteId] = useState(null);
     const [addOpen, setAddOpen] = useState(searchParams.get('new') === '1');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [eventDate, setEventDate] = useState('');
+    const [eventDate, setEventDate] = useState(searchParams.get('eventDate') || '');
     const [eventType, setEventType] = useState(searchParams.get('eventType') || 'Wedding');
     const [venue, setVenue] = useState(searchParams.get('venue') || '');
     const [notes, setNotes] = useState(searchParams.get('notes') || '');
     const linkedDesignId = searchParams.get('designId') || '';
     const linkedDesignName = searchParams.get('designName') || '';
     const linkedDesignType = searchParams.get('designType') || '';
+    const linkedDesign = linkedDesignType === 'template'
+        ? STARTER_TEMPLATES.find((item) => item.id === linkedDesignId)
+        : designs.find((item) => item.id === linkedDesignId);
+    const today = (() => { const date = new Date(); return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; })();
     useEffect(() => {
         if (searchParams.get('new') === '1') setAddOpen(true);
     }, [searchParams]);
@@ -40,7 +47,13 @@ export function Bookings() {
         if (isSubmitting) return;
         setIsSubmitting(true);
         try {
-            await saveBooking({ eventDate, eventType, venue: venue.trim(), notes: notes.trim(), designId: linkedDesignId, designName: linkedDesignName, designType: linkedDesignType });
+            const designSnapshot = linkedDesign ? {
+                name: linkedDesign.name,
+                elements: (linkedDesign.elements || []).map((element, index) => ({ ...element, id: element.id || `${element.libraryId || 'element'}-${index}` })),
+                settings: linkedDesign.settings,
+                venuePlan: { ...(linkedDesign.venuePlan || DEFAULT_VENUE_PLAN()), imageDataUrl: null },
+            } : null;
+            await saveBooking({ eventDate, eventType, venue: venue.trim(), notes: notes.trim(), designId: linkedDesignId, designName: linkedDesignName, designType: linkedDesignType, designSnapshot });
             setEventDate(''); setVenue(''); setNotes(''); setAddOpen(false);
             toast('Booking request submitted for review', 'success');
         } catch (error) {
@@ -106,6 +119,7 @@ export function Bookings() {
                             </Link>) : (b.designName)}
                         </p>)}
                       {b.notes && <p className="text-xs text-charcoal/50 mt-2">{b.notes}</p>}
+                      {b.statusNote && <p className="text-xs text-forest bg-sage/10 rounded-lg px-3 py-2 mt-2"><strong>Admin update:</strong> {b.statusNote}</p>}
                     </div>
                     <div className="flex gap-2">
                       <Button size="sm" variant="secondary" aria-label="Delete booking" onClick={() => setDeleteId(b.id)}>
@@ -127,15 +141,21 @@ export function Bookings() {
         }}/>
       <Modal open={addOpen} onClose={() => setAddOpen(false)} title="Add a booking" footer={<>
         <Button variant="secondary" onClick={() => setAddOpen(false)}>Cancel</Button>
-        <Button type="submit" form="booking-form" disabled={isSubmitting}>{isSubmitting ? 'Submitting…' : 'Submit request'}</Button>
+        <Button type="submit" form="booking-form" disabled={isSubmitting || !canSaveData}>{isSubmitting ? 'Submitting…' : 'Submit request'}</Button>
       </>}>
         <form id="booking-form" onSubmit={addBooking} className="space-y-3">
           {!canSaveData && <p className="text-xs text-amber-800">Sign in with a configured Supabase account to submit requests for admin review.</p>}
           {linkedDesignName && <p className="rounded-lg bg-sage/15 px-3 py-2 text-sm text-forest">Linked decoration: <span className="font-semibold">{linkedDesignName}</span></p>}
-          <Input label="Event date" type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} required />
-          <Input label="Event type" value={eventType} onChange={(e) => setEventType(e.target.value)} required />
+          <Input label="Event date" type="date" min={today} value={eventDate} onChange={(e) => setEventDate(e.target.value)} required />
+          <Select label="Event type" value={eventType} onChange={(e) => setEventType(e.target.value)} options={EVENT_TYPES.map((type) => ({ value: type, label: type }))} />
           <Input label="Venue" value={venue} onChange={(e) => setVenue(e.target.value)} />
-          <Input label="Notes" value={notes} onChange={(e) => setNotes(e.target.value)} />
+          <label className="block space-y-1.5 text-sm font-medium text-charcoal/80">Notes or event brief<textarea value={notes} onChange={(e) => setNotes(e.target.value)} className="w-full min-h-24 rounded-xl border border-sage/40 bg-white px-3 py-2 text-sm font-normal outline-none focus:border-champagne focus:ring-2 focus:ring-champagne/25" /></label>
+          <section className="rounded-xl border border-sage/25 bg-sage/10 p-3" aria-live="polite">
+            <p className="text-xs font-semibold text-forest">Review request</p>
+            <p className="text-xs text-charcoal/70 mt-1">{eventType} · {eventDate || 'Choose an event date'}{venue.trim() ? ` · ${venue.trim()}` : ''}</p>
+            {linkedDesignName && <p className="text-xs text-charcoal/70 mt-1">Decoration: {linkedDesignName}</p>}
+            {notes.trim() && <p className="text-xs text-charcoal/70 mt-1 whitespace-pre-wrap">{notes.trim()}</p>}
+          </section>
         </form>
       </Modal>
     </div>);

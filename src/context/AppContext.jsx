@@ -8,6 +8,10 @@ export function AppProvider({ children }) {
     const [offlineDemo, setOfflineDemo] = useState(false);
     const [authReady, setAuthReady] = useState(!supabase);
     const [cloudReady, setCloudReady] = useState(false);
+    const [cloudError, setCloudError] = useState('');
+    const [cloudSaveStatus, setCloudSaveStatus] = useState('saved');
+    const [loadAttempt, setLoadAttempt] = useState(0);
+    const retryCloudLoad = useCallback(() => setLoadAttempt((attempt) => attempt + 1), []);
     useEffect(() => {
         if (!supabase) return;
         let alive = true;
@@ -49,10 +53,16 @@ export function AppProvider({ children }) {
         if (!supabase || !user) { setCloudReady(false); return; }
         let alive = true;
         setCloudReady(false);
+        setCloudError('');
         (async () => {
             const { data, error } = await supabase.from('user_data').select('payload').eq('user_id', user.id).maybeSingle();
             if (!alive) return;
-            if (error) console.error('Could not load account data', error);
+            if (error) {
+                console.error('Could not load account data', error);
+                setCloudError('Could not load your saved workspace. Your existing data has been left untouched.');
+                setCloudReady(true);
+                return;
+            }
             const bookingRows = await getBookingRequests().catch((bookingError) => {
                 console.error('Could not load booking requests', bookingError);
                 return [];
@@ -81,16 +91,20 @@ export function AppProvider({ children }) {
             setCloudReady(true);
         })();
         return () => { alive = false; };
-    }, [user?.id]);
+    }, [user?.id, loadAttempt]);
     useEffect(() => {
-        if (!supabase || !user || !cloudReady) return;
+        if (!supabase || !user || !cloudReady || cloudError) return;
         const payload = { designs, moodboards, profile, templateFavorites, decoratorFavorites, locale, notifications, activeDesignId };
+        setCloudSaveStatus('saving');
         const timer = setTimeout(async () => {
             const { error } = await supabase.from('user_data').upsert({ user_id: user.id, payload, updated_at: new Date().toISOString() });
-            if (error) console.error('Could not save account data', error);
+            if (error) {
+                console.error('Could not save account data', error);
+                setCloudSaveStatus('error');
+            } else setCloudSaveStatus('saved');
         }, 500);
         return () => clearTimeout(timer);
-    }, [user?.id, cloudReady, designs, moodboards, profile, templateFavorites, decoratorFavorites, locale, notifications, activeDesignId]);
+    }, [user?.id, cloudReady, cloudError, designs, moodboards, profile, templateFavorites, decoratorFavorites, locale, notifications, activeDesignId]);
     const signIn = useCallback(async (email, password) => {
         if (!supabase) return { error: 'Account sign-in is unavailable. Configure the Supabase URL and publishable key, then restart the app.' };
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -160,8 +174,8 @@ export function AppProvider({ children }) {
         setBookings((prev) => [saved, ...prev]);
         return saved;
     }, []);
-    const setBookingStatus = useCallback(async (id, status) => {
-        const updated = await updateBookingRequestStatus(id, status);
+    const setBookingStatus = useCallback(async (id, status, statusNote = '') => {
+        const updated = await updateBookingRequestStatus(id, status, statusNote);
         setBookings((prev) => prev.map((booking) => booking.id === id ? updated : booking));
         return updated;
     }, []);
@@ -217,6 +231,9 @@ export function AppProvider({ children }) {
         isAdmin: user?.app_metadata?.role === 'admin',
         authReady,
         cloudReady,
+        cloudError,
+        cloudSaveStatus,
+        retryCloudLoad,
         authEnabled: !!supabase,
         canSaveData: !!supabase && !!user && !offlineDemo,
         offlineDemo,
@@ -258,6 +275,9 @@ export function AppProvider({ children }) {
         user,
         authReady,
         cloudReady,
+        cloudError,
+        cloudSaveStatus,
+        retryCloudLoad,
         offlineDemo,
         enterOfflineDemo,
         leaveOfflineDemo,

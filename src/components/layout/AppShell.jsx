@@ -5,9 +5,10 @@ import { useApp } from '@/context/AppContext';
 import { Auth } from '@/pages/Auth';
 import { Button } from '@/components/ui/Button';
 export function AppShell() {
-    const { authEnabled, authReady, cloudReady, user, offlineDemo, leaveOfflineDemo } = useApp();
+    const { authEnabled, authReady, cloudReady, cloudError, retryCloudLoad, user, offlineDemo, leaveOfflineDemo } = useApp();
     if (authEnabled && !authReady) return <div className="min-h-screen flex items-center justify-center text-forest">Loading Vedika…</div>;
     if (authEnabled && !user && !offlineDemo) return <Auth />;
+    if (authEnabled && user && cloudError) return <div className="min-h-screen flex flex-col items-center justify-center gap-4 p-6 text-center text-forest"><p>{cloudError}</p><Button onClick={retryCloudLoad}>Try again</Button></div>;
     if (authEnabled && user && !cloudReady) return <div className="min-h-screen flex items-center justify-center text-forest">Loading your saved workspace…</div>;
     return (<div className="flex min-h-screen app-atmosphere">
       <Sidebar />

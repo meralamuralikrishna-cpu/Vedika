@@ -59,7 +59,7 @@ export function MyDesigns() {
 
       {canSaveData && <section className="mb-10 rounded-2xl border border-sage/30 bg-white/65 p-5 md:p-6 shadow-sm">
         <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
-          <div><p className="section-kicker">Guest access</p><h2 className="font-display text-2xl text-forest">Shared links</h2><p className="text-xs text-charcoal/55 mt-1">Links stay active until you revoke them. Guests can view, rearrange, and resize shared elements.</p></div>
+          <div><p className="section-kicker">Guest access</p><h2 className="font-display text-2xl text-forest">Shared links</h2><p className="text-xs text-charcoal/55 mt-1">Links stay active until you revoke them. Guests can view the design, comment, and approve or request changes.</p></div>
           <span className="rounded-full bg-sage/15 px-3 py-1 text-xs font-semibold text-forest">No expiry</span>
         </div>
         {shareError && <p role="alert" className="text-sm text-red-700">{shareError}</p>}

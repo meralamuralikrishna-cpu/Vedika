@@ -58,10 +58,12 @@ create table if not exists public.booking_requests (
   design_id text,
   design_name text,
   design_type text,
+  design_snapshot jsonb,
   event_date date not null,
   event_type text not null,
   venue text,
   notes text,
+  status_note text,
   status text not null default 'pending' check (status in ('pending', 'confirmed', 'declined')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
@@ -73,11 +75,13 @@ alter table public.booking_requests alter column vendor_name drop not null;
 alter table public.booking_requests add column if not exists design_id text;
 alter table public.booking_requests add column if not exists design_name text;
 alter table public.booking_requests add column if not exists design_type text;
+alter table public.booking_requests add column if not exists design_snapshot jsonb;
+alter table public.booking_requests add column if not exists status_note text;
 
 alter table public.booking_requests enable row level security;
 revoke all on table public.booking_requests from anon, authenticated;
 grant select, insert, delete on table public.booking_requests to authenticated;
-grant update (status, updated_at) on table public.booking_requests to authenticated;
+grant update (status, status_note, updated_at) on table public.booking_requests to authenticated;
 
 drop policy if exists "Owners and admins can read booking requests" on public.booking_requests;
 drop policy if exists "Users can submit their own booking requests" on public.booking_requests;
@@ -111,7 +115,7 @@ create policy "Owners can delete their booking requests" on public.booking_reque
   );
 
 comment on table public.booking_requests is
-  'User booking requests. Admin access is granted only by the trusted app_metadata role claim.';
+  'User booking requests. Admin access is granted only by the trusted app_metadata role claim; status_note explains admin decisions.';
 
 -- Share links are stored separately because guests can read and comment without
 -- an account. The unguessable UUID share id is the public link credential.
@@ -138,8 +142,6 @@ grant select (id, design_id, name, elements, settings, venue_plan, status, comme
 grant select (owner_id) on table public.shared_designs to authenticated;
 grant insert (id, owner_id, design_id, name, elements, settings, venue_plan, status, comments)
   on table public.shared_designs to authenticated;
-grant update (name, elements, settings, venue_plan, status, comments, approved_at, approved_by)
-  on table public.shared_designs to anon, authenticated;
 grant delete on table public.shared_designs to authenticated;
 
 drop policy if exists "Anyone can read a share link" on public.shared_designs;
@@ -154,12 +156,53 @@ create policy "Anyone can read a share link" on public.shared_designs
 create policy "Users can create their own share links" on public.shared_designs
   for insert to authenticated with check ((select auth.uid()) = owner_id);
 
-create policy "Guests can leave share feedback" on public.shared_designs
-  for update to anon, authenticated using (true)
-  with check (status in ('pending', 'approved', 'changes') and jsonb_typeof(comments) = 'array');
-
 create policy "Owners can delete share links" on public.shared_designs
   for delete to authenticated using ((select auth.uid()) = owner_id);
 
 comment on table public.shared_designs is
-  'Design snapshots shared by UUID link; guests can view and edit shared content, while owners can revoke links.';
+  'Design snapshots shared by UUID link; guests can read and submit feedback through constrained database functions, while owners can revoke links.';
+
+-- Guests may append comments and set feedback status, but cannot rewrite the
+-- shared design snapshot or forge approval metadata with a direct table update.
+create or replace function public.add_shared_design_comment(p_share_id uuid, p_comment jsonb)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if jsonb_typeof(p_comment) <> 'object'
+     or nullif(trim(p_comment->>'body'), '') is null
+     or length(p_comment->>'body') > 2000 then
+    raise exception 'A comment between 1 and 2000 characters is required';
+  end if;
+  update public.shared_designs
+    set comments = comments || jsonb_build_array(p_comment)
+    where id = p_share_id;
+  if not found then raise exception 'Share link not found'; end if;
+end;
+$$;
+
+create or replace function public.set_shared_design_feedback(p_share_id uuid, p_status text, p_approved_by text)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if p_status not in ('approved', 'changes') then
+    raise exception 'Unsupported feedback status';
+  end if;
+  update public.shared_designs
+    set status = p_status,
+        approved_at = case when p_status = 'approved' then now() else null end,
+        approved_by = case when p_status = 'approved' then left(coalesce(nullif(trim(p_approved_by), ''), 'Family guest'), 120) else null end
+    where id = p_share_id;
+  if not found then raise exception 'Share link not found'; end if;
+end;
+$$;
+
+revoke all on function public.add_shared_design_comment(uuid, jsonb) from public;
+revoke all on function public.set_shared_design_feedback(uuid, text, text) from public;
+grant execute on function public.add_shared_design_comment(uuid, jsonb) to anon, authenticated;
+grant execute on function public.set_shared_design_feedback(uuid, text, text) to anon, authenticated;

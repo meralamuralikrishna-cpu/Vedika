@@ -38,18 +38,6 @@ export async function getMySharedDesigns() {
   return (data ?? []).map(mapShare);
 }
 
-export async function updateSharedDesignContent(id, changes) {
-  if (!supabase) throw new Error('Supabase is not configured.');
-  const { data, error } = await supabase.from('shared_designs').update({
-    name: changes.name,
-    elements: changes.elements,
-    settings: changes.settings,
-    venue_plan: changes.venuePlan,
-  }).eq('id', id).select(SHARE_FIELDS).maybeSingle();
-  if (error) throw error;
-  return mapShare(data);
-}
-
 export async function revokeSharedDesign(id) {
   if (!supabase) throw new Error('Supabase is not configured.');
   const { error } = await supabase.from('shared_designs').delete().eq('id', id);
@@ -75,27 +63,27 @@ export async function createSharedDesign(input) {
   return mapShare(data);
 }
 
-async function updateFeedback(id, changes) {
-  if (!supabase) return null;
-  const { data, error } = await supabase.from('shared_designs').update(changes).eq('id', id).select(SHARE_FIELDS).maybeSingle();
+async function fetchShare(id) {
+  const { data, error } = await supabase.from('shared_designs').select(SHARE_FIELDS).eq('id', id).maybeSingle();
   if (error) throw error;
   return mapShare(data);
 }
 
 export async function addShareComment(shareId, author, body) {
-  const share = await getSharedDesign(shareId);
-  if (!share) return null;
   const comment = { id: uuid(), author: author.trim() || 'Guest', body: body.trim(), createdAt: new Date().toISOString() };
-  return updateFeedback(shareId, { comments: [...share.comments, comment] });
+  const { error } = await supabase.rpc('add_shared_design_comment', { p_share_id: shareId, p_comment: comment });
+  if (error) throw error;
+  return fetchShare(shareId);
 }
 
 export async function setShareStatus(shareId, status, approvedBy) {
-  const changes = { status };
-  if (status === 'approved') {
-    changes.approved_at = new Date().toISOString();
-    changes.approved_by = approvedBy?.trim() || 'Family guest';
-  }
-  return updateFeedback(shareId, changes);
+  const { error } = await supabase.rpc('set_shared_design_feedback', {
+    p_share_id: shareId,
+    p_status: status,
+    p_approved_by: approvedBy?.trim() || 'Family guest',
+  });
+  if (error) throw error;
+  return fetchShare(shareId);
 }
 
 export function shareUrl(shareId) {
