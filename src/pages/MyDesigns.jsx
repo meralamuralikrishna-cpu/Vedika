@@ -12,7 +12,7 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { ConfirmDialog } from '@/components/ui/Modal';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { formatDate, cn } from '@/lib/utils';
-import { getMySharedDesigns, revokeSharedDesign, shareUrl } from '@/lib/share';
+import { createSharedDesign, getMySharedDesigns, revokeSharedDesign, shareUrl } from '@/lib/share';
 export function MyDesigns() {
     const { designs, deleteDesign, saveDesign, toggleDesignFavorite, setActiveDesignId, canSaveData } = useApp();
     const { toast } = useToast();
@@ -22,6 +22,7 @@ export function MyDesigns() {
     const [shares, setShares] = useState([]);
     const [shareError, setShareError] = useState('');
     const [revokingId, setRevokingId] = useState(null);
+    const [creatingShareId, setCreatingShareId] = useState(null);
     const refreshShares = useCallback(async () => {
         if (!canSaveData) { setShares([]); return; }
         try { setShares(await getMySharedDesigns()); setShareError(''); }
@@ -103,6 +104,21 @@ export function MyDesigns() {
                     <Link to={`/decorators?designType=custom&designId=${encodeURIComponent(d.id)}&designName=${encodeURIComponent(d.name)}`} className="flex-1">
                       <Button size="sm" variant="secondary" className="w-full">Find Decorators</Button>
                     </Link>
+                    {canSaveData && <Button size="sm" variant="secondary" disabled={creatingShareId === d.id} onClick={async () => {
+                      setCreatingShareId(d.id);
+                      try {
+                        const share = await createSharedDesign({ designId: d.id, name: d.name, elements: d.elements, settings: d.settings, venuePlan: d.venuePlan });
+                        const url = shareUrl(share.id);
+                        let copied = false;
+                        try {
+                          if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText(url); copied = true; }
+                        } catch { /* Link remains available in Shared links below. */ }
+                        await refreshShares();
+                        toast(copied ? 'Guest link created and copied' : 'Guest link created. Copy it from Shared links below.', copied ? 'success' : 'info');
+                      } catch (error) {
+                        toast(error instanceof Error ? error.message : 'Could not create the guest link.', 'error');
+                      } finally { setCreatingShareId(null); }
+                    }}><Link2 className="h-3.5 w-3.5"/><span>{creatingShareId === d.id ? 'Creating…' : 'Get link'}</span></Button>}
                     <Button size="sm" variant="secondary" aria-label={`Duplicate ${d.name}`} title="Duplicate design" onClick={() => {
                       const copy = { ...d, id: uuid(), name: `${d.name} copy`, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), elements: d.elements.map((element) => ({ ...element, id: uuid() })) };
                       saveDesign(copy);
