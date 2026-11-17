@@ -21,7 +21,7 @@ export const DesignCanvas = forwardRef(function DesignCanvas({ elements, selecte
             width: CANVAS_W,
             height: CANVAS_H,
             transform: `scale(${zoom})`,
-        }} onMouseDown={() => onSelect(null)} role="application" aria-label={floorMode ? 'Venue floor-plan canvas' : 'Design canvas'}>
+        }} onPointerDown={() => onSelect(null)} role="application" aria-label={floorMode ? 'Venue floor-plan canvas' : 'Design canvas'}>
           {/* Scene / venue base */}
           {floorMode && venuePlan?.imageDataUrl ? (<img src={venuePlan.imageDataUrl} alt="Venue floor plan" className="absolute inset-0 w-full h-full object-fill pointer-events-none select-none" draggable={false}/>) : floorMode ? (<div className="absolute inset-0" style={{
                 background: `

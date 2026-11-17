@@ -24,7 +24,36 @@ export async function getSharedDesign(id) {
   if (!supabase) return null;
   const { data, error } = await supabase.from('shared_designs').select(SHARE_FIELDS).eq('id', id).maybeSingle();
   if (error) throw error;
+  const share = mapShare(data);
+  if (!share) return null;
+  return share;
+}
+
+export async function getMySharedDesigns() {
+  if (!supabase) return [];
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) throw new Error('Sign in to manage share links.');
+  const { data, error } = await supabase.from('shared_designs').select(`${SHARE_FIELDS}, owner_id`).eq('owner_id', user.id).order('created_at', { ascending: false });
+  if (error) throw error;
+  return (data ?? []).map(mapShare);
+}
+
+export async function updateSharedDesignContent(id, changes) {
+  if (!supabase) throw new Error('Supabase is not configured.');
+  const { data, error } = await supabase.from('shared_designs').update({
+    name: changes.name,
+    elements: changes.elements,
+    settings: changes.settings,
+    venue_plan: changes.venuePlan,
+  }).eq('id', id).select(SHARE_FIELDS).maybeSingle();
+  if (error) throw error;
   return mapShare(data);
+}
+
+export async function revokeSharedDesign(id) {
+  if (!supabase) throw new Error('Supabase is not configured.');
+  const { error } = await supabase.from('shared_designs').delete().eq('id', id);
+  if (error) throw error;
 }
 
 export async function createSharedDesign(input) {

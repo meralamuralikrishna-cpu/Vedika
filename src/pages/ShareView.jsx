@@ -1,6 +1,6 @@
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { addShareComment, getSharedDesign, setShareStatus, } from '@/lib/share';
+import { addShareComment, getSharedDesign, setShareStatus, updateSharedDesignContent } from '@/lib/share';
 import { DesignCanvas } from '@/components/studio/DesignCanvas';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -27,6 +27,9 @@ export function ShareView() {
     const [body, setBody] = useState('');
     const [error, setError] = useState('');
     const [flash, setFlash] = useState(null);
+    const [saving, setSaving] = useState(false);
+    const [contentDirty, setContentDirty] = useState(false);
+    const [selectedElementId, setSelectedElementId] = useState(null);
     const reload = useCallback(async () => {
         if (!shareId) {
             setMissing(true);
@@ -41,6 +44,8 @@ export function ShareView() {
           }
           setMissing(false);
           setShare(found);
+          setContentDirty(false);
+          setSelectedElementId(null);
         } catch {
           setMissing(true);
           setShare(null);
@@ -88,6 +93,24 @@ export function ShareView() {
           setFlash('Could not save your feedback. Please try again.');
           window.setTimeout(() => setFlash(null), 2800);
         }
+    };
+    const updateElement = (element) => {
+      setShare((current) => current ? ({ ...current, elements: current.elements.map((item) => item.id === element.id ? element : item) }) : current);
+      setContentDirty(true);
+    };
+    const deleteElement = (id) => {
+      setShare((current) => current ? ({ ...current, elements: current.elements.filter((item) => item.id !== id) }) : current);
+      setSelectedElementId(null);
+      setContentDirty(true);
+    };
+    const saveGuestEdits = async () => {
+      if (!share) return;
+      setSaving(true);
+      try {
+        const updated = await updateSharedDesignContent(share.id, share);
+        if (updated) { setShare(updated); setContentDirty(false); showFlash('Design changes saved for everyone with this link'); }
+      } catch { showFlash('Could not save changes. Please try again.'); }
+      finally { setSaving(false); }
     };
     if (missing) {
         return (<div className="min-h-screen app-atmosphere flex flex-col">
@@ -142,7 +165,11 @@ export function ShareView() {
 
       <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 md:py-10 space-y-8">
         <section className="rounded-2xl overflow-hidden border border-sage/30 shadow-lg bg-white/40">
-          <DesignCanvas elements={share.elements} selectedId={null} settings={share.settings} venuePlan={share.venuePlan} zoom={1} preview onSelect={() => { }} onUpdateElement={() => { }}/>
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-sage/25 bg-white/75 px-4 py-3">
+            <p className="text-xs text-charcoal/60">Drag, resize, or rotate an element to adjust this shared look.</p>
+            <Button size="sm" variant="gold" disabled={!contentDirty || saving} onClick={() => void saveGuestEdits()}>{saving ? 'Saving…' : 'Save design changes'}</Button>
+          </div>
+          <DesignCanvas elements={share.elements} selectedId={selectedElementId} settings={share.settings} venuePlan={share.venuePlan} zoom={1} onSelect={setSelectedElementId} onUpdateElement={updateElement} onDeleteElement={deleteElement}/>
         </section>
 
         <div className="grid md:grid-cols-[1fr_280px] gap-6 items-start">

@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Plus, Search, Trash2, Copy } from 'lucide-react';
+import { Heart, Plus, Search, Trash2, Copy, Link2, ExternalLink, Ban } from 'lucide-react';
 import { v4 as uuid } from 'uuid';
 import { useApp } from '@/context/AppContext';
 import { useToast } from '@/components/ui/Toast';
@@ -12,12 +12,22 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { ConfirmDialog } from '@/components/ui/Modal';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { formatDate, cn } from '@/lib/utils';
+import { getMySharedDesigns, revokeSharedDesign, shareUrl } from '@/lib/share';
 export function MyDesigns() {
     const { designs, deleteDesign, saveDesign, toggleDesignFavorite, setActiveDesignId, canSaveData } = useApp();
     const { toast } = useToast();
     const [q, setQ] = useState('');
     const [favOnly, setFavOnly] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
+    const [shares, setShares] = useState([]);
+    const [shareError, setShareError] = useState('');
+    const [revokingId, setRevokingId] = useState(null);
+    const refreshShares = useCallback(async () => {
+        if (!canSaveData) { setShares([]); return; }
+        try { setShares(await getMySharedDesigns()); setShareError(''); }
+        catch { setShareError('Could not load share links.'); }
+    }, [canSaveData]);
+    useEffect(() => { void refreshShares(); }, [refreshShares]);
     const filtered = useMemo(() => {
         return designs.filter((d) => {
             if (favOnly && !d.isFavorite)
@@ -45,6 +55,24 @@ export function MyDesigns() {
           Favorites
         </Button>
       </div>
+
+      {canSaveData && <section className="mb-10 rounded-2xl border border-sage/30 bg-white/65 p-5 md:p-6 shadow-sm">
+        <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
+          <div><p className="section-kicker">Guest access</p><h2 className="font-display text-2xl text-forest">Shared links</h2><p className="text-xs text-charcoal/55 mt-1">Links stay active until you revoke them. Guests can view, rearrange, and resize shared elements.</p></div>
+          <span className="rounded-full bg-sage/15 px-3 py-1 text-xs font-semibold text-forest">No expiry</span>
+        </div>
+        {shareError && <p role="alert" className="text-sm text-red-700">{shareError}</p>}
+        {shares.length === 0 ? <p className="text-sm text-charcoal/55">No active links yet. Share a design from Studio to invite guests.</p> : <ul className="divide-y divide-sage/20">
+          {shares.map((share) => <li key={share.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
+            <div className="min-w-0"><p className="font-semibold text-sm text-forest truncate">{share.name}</p><p className="text-[11px] text-charcoal/50">Created {formatDate(share.createdAt)} · {share.status}</p></div>
+            <div className="flex items-center gap-2">
+              <Button size="sm" variant="secondary" aria-label={`Copy link for ${share.name}`} onClick={() => { void navigator.clipboard?.writeText(shareUrl(share.id)); toast('Share link copied', 'success'); }}><Link2 className="h-3.5 w-3.5"/><span className="hidden sm:inline">Copy</span></Button>
+              <a href={shareUrl(share.id)} target="_blank" rel="noreferrer" aria-label={`Open share for ${share.name}`} className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-forest hover:bg-sage/15"><ExternalLink className="h-3.5 w-3.5"/></a>
+              <Button size="sm" variant="danger" disabled={revokingId === share.id} aria-label={`Revoke link for ${share.name}`} onClick={async () => { setRevokingId(share.id); try { await revokeSharedDesign(share.id); setShares((current) => current.filter((item) => item.id !== share.id)); toast('Share link revoked', 'info'); } catch (error) { toast(error instanceof Error ? error.message : 'Could not revoke link.', 'error'); } finally { setRevokingId(null); } }}><Ban className="h-3.5 w-3.5"/><span className="hidden sm:inline">Revoke</span></Button>
+            </div>
+          </li>)}
+        </ul>}
+      </section>}
 
       {filtered.length === 0 ? (<EmptyState title="No designs yet" description={designs.length === 0
                 ? 'Open the Design Studio to create your first look.'

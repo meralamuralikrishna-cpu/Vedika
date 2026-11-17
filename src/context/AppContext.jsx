@@ -14,7 +14,18 @@ export function AppProvider({ children }) {
         supabase.auth.getSession().then(({ data }) => { if (alive) { setUser(data.session?.user ?? null); setAuthReady(true); } });
         const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user ?? null);
-            if (!session) setCloudReady(false);
+            if (!session) {
+                setCloudReady(false);
+                setDesigns([]);
+                setMoodboards([]);
+                setBookings([]);
+                setNotifications([]);
+                setTemplateFavorites([]);
+                setDecoratorFavorites([]);
+                setLocaleState('en');
+                setActiveDesignIdState(null);
+                setProfileState(DEFAULT_PROFILE);
+            }
         });
         return () => { alive = false; listener.subscription.unsubscribe(); };
     }, []);

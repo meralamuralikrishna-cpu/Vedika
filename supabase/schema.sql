@@ -135,14 +135,18 @@ alter table public.shared_designs enable row level security;
 revoke all on table public.shared_designs from anon, authenticated;
 grant select (id, design_id, name, elements, settings, venue_plan, status, comments, created_at, approved_at, approved_by)
   on table public.shared_designs to anon, authenticated;
+grant select (owner_id) on table public.shared_designs to authenticated;
 grant insert (id, owner_id, design_id, name, elements, settings, venue_plan, status, comments)
   on table public.shared_designs to authenticated;
-grant update (status, comments, approved_at, approved_by)
+grant update (name, elements, settings, venue_plan, status, comments, approved_at, approved_by)
   on table public.shared_designs to anon, authenticated;
+grant delete on table public.shared_designs to authenticated;
 
 drop policy if exists "Anyone can read a share link" on public.shared_designs;
 drop policy if exists "Users can create their own share links" on public.shared_designs;
 drop policy if exists "Guests can leave share feedback" on public.shared_designs;
+drop policy if exists "Owners can revoke share links" on public.shared_designs;
+drop policy if exists "Owners can delete share links" on public.shared_designs;
 
 create policy "Anyone can read a share link" on public.shared_designs
   for select to anon, authenticated using (true);
@@ -154,5 +158,8 @@ create policy "Guests can leave share feedback" on public.shared_designs
   for update to anon, authenticated using (true)
   with check (status in ('pending', 'approved', 'changes') and jsonb_typeof(comments) = 'array');
 
+create policy "Owners can delete share links" on public.shared_designs
+  for delete to authenticated using ((select auth.uid()) = owner_id);
+
 comment on table public.shared_designs is
-  'Design snapshots shared by UUID link; guests can view and update feedback fields only.';
+  'Design snapshots shared by UUID link; guests can view and edit shared content, while owners can revoke links.';

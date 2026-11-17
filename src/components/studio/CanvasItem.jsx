@@ -1,9 +1,11 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 import { Trash2 } from 'lucide-react';
 import { ElementVisual } from './ElementVisual';
 import { cn, clamp } from '@/lib/utils';
 export function CanvasItem({ element, selected, zoom, density, onSelect, onChange, onDelete, onInteractionStart, canvasWidth, canvasHeight, }) {
     const modeRef = useRef(null);
+    const pointerIdRef = useRef(null);
+    const stopRef = useRef(null);
     const startRef = useRef({
         mx: 0,
         my: 0,
@@ -19,6 +21,7 @@ export function CanvasItem({ element, selected, zoom, density, onSelect, onChang
         onSelect(element.id);
         onInteractionStart?.();
         modeRef.current = mode;
+        pointerIdRef.current = e.pointerId;
         startRef.current = {
             mx: e.clientX,
             my: e.clientY,
@@ -29,7 +32,7 @@ export function CanvasItem({ element, selected, zoom, density, onSelect, onChang
             rot: element.rotation,
         };
         const onMove = (ev) => {
-            if (!modeRef.current)
+            if (!modeRef.current || ev.pointerId !== pointerIdRef.current)
                 return;
             const dx = (ev.clientX - startRef.current.mx) / zoom;
             const dy = (ev.clientY - startRef.current.my) / zoom;
@@ -54,12 +57,22 @@ export function CanvasItem({ element, selected, zoom, density, onSelect, onChang
         };
         const onUp = () => {
             modeRef.current = null;
-            window.removeEventListener('mousemove', onMove);
-            window.removeEventListener('mouseup', onUp);
+            pointerIdRef.current = null;
+            window.removeEventListener('pointermove', onMove);
+            window.removeEventListener('pointerup', onUp);
+            window.removeEventListener('pointercancel', onUp);
+            stopRef.current = null;
         };
-        window.addEventListener('mousemove', onMove);
-        window.addEventListener('mouseup', onUp);
+        stopRef.current = onUp;
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+        window.addEventListener('pointercancel', onUp);
     }, [element, onSelect, onChange, onInteractionStart, zoom, canvasWidth, canvasHeight]);
+    useEffect(() => () => {
+        stopRef.current?.();
+        modeRef.current = null;
+        pointerIdRef.current = null;
+    }, []);
     return (<div role="button" tabIndex={0} aria-label={`${element.name}, selected: ${selected}`} aria-pressed={selected} className={cn('absolute select-none touch-none group', selected ? 'z-50' : 'z-10')} style={{
             left: element.x,
             top: element.y,
@@ -67,7 +80,7 @@ export function CanvasItem({ element, selected, zoom, density, onSelect, onChang
             height: element.height,
             transform: `rotate(${element.rotation}deg)`,
             zIndex: selected ? 1000 : element.zIndex,
-        }} onMouseDown={(e) => begin('move', e)} onKeyDown={(e) => {
+        }} onPointerDown={(e) => begin('move', e)} onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 onSelect(element.id);
@@ -81,9 +94,8 @@ export function CanvasItem({ element, selected, zoom, density, onSelect, onChang
           <span className="absolute -top-6 left-0 text-[10px] font-medium text-forest bg-ivory/90 px-1.5 py-0.5 rounded whitespace-nowrap max-w-[70%] truncate">
             {element.name}
           </span>
-          <button type="button" aria-label={`Delete ${element.name}`} title="Delete" className="absolute -top-3 -right-3 h-6 w-6 rounded-full bg-red-700 text-white border-2 border-white shadow flex items-center justify-center hover:bg-red-800 cursor-pointer" onMouseDown={(e) => {
+          <button type="button" aria-label={`Delete ${element.name}`} title="Delete" className="absolute -top-3 -right-3 h-8 w-8 rounded-full bg-red-700 text-white border-2 border-white shadow flex items-center justify-center hover:bg-red-800 cursor-pointer" onPointerDown={(e) => {
                 e.stopPropagation();
-                e.preventDefault();
             }} onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
@@ -91,8 +103,8 @@ export function CanvasItem({ element, selected, zoom, density, onSelect, onChang
             }}>
             <Trash2 className="h-3 w-3"/>
           </button>
-          <button type="button" aria-label="Resize element" className="absolute -right-2 -bottom-2 h-4 w-4 rounded-full bg-champagne border-2 border-white cursor-se-resize" onMouseDown={(e) => begin('resize', e)}/>
-          <button type="button" aria-label="Rotate element" className="absolute left-1/2 -top-3 -translate-x-1/2 h-3.5 w-3.5 rounded-full bg-forest border-2 border-white cursor-grab" onMouseDown={(e) => begin('rotate', e)}/>
+          <button type="button" aria-label="Resize element" className="absolute -right-2 -bottom-2 h-7 w-7 rounded-full bg-champagne border-2 border-white cursor-se-resize" onPointerDown={(e) => begin('resize', e)}/>
+          <button type="button" aria-label="Rotate element" className="absolute left-1/2 -top-3 -translate-x-1/2 h-7 w-7 rounded-full bg-forest border-2 border-white cursor-grab" onPointerDown={(e) => begin('rotate', e)}/>
         </>)}
     </div>);
 }
