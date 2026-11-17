@@ -59,12 +59,13 @@ create table if not exists public.booking_requests (
   design_name text,
   design_type text,
   design_snapshot jsonb,
+  event_details jsonb not null default '{}'::jsonb,
   event_date date not null,
   event_type text not null,
   venue text,
   notes text,
   status_note text,
-  status text not null default 'pending' check (status in ('pending', 'confirmed', 'declined')),
+  status text not null default 'pending' check (status in ('pending', 'under_review', 'changes_requested', 'approved', 'rejected')),
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -76,7 +77,15 @@ alter table public.booking_requests add column if not exists design_id text;
 alter table public.booking_requests add column if not exists design_name text;
 alter table public.booking_requests add column if not exists design_type text;
 alter table public.booking_requests add column if not exists design_snapshot jsonb;
+alter table public.booking_requests add column if not exists event_details jsonb not null default '{}'::jsonb;
 alter table public.booking_requests add column if not exists status_note text;
+
+-- Expand booking workflow statuses while preserving legacy decisions.
+alter table public.booking_requests drop constraint if exists booking_requests_status_check;
+update public.booking_requests set status = 'approved' where status = 'confirmed';
+update public.booking_requests set status = 'rejected' where status = 'declined';
+alter table public.booking_requests add constraint booking_requests_status_check
+  check (status in ('pending', 'under_review', 'changes_requested', 'approved', 'rejected'));
 
 alter table public.booking_requests enable row level security;
 revoke all on table public.booking_requests from anon, authenticated;

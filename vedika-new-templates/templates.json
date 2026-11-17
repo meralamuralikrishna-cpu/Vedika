@@ -1,0 +1,644 @@
+[
+  {
+    "id": "mehendi-garden-swing",
+    "name": "Mehendi Garden Swing",
+    "category": "Mehendi",
+    "theme": "Parrot Green & Marigold",
+    "tags": [
+      "mehendi",
+      "swing",
+      "marigold",
+      "outdoor",
+      "haldi-mehendi"
+    ],
+    "floorPlanReady": true,
+    "elements": [
+      {
+        "id": "bg",
+        "type": "backdrop",
+        "fill": "#2e6b3a",
+        "floor": "#d9a441",
+        "trim": "#ffffff"
+      },
+      {
+        "id": "lights",
+        "type": "lights",
+        "y": 22,
+        "count": 26,
+        "color": "#ffe29a",
+        "sag": 12
+      },
+      {
+        "id": "wall",
+        "type": "floralWall",
+        "x": 40,
+        "y": 34,
+        "w": 320,
+        "h": 191,
+        "r": 11,
+        "base": "#245c30",
+        "colors": [
+          "#f4a300",
+          "#ffc933",
+          "#e8590c",
+          "#ffd95a"
+        ]
+      },
+      {
+        "id": "swing",
+        "type": "swing",
+        "x": 150,
+        "y": 78,
+        "w": 100,
+        "h": 135,
+        "frame": "#7a4a1d",
+        "rope": "#d9a441",
+        "seat": "#c0392b"
+      },
+      {
+        "id": "diyas",
+        "type": "diyas",
+        "x": 60,
+        "y": 238,
+        "w": 280,
+        "count": 6,
+        "color": "#b5651d"
+      }
+    ],
+    "elementCount": 5
+  },
+  {
+    "id": "garba-navratri-mandap",
+    "name": "Garba Navratri Mandap",
+    "category": "Navratri",
+    "theme": "Saffron & Rani Pink",
+    "tags": [
+      "navratri",
+      "garba",
+      "dandiya",
+      "festival",
+      "mandap"
+    ],
+    "floorPlanReady": true,
+    "elements": [
+      {
+        "id": "bg",
+        "type": "backdrop",
+        "fill": "#8e2a6b",
+        "floor": "#4a1238",
+        "trim": "#ffb703"
+      },
+      {
+        "id": "curtainL",
+        "type": "curtain",
+        "side": "left",
+        "color": "#e85d04"
+      },
+      {
+        "id": "curtainR",
+        "type": "curtain",
+        "side": "right",
+        "color": "#e85d04"
+      },
+      {
+        "id": "lanterns",
+        "type": "lanterns",
+        "cord": "#ffd166",
+        "items": [
+          {
+            "x": 100,
+            "y": 40,
+            "color": "#ffb703"
+          },
+          {
+            "x": 160,
+            "y": 58,
+            "color": "#f72585"
+          },
+          {
+            "x": 240,
+            "y": 58,
+            "color": "#f72585"
+          },
+          {
+            "x": 300,
+            "y": 40,
+            "color": "#ffb703"
+          }
+        ]
+      },
+      {
+        "id": "mandap",
+        "type": "mandap",
+        "x": 140,
+        "y": 80,
+        "w": 120,
+        "h": 145,
+        "roof": "#ffb703",
+        "pillar": "#f4a261",
+        "inner": "#5a1a4a",
+        "seat": "#e63946"
+      },
+      {
+        "id": "rangoli",
+        "type": "rangoli",
+        "x": 200,
+        "y": 262,
+        "r": 28,
+        "colors": [
+          "#ffb703",
+          "#f72585",
+          "#7209b7",
+          "#ffffff"
+        ]
+      },
+      {
+        "id": "lights",
+        "type": "lights",
+        "y": 16,
+        "count": 22,
+        "color": "#ffd166",
+        "sag": 8
+      }
+    ],
+    "elementCount": 7
+  },
+  {
+    "id": "golden-anniversary-backdrop",
+    "name": "Golden Anniversary Backdrop",
+    "category": "Anniversary",
+    "theme": "Champagne & Gold",
+    "tags": [
+      "anniversary",
+      "gold",
+      "romantic",
+      "50th",
+      "silver-jubilee"
+    ],
+    "floorPlanReady": true,
+    "elements": [
+      {
+        "id": "bg",
+        "type": "backdrop",
+        "fill": "#3a2a1a",
+        "floor": "#241709",
+        "trim": "#f2c14e"
+      },
+      {
+        "id": "lights",
+        "type": "lights",
+        "y": 20,
+        "count": 24,
+        "color": "#ffe9a8",
+        "sag": 10
+      },
+      {
+        "id": "arch",
+        "type": "arch",
+        "x": 125,
+        "y": 50,
+        "w": 150,
+        "h": 175,
+        "color": "#f2c14e",
+        "bloom": "#fff3d6",
+        "thick": 8
+      },
+      {
+        "id": "rings",
+        "type": "rings",
+        "x": 200,
+        "y": 140,
+        "color": "#f2c14e"
+      },
+      {
+        "id": "chandelier",
+        "type": "chandelier",
+        "x": 200,
+        "y": 36,
+        "color": "#f2c14e"
+      },
+      {
+        "id": "sofa",
+        "type": "sofa",
+        "x": 160,
+        "y": 200,
+        "w": 80,
+        "color": "#9b2335"
+      },
+      {
+        "id": "pillars",
+        "type": "pillars",
+        "xs": [
+          60,
+          328
+        ],
+        "y": 70,
+        "h": 155,
+        "color": "#d4a73a",
+        "cap": "#f2c14e"
+      }
+    ],
+    "elementCount": 7
+  },
+  {
+    "id": "griha-pravesh-toran",
+    "name": "Griha Pravesh Toran",
+    "category": "Housewarming",
+    "theme": "Mango Green & Haldi",
+    "tags": [
+      "griha pravesh",
+      "housewarming",
+      "toran",
+      "entrance",
+      "puja"
+    ],
+    "floorPlanReady": false,
+    "elements": [
+      {
+        "id": "bg",
+        "type": "backdrop",
+        "fill": "#f6efe0",
+        "floor": "#c9a66b",
+        "trim": "#7a4a1d"
+      },
+      {
+        "id": "toran",
+        "type": "toran",
+        "x": 70,
+        "y": 40,
+        "w": 260,
+        "count": 9,
+        "colors": [
+          "#f4a300",
+          "#e8590c",
+          "#ffc933"
+        ],
+        "rail": "#6b3f1d"
+      },
+      {
+        "id": "pillars",
+        "type": "pillars",
+        "xs": [
+          90,
+          298
+        ],
+        "y": 50,
+        "h": 175,
+        "color": "#b5651d",
+        "cap": "#7a4a1d"
+      },
+      {
+        "id": "rangoli",
+        "type": "rangoli",
+        "x": 200,
+        "y": 258,
+        "r": 30,
+        "colors": [
+          "#e63946",
+          "#f4a300",
+          "#2a9d8f",
+          "#ffffff"
+        ]
+      },
+      {
+        "id": "diyas",
+        "type": "diyas",
+        "x": 120,
+        "y": 240,
+        "w": 160,
+        "count": 4,
+        "color": "#b5651d"
+      }
+    ],
+    "elementCount": 5
+  },
+  {
+    "id": "diwali-diya-lounge",
+    "name": "Diwali Diya Lounge",
+    "category": "Diwali",
+    "theme": "Midnight & Amber",
+    "tags": [
+      "diwali",
+      "deepavali",
+      "diya",
+      "lanterns",
+      "festival"
+    ],
+    "floorPlanReady": true,
+    "elements": [
+      {
+        "id": "bg",
+        "type": "backdrop",
+        "fill": "#1b1038",
+        "floor": "#2a1a52",
+        "trim": "#ffb703"
+      },
+      {
+        "id": "lights",
+        "type": "lights",
+        "y": 18,
+        "count": 28,
+        "color": "#ffcf5c",
+        "sag": 14
+      },
+      {
+        "id": "lanterns",
+        "type": "lanterns",
+        "cord": "#ffcf5c",
+        "items": [
+          {
+            "x": 70,
+            "y": 48,
+            "color": "#ff7b00"
+          },
+          {
+            "x": 140,
+            "y": 70,
+            "color": "#ffb703"
+          },
+          {
+            "x": 200,
+            "y": 52,
+            "color": "#e63946"
+          },
+          {
+            "x": 260,
+            "y": 70,
+            "color": "#ffb703"
+          },
+          {
+            "x": 330,
+            "y": 48,
+            "color": "#ff7b00"
+          }
+        ]
+      },
+      {
+        "id": "stage",
+        "type": "stage",
+        "x": 90,
+        "y": 190,
+        "w": 220,
+        "h": 35,
+        "color": "#3b2468"
+      },
+      {
+        "id": "diyas",
+        "type": "diyas",
+        "x": 40,
+        "y": 245,
+        "w": 320,
+        "count": 10,
+        "color": "#d4881e"
+      },
+      {
+        "id": "rangoli",
+        "type": "rangoli",
+        "x": 200,
+        "y": 270,
+        "r": 24,
+        "colors": [
+          "#ff7b00",
+          "#e63946",
+          "#ffb703",
+          "#ffffff"
+        ]
+      }
+    ],
+    "elementCount": 6
+  },
+  {
+    "id": "cradle-ceremony-bloom",
+    "name": "Cradle Ceremony Bloom",
+    "category": "Naming ceremony",
+    "theme": "Peach & Sage",
+    "tags": [
+      "cradle",
+      "namkaran",
+      "naming ceremony",
+      "baby",
+      "pastel"
+    ],
+    "floorPlanReady": true,
+    "elements": [
+      {
+        "id": "bg",
+        "type": "backdrop",
+        "fill": "#fde8dc",
+        "floor": "#e6d5c3",
+        "trim": "#ffffff"
+      },
+      {
+        "id": "curtainL",
+        "type": "curtain",
+        "side": "left",
+        "color": "#cfe0c3"
+      },
+      {
+        "id": "curtainR",
+        "type": "curtain",
+        "side": "right",
+        "color": "#cfe0c3"
+      },
+      {
+        "id": "arch",
+        "type": "arch",
+        "x": 110,
+        "y": 40,
+        "w": 180,
+        "h": 185,
+        "color": "#9fc08a",
+        "bloom": "#f6b8a5",
+        "thick": 7
+      },
+      {
+        "id": "cradle",
+        "type": "cradle",
+        "x": 165,
+        "y": 150,
+        "w": 70,
+        "color": "#f9c9b6",
+        "rope": "#b08968"
+      },
+      {
+        "id": "balloons",
+        "type": "balloons",
+        "items": [
+          {
+            "x": 60,
+            "y": 70,
+            "color": "#f6b8a5"
+          },
+          {
+            "x": 85,
+            "y": 100,
+            "color": "#cfe0c3"
+          },
+          {
+            "x": 335,
+            "y": 70,
+            "color": "#f6b8a5"
+          },
+          {
+            "x": 312,
+            "y": 100,
+            "color": "#cfe0c3"
+          }
+        ]
+      }
+    ],
+    "elementCount": 6
+  },
+  {
+    "id": "starry-kids-birthday",
+    "name": "Starry Kids Birthday",
+    "category": "Birthday",
+    "theme": "Sunny Yellow & Sky",
+    "tags": [
+      "birthday",
+      "kids",
+      "balloons",
+      "cake",
+      "1st birthday"
+    ],
+    "floorPlanReady": false,
+    "elements": [
+      {
+        "id": "bg",
+        "type": "backdrop",
+        "fill": "#8fd3f4",
+        "floor": "#ffd166",
+        "trim": "#ffffff"
+      },
+      {
+        "id": "balloons",
+        "type": "balloons",
+        "items": [
+          {
+            "x": 60,
+            "y": 60,
+            "color": "#ef476f"
+          },
+          {
+            "x": 100,
+            "y": 90,
+            "color": "#ffd166"
+          },
+          {
+            "x": 150,
+            "y": 55,
+            "color": "#06d6a0"
+          },
+          {
+            "x": 250,
+            "y": 55,
+            "color": "#118ab2"
+          },
+          {
+            "x": 300,
+            "y": 90,
+            "color": "#ef476f"
+          },
+          {
+            "x": 340,
+            "y": 60,
+            "color": "#ffd166"
+          }
+        ]
+      },
+      {
+        "id": "lights",
+        "type": "lights",
+        "y": 20,
+        "count": 20,
+        "color": "#ffffff",
+        "sag": 10
+      },
+      {
+        "id": "stage",
+        "type": "stage",
+        "x": 130,
+        "y": 205,
+        "w": 140,
+        "h": 20,
+        "color": "#ffffff"
+      },
+      {
+        "id": "cake",
+        "type": "cake",
+        "x": 180,
+        "y": 183,
+        "color": "#ef476f",
+        "top": "#ffd166"
+      }
+    ],
+    "elementCount": 5
+  },
+  {
+    "id": "product-launch-stage",
+    "name": "Product Launch Stage",
+    "category": "Corporate",
+    "theme": "Graphite & Electric Blue",
+    "tags": [
+      "corporate",
+      "launch",
+      "conference",
+      "stage",
+      "led wall"
+    ],
+    "floorPlanReady": true,
+    "elements": [
+      {
+        "id": "bg",
+        "type": "backdrop",
+        "fill": "#10151f",
+        "floor": "#1b2433",
+        "trim": "#4cc9f0"
+      },
+      {
+        "id": "chandelier",
+        "type": "chandelier",
+        "x": 90,
+        "y": 30,
+        "color": "#9aa7bd"
+      },
+      {
+        "id": "chandelier2",
+        "type": "chandelier",
+        "x": 310,
+        "y": 30,
+        "color": "#9aa7bd"
+      },
+      {
+        "id": "stage",
+        "type": "stage",
+        "x": 60,
+        "y": 185,
+        "w": 280,
+        "h": 40,
+        "color": "#26334a"
+      },
+      {
+        "id": "pillars",
+        "type": "pillars",
+        "xs": [
+          48,
+          340
+        ],
+        "y": 60,
+        "h": 165,
+        "color": "#2f3d57",
+        "cap": "#4cc9f0"
+      },
+      {
+        "id": "lights",
+        "type": "lights",
+        "y": 16,
+        "count": 24,
+        "color": "#4cc9f0",
+        "sag": 6
+      }
+    ],
+    "elementCount": 6
+  }
+]

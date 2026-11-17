@@ -1,0 +1,46 @@
+// Editor metadata for each component: label, group, and which props the Studio
+// should expose as controls. kind: color | number | count | side | colors | items
+export const componentMeta = {
+  backdrop:   { label: "Backdrop & floor",  group: "Structure",  props: { fill: "color", floor: "color", trim: "color" } },
+  curtain:    { label: "Curtain",           group: "Structure",  props: { side: "side", color: "color" } },
+  pillars:    { label: "Pillars",           group: "Structure",  props: { xs: "numbers", y: "number", h: "number", color: "color", cap: "color" } },
+  stage:      { label: "Stage platform",    group: "Structure",  props: { x: "number", y: "number", w: "number", h: "number", color: "color" } },
+  mandap:     { label: "Mandap",            group: "Structure",  props: { x: "number", y: "number", w: "number", h: "number", roof: "color", pillar: "color", inner: "color", seat: "color" } },
+  arch:       { label: "Floral arch",       group: "Structure",  props: { x: "number", y: "number", w: "number", h: "number", color: "color", bloom: "color", thick: "number" } },
+  floralWall: { label: "Floral wall",       group: "Decor",      props: { x: "number", y: "number", w: "number", h: "number", r: "number", base: "color", colors: "colors" } },
+  toran:      { label: "Toran / garland",   group: "Decor",      props: { x: "number", y: "number", w: "number", count: "count", colors: "colors", rail: "color" } },
+  lights:     { label: "String lights",     group: "Lighting",   props: { y: "number", count: "count", color: "color", sag: "number" } },
+  chandelier: { label: "Chandelier",        group: "Lighting",   props: { x: "number", y: "number", color: "color" } },
+  lanterns:   { label: "Hanging lanterns",  group: "Lighting",   props: { cord: "color", items: "items" } },
+  diyas:      { label: "Diya row",          group: "Lighting",   props: { x: "number", y: "number", w: "number", count: "count", color: "color" } },
+  balloons:   { label: "Balloons",          group: "Decor",      props: { items: "items" } },
+  swing:      { label: "Swing (jhula)",     group: "Furniture",  props: { x: "number", y: "number", w: "number", h: "number", frame: "color", rope: "color", seat: "color" } },
+  sofa:       { label: "Sofa",              group: "Furniture",  props: { x: "number", y: "number", w: "number", color: "color" } },
+  cradle:     { label: "Cradle (palna)",    group: "Furniture",  props: { x: "number", y: "number", w: "number", color: "color", rope: "color" } },
+  cake:       { label: "Cake table",        group: "Furniture",  props: { x: "number", y: "number", color: "color", top: "color" } },
+  rings:      { label: "Wedding rings",     group: "Ornament",   props: { x: "number", y: "number", color: "color" } },
+  rangoli:    { label: "Rangoli",           group: "Ornament",   props: { x: "number", y: "number", r: "number", colors: "colors" } },
+};
+
+// Sensible defaults used when a designer drops a component onto the canvas.
+export const componentDefaults = {
+  backdrop:   { fill: "#2e3a59", floor: "#1b2233", trim: "#ffffff" },
+  curtain:    { side: "left", color: "#8a1c2b" },
+  pillars:    { xs: [60, 328], y: 70, h: 155, color: "#d4a73a", cap: "#f2c14e" },
+  stage:      { x: 90, y: 190, w: 220, h: 35, color: "#3b2468" },
+  mandap:     { x: 140, y: 80, w: 120, h: 145, roof: "#ffb703", pillar: "#f4a261", inner: "#5a1a4a", seat: "#e63946" },
+  arch:       { x: 125, y: 50, w: 150, h: 175, color: "#f2c14e", bloom: "#fff3d6", thick: 8 },
+  floralWall: { x: 40, y: 34, w: 320, h: 191, r: 11, base: "#245c30", colors: ["#f4a300", "#ffc933", "#e8590c"] },
+  toran:      { x: 70, y: 40, w: 260, count: 9, colors: ["#f4a300", "#e8590c", "#ffc933"], rail: "#6b3f1d" },
+  lights:     { y: 20, count: 24, color: "#ffe29a", sag: 10 },
+  chandelier: { x: 200, y: 36, color: "#f2c14e" },
+  lanterns:   { cord: "#ffd166", items: [{ x: 120, y: 50, color: "#ffb703" }, { x: 280, y: 50, color: "#f72585" }] },
+  diyas:      { x: 60, y: 238, w: 280, count: 6, color: "#b5651d" },
+  balloons:   { items: [{ x: 70, y: 70, color: "#ef476f" }, { x: 330, y: 70, color: "#06d6a0" }] },
+  swing:      { x: 150, y: 78, w: 100, h: 135, frame: "#7a4a1d", rope: "#d9a441", seat: "#c0392b" },
+  sofa:       { x: 160, y: 200, w: 80, color: "#9b2335" },
+  cradle:     { x: 165, y: 150, w: 70, color: "#f9c9b6", rope: "#b08968" },
+  cake:       { x: 180, y: 183, color: "#ef476f", top: "#ffd166" },
+  rings:      { x: 200, y: 140, color: "#f2c14e" },
+  rangoli:    { x: 200, y: 262, r: 28, colors: ["#ffb703", "#f72585", "#7209b7", "#ffffff"] },
+};

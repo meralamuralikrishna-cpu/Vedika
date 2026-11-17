@@ -11,6 +11,7 @@ function fromRow(row) {
     designName: row.design_name,
     designType: row.design_type,
     designSnapshot: row.design_snapshot,
+    eventDetails: row.event_details ?? {},
     eventDate: row.event_date,
     eventType: row.event_type,
     venue: row.venue,
@@ -45,6 +46,7 @@ export async function createBookingRequest(input) {
     design_name: input.designName || null,
     design_type: input.designType || null,
     design_snapshot: input.designSnapshot || null,
+    event_details: input.eventDetails || {},
     event_date: input.eventDate,
     event_type: input.eventType,
     venue: input.venue || null,
@@ -56,8 +58,12 @@ export async function createBookingRequest(input) {
 
 export async function updateBookingRequestStatus(id, status, statusNote = '') {
   if (!supabase) throw new Error('Supabase is not configured.');
+  const allowed = ['pending', 'under_review', 'changes_requested', 'approved', 'rejected'];
+  if (!allowed.includes(status)) throw new Error('Unsupported event request status.');
+  const note = typeof statusNote === 'string' ? statusNote.trim() : '';
+  if (status === 'changes_requested' && !note) throw new Error('Add a message explaining what needs clarification.');
   const { data, error } = await supabase.from('booking_requests')
-    .update({ status, status_note: statusNote.trim() || null, updated_at: new Date().toISOString() })
+    .update({ status, status_note: note || null, updated_at: new Date().toISOString() })
     .eq('id', id).select('*').single();
   if (error) throw error;
   return fromRow(data);

@@ -13,6 +13,7 @@ import { ConfirmDialog } from '@/components/ui/Modal';
 import { PageHeader } from '@/components/ui/PageHeader';
 import { formatDate, cn } from '@/lib/utils';
 import { createSharedDesign, getMySharedDesigns, revokeSharedDesign, shareUrl } from '@/lib/share';
+import SceneView from '@/studio/SceneView';
 export function MyDesigns() {
     const { designs, deleteDesign, saveDesign, toggleDesignFavorite, setActiveDesignId, canSaveData } = useApp();
     const { toast } = useToast();
@@ -83,9 +84,10 @@ export function MyDesigns() {
           {filtered.map((d) => {
                 const th = getTheme(d.thumbnailTheme);
                 return (<Card key={d.id} className="overflow-hidden">
-                <div className="h-32 relative" style={{
+                <div className="h-32 relative overflow-hidden" style={{
                         background: `linear-gradient(145deg, ${th.palette.backdrop}, ${th.palette.primary})`,
                     }}>
+                  {d.scene && <SceneView scene={d.scene} uid={`d-${d.id}`} className="absolute inset-0 h-full w-full object-cover" aria-hidden="true"/>}
                   <button type="button" className="absolute top-3 right-3 h-9 w-9 rounded-full bg-white/80 flex items-center justify-center" aria-label="Toggle favorite" onClick={() => toggleDesignFavorite(d.id)}>
                     <Heart className={cn('h-4 w-4 text-forest', d.isFavorite && 'fill-blush text-blush')}/>
                   </button>
@@ -95,19 +97,19 @@ export function MyDesigns() {
                   <p className="text-xs text-charcoal/50 mt-1">
                     {formatDate(d.updatedAt)}
                   </p>
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    <Link to={`/studio?design=${d.id}`} className="flex-1" onClick={() => setActiveDesignId(d.id)}>
-                      <Button size="sm" className="w-full">
+                  <div className="mt-4 grid grid-cols-2 gap-2">
+                    <Link to={`/studio?design=${encodeURIComponent(d.id)}`} className="min-w-0" onClick={() => setActiveDesignId(d.id)}>
+                      <Button size="sm" className="w-full justify-center whitespace-nowrap">
                         Open
                       </Button>
                     </Link>
-                    <Link to={`/designs/${encodeURIComponent(d.id)}/plan`} className="flex-1">
-                      <Button size="sm" variant="secondary" className="w-full"><ClipboardList className="h-3.5 w-3.5"/>Build plan</Button>
+                    <Link to={`/designs/${encodeURIComponent(d.id)}/plan`} className="min-w-0">
+                      <Button size="sm" variant="secondary" className="w-full justify-center whitespace-nowrap"><ClipboardList className="h-3.5 w-3.5 shrink-0"/>Build plan</Button>
                     </Link>
-                    <Link to={`/decorators?designType=custom&designId=${encodeURIComponent(d.id)}&designName=${encodeURIComponent(d.name)}`} className="flex-1">
-                      <Button size="sm" variant="secondary" className="w-full">Create event brief</Button>
+                    <Link to={`/decorators?designType=custom&designId=${encodeURIComponent(d.id)}&designName=${encodeURIComponent(d.name)}`} className="min-w-0">
+                      <Button size="sm" variant="secondary" className="w-full justify-center whitespace-nowrap">Create event brief</Button>
                     </Link>
-                    {canSaveData && <Button size="sm" variant="secondary" disabled={creatingShareId === d.id} onClick={async () => {
+                    {canSaveData && <Button size="sm" variant="secondary" className="w-full justify-center whitespace-nowrap" disabled={creatingShareId === d.id} onClick={async () => {
                       setCreatingShareId(d.id);
                       try {
                         const share = await createSharedDesign({ designId: d.id, name: d.name, elements: d.elements, settings: d.settings, venuePlan: d.venuePlan });
@@ -121,15 +123,15 @@ export function MyDesigns() {
                       } catch (error) {
                         toast(error instanceof Error ? error.message : 'Could not create the guest link.', 'error');
                       } finally { setCreatingShareId(null); }
-                    }}><Link2 className="h-3.5 w-3.5"/><span>{creatingShareId === d.id ? 'Creating…' : 'Get link'}</span></Button>}
-                    <Button size="sm" variant="secondary" aria-label={`Duplicate ${d.name}`} title="Duplicate design" onClick={() => {
+                    }}><Link2 className="h-3.5 w-3.5 shrink-0"/><span>{creatingShareId === d.id ? 'Creating…' : 'Get link'}</span></Button>}
+                    <Button size="icon" variant="secondary" className="justify-self-start" aria-label={`Duplicate ${d.name}`} title="Duplicate design" onClick={() => {
                       const copy = { ...d, id: uuid(), name: `${d.name} copy`, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), elements: d.elements.map((element) => ({ ...element, id: uuid() })) };
                       saveDesign(copy);
                       toast('Design duplicated', 'success');
                     }}>
                       <Copy className="h-3.5 w-3.5"/>
                     </Button>
-                    <Button size="sm" variant="secondary" aria-label={`Delete ${d.name}`} onClick={() => setDeleteId(d.id)}>
+                    <Button size="icon" variant="secondary" aria-label={`Delete ${d.name}`} onClick={() => setDeleteId(d.id)}>
                       <Trash2 className="h-3.5 w-3.5"/>
                     </Button>
                   </div>

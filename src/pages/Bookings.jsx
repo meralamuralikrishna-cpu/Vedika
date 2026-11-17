@@ -13,12 +13,18 @@ import { formatDate, cn } from '@/lib/utils';
 import { Link, useSearchParams } from 'react-router-dom';
 import { STARTER_TEMPLATES } from '@/data/starterLayouts';
 import { DEFAULT_VENUE_PLAN } from '@/lib/share';
+import SceneView from '@/studio/SceneView';
+import { ELEMENT_MAP } from '@/studio/elements';
+import { getTheme } from '@/data/themes';
 const EVENT_TYPES = ['Wedding', 'Reception', 'Haldi', 'Mehendi', 'Sangeet', 'Birthday', 'Baby shower', 'Engagement', 'Anniversary', 'Corporate event', 'Other celebration', "Valentine's Day", 'Diwali'];
 const STATUS_STYLE = {
     pending: 'bg-champagne/25 text-charcoal',
-    confirmed: 'bg-sage/40 text-forest',
-    declined: 'bg-red-100 text-red-800',
+    under_review: 'bg-blue-100 text-blue-900',
+    changes_requested: 'bg-amber-100 text-amber-900',
+    approved: 'bg-sage/40 text-forest',
+    rejected: 'bg-red-100 text-red-800',
 };
+const STATUS_LABEL = { pending: 'Pending', under_review: 'Under Review', changes_requested: 'Changes Requested', approved: 'Approved', rejected: 'Rejected' };
 export function Bookings() {
     const { bookings, designs, deleteBooking, saveBooking, canSaveData } = useApp();
     const { toast } = useToast();
@@ -32,6 +38,7 @@ export function Bookings() {
     const [eventType, setEventType] = useState(searchParams.get('eventType') || 'Wedding');
     const [venue, setVenue] = useState(searchParams.get('venue') || '');
     const [notes, setNotes] = useState(searchParams.get('notes') || '');
+    const eventDetails = (() => { try { return JSON.parse(searchParams.get('eventDetails') || '{}'); } catch { return {}; } })();
     const linkedDesignId = searchParams.get('designId') || '';
     const linkedDesignName = searchParams.get('designName') || '';
     const linkedDesignType = searchParams.get('designType') || '';
@@ -47,13 +54,25 @@ export function Bookings() {
         if (isSubmitting) return;
         setIsSubmitting(true);
         try {
-            const designSnapshot = linkedDesign ? {
-                name: linkedDesign.name,
-                elements: (linkedDesign.elements || []).map((element, index) => ({ ...element, id: element.id || `${element.libraryId || 'element'}-${index}` })),
-                settings: linkedDesign.settings,
-                venuePlan: { ...(linkedDesign.venuePlan || DEFAULT_VENUE_PLAN()), imageDataUrl: null },
+            const scene = linkedDesign?.scene ?? null;
+            const sceneElements = scene?.elements ?? [];
+            const decorationCategories = [...new Set(sceneElements.map((element) => ELEMENT_MAP[element.type]?.category).filter(Boolean))];
+            const selectedTheme = linkedDesign?.settings?.themeId ? getTheme(linkedDesign.settings.themeId) : null;
+            const designSnapshot = linkedDesignId ? {
+                version: 1,
+                designId: linkedDesignId,
+                designType: linkedDesignType || 'custom',
+                name: linkedDesign?.name || linkedDesignName || 'Saved design',
+                scene,
+                elements: (linkedDesign?.elements || []).map((element, index) => ({ ...element, id: element.id || `${element.libraryId || 'element'}-${index}` })),
+                settings: linkedDesign?.settings ?? {},
+                venuePlan: { ...(linkedDesign?.venuePlan || DEFAULT_VENUE_PLAN()), imageDataUrl: null },
+                decorationCategories,
+                colors: scene?.palette ?? [],
+                style: selectedTheme?.name ?? linkedDesign?.settings?.themeId ?? '',
+                customization: { elementCount: sceneElements.length, elementNames: [...new Set(sceneElements.map((element) => ELEMENT_MAP[element.type]?.name ?? element.type))], settings: linkedDesign?.settings ?? {}, venue: scene?.venue ?? null },
             } : null;
-            await saveBooking({ eventDate, eventType, venue: venue.trim(), notes: notes.trim(), designId: linkedDesignId, designName: linkedDesignName, designType: linkedDesignType, designSnapshot });
+            await saveBooking({ eventDate, eventType, venue: venue.trim(), notes: notes.trim(), eventDetails, designId: linkedDesignId, designName: linkedDesignName || linkedDesign?.name || '', designType: linkedDesignType || (linkedDesign ? 'custom' : ''), designSnapshot });
             setEventDate(''); setVenue(''); setNotes(''); setAddOpen(false);
             toast('Booking request submitted for review', 'success');
         } catch (error) {
@@ -95,8 +114,10 @@ export function Bookings() {
         <Select label="Status" value={status} onChange={(e) => setStatus(e.target.value)} options={[
             { value: 'all', label: 'All statuses' },
             { value: 'pending', label: 'Pending review' },
-            { value: 'confirmed', label: 'Confirmed' },
-            { value: 'declined', label: 'Declined' },
+            { value: 'under_review', label: 'Under review' },
+            { value: 'changes_requested', label: 'Changes requested' },
+            { value: 'approved', label: 'Approved' },
+            { value: 'rejected', label: 'Rejected' },
         ]}/>
       </div>
 
@@ -108,7 +129,7 @@ export function Bookings() {
                     <div>
                       <div className="flex items-center gap-2 flex-wrap">
                         <p className="font-display text-xl text-forest">{b.decoratorName || 'Venue booking'}</p>
-                        <Badge className={cn(STATUS_STYLE[b.status])}>{b.status}</Badge>
+                        <Badge className={cn(STATUS_STYLE[b.status])}>{STATUS_LABEL[b.status] ?? b.status}</Badge>
                       </div>
                       <p className="text-sm text-charcoal/70 mt-1">
                         {b.eventType} · {formatDate(b.eventDate)} · {b.venue}
@@ -118,8 +139,9 @@ export function Bookings() {
                               {b.designName ?? 'Linked design'}
                             </Link>) : (b.designName)}
                         </p>)}
+                      {b.designSnapshot?.scene && <div className="mt-3 h-24 w-40 overflow-hidden rounded-lg border border-sage/25 bg-ivory"><SceneView scene={b.designSnapshot.scene} uid={`booking-${b.id}`} className="h-full w-full" aria-hidden="true" /></div>}
                       {b.notes && <p className="text-xs text-charcoal/50 mt-2">{b.notes}</p>}
-                      {b.statusNote && <p className="text-xs text-forest bg-sage/10 rounded-lg px-3 py-2 mt-2"><strong>Admin update:</strong> {b.statusNote}</p>}
+                      {b.statusNote && <p className="text-xs text-forest bg-sage/10 rounded-lg px-3 py-2 mt-2"><strong>{b.status === 'changes_requested' ? 'Changes requested:' : 'Admin update:'}</strong> {b.statusNote}</p>}
                     </div>
                     <div className="flex gap-2">
                       <Button size="sm" variant="secondary" aria-label="Delete booking" onClick={() => setDeleteId(b.id)}>

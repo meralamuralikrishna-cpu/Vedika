@@ -19,6 +19,14 @@ const STATUS_STYLE = {
     approved: 'bg-sage/40 text-forest',
     changes: 'bg-blush/50 text-charcoal',
 };
+function MoodboardSharePreview({ snapshot }) {
+    return <div className="grid gap-5 bg-ivory p-4 md:p-6">
+      {snapshot.note && <p className="max-w-3xl text-sm leading-relaxed text-charcoal/70">{snapshot.note}</p>}
+      {snapshot.palette?.length > 0 && <section><h2 className="mb-2 font-display text-lg text-forest">Color palette</h2><div className="flex gap-2">{snapshot.palette.map((color, index) => <i key={`${color}-${index}`} className="h-9 w-9 rounded-full border border-sage/30" style={{ backgroundColor: color }} />)}</div></section>}
+      {snapshot.palettes?.map((palette) => <section key={palette.id}><h2 className="mb-2 font-display text-lg text-forest">{palette.name}</h2><div className="flex gap-2">{palette.colors.map((color, index) => <i key={`${color}-${index}`} className="h-8 w-8 rounded-full border border-sage/30" style={{ backgroundColor: color }} />)}</div></section>)}
+      <section><h2 className="mb-3 font-display text-lg text-forest">Saved inspirations</h2><div className="grid grid-cols-2 gap-3 md:grid-cols-3">{(snapshot.items ?? []).map((item) => <article key={item.id} className="overflow-hidden rounded-xl border border-sage/30 bg-white">{item.type === 'image' && item.src ? <img src={item.src} alt={item.title} className="h-36 w-full object-cover" /> : item.cover ? <img src={item.cover} alt="" className="h-36 w-full object-cover" /> : <div className="grid h-36 place-items-center bg-sage/10"><i className="h-12 w-12 rounded-full border-4 border-white" style={{ backgroundColor: item.color ?? '#B7C9B8' }} /></div>}<div className="p-3"><strong className="text-sm text-forest">{item.title}</strong><p className="mt-1 text-[11px] text-charcoal/55">{item.type === 'template' ? `Template · ${item.category}` : item.type === 'element' ? `Decoration · ${item.category}` : item.type === 'design' ? 'Saved Studio design' : 'Reference image'}</p></div></article>)}</div>{!snapshot.items?.length && <p className="text-sm text-charcoal/50">No inspiration items were saved to this collection.</p>}</section>
+    </div>;
+}
 export function ShareView() {
     const { shareId } = useParams();
     const [share, setShare] = useState(null);
@@ -67,7 +75,7 @@ export function ShareView() {
           if (next) {
               setShare(next);
               setBody('');
-              showFlash('Comment saved to the shared design');
+              showFlash(share.settings?.moodboardSnapshot ? 'Comment saved to the moodboard' : 'Comment saved to the shared design');
           }
         } catch {
           setError('Could not save your comment. Please try again.');
@@ -143,16 +151,16 @@ export function ShareView() {
       <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 md:py-10 space-y-8">
         <section className="rounded-2xl overflow-hidden border border-sage/30 shadow-lg bg-white/40">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-sage/25 bg-white/75 px-4 py-3">
-            <p className="text-xs text-charcoal/60">Read-only design preview. Leave a comment or request changes below.</p>
+            <p className="text-xs text-charcoal/60">{share.settings?.moodboardSnapshot ? 'Read-only moodboard collection. Leave a comment or request changes below.' : 'Read-only design preview. Leave a comment or request changes below.'}</p>
           </div>
-          <DesignCanvas elements={share.elements} selectedId={null} settings={share.settings} venuePlan={share.venuePlan} zoom={1} preview onSelect={() => {}} onUpdateElement={() => {}} />
+          {share.settings?.moodboardSnapshot ? <MoodboardSharePreview snapshot={share.settings.moodboardSnapshot} /> : <DesignCanvas elements={share.elements} selectedId={null} settings={share.settings} venuePlan={share.venuePlan} zoom={1} preview onSelect={() => {}} onUpdateElement={() => {}} />}
         </section>
 
         <div className="grid md:grid-cols-[1fr_280px] gap-6 items-start">
           <section className="bg-white/70 border border-sage/30 rounded-2xl p-5 md:p-6 space-y-4">
             <div className="flex items-center gap-2">
               <MessageCircle className="h-4 w-4 text-champagne"/>
-              <h2 className="font-display text-2xl text-forest">Family comments</h2>
+              <h2 className="font-display text-2xl text-forest">{share.settings?.moodboardSnapshot ? 'Moodboard comments' : 'Family comments'}</h2>
             </div>
             {share.comments.length === 0 ? (<p className="text-sm text-charcoal/50">No comments yet — be the first.</p>) : (<ul className="space-y-3">
                 {share.comments.map((c) => (<li key={c.id} className="rounded-xl bg-sage/10 border border-sage/20 px-3 py-2.5">
