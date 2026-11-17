@@ -68,7 +68,7 @@ export function Bookings() {
             Booking history
           </h1>
           <p className="text-sm text-charcoal/60 mt-1">
-            Your venue booking requests and their review status.
+            Internal requests sent to the Vedika admin team for review. They do not book a venue or contact a decorator.
           </p>
         </div>
         <Button onClick={() => setAddOpen(true)}><Plus className="h-4 w-4"/>New request</Button>

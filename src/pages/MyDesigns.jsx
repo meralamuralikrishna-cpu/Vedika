@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Plus, Search, Trash2, Copy, Link2, ExternalLink, Ban } from 'lucide-react';
+import { Heart, Plus, Search, Trash2, Copy, Link2, ExternalLink, Ban, ClipboardList } from 'lucide-react';
 import { v4 as uuid } from 'uuid';
 import { useApp } from '@/context/AppContext';
 import { useToast } from '@/components/ui/Toast';
@@ -101,8 +101,11 @@ export function MyDesigns() {
                         Open
                       </Button>
                     </Link>
+                    <Link to={`/designs/${encodeURIComponent(d.id)}/plan`} className="flex-1">
+                      <Button size="sm" variant="secondary" className="w-full"><ClipboardList className="h-3.5 w-3.5"/>Build plan</Button>
+                    </Link>
                     <Link to={`/decorators?designType=custom&designId=${encodeURIComponent(d.id)}&designName=${encodeURIComponent(d.name)}`} className="flex-1">
-                      <Button size="sm" variant="secondary" className="w-full">Find Decorators</Button>
+                      <Button size="sm" variant="secondary" className="w-full">Create event brief</Button>
                     </Link>
                     {canSaveData && <Button size="sm" variant="secondary" disabled={creatingShareId === d.id} onClick={async () => {
                       setCreatingShareId(d.id);

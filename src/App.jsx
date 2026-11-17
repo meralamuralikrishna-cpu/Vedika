@@ -8,6 +8,7 @@ import { ExploreTemplates } from '@/pages/ExploreTemplates';
 import { MyDesigns } from '@/pages/MyDesigns';
 import { Moodboards } from '@/pages/Moodboards';
 import { FindDecorators } from '@/pages/FindDecorators';
+import { ImplementationPlan } from '@/pages/ImplementationPlan';
 import { Bookings } from '@/pages/Bookings';
 import { AdminBookings } from '@/pages/AdminBookings';
 import { Settings } from '@/pages/Settings';
@@ -25,6 +26,7 @@ export default function App() {
               <Route path="studio" element={<DesignStudio />}/>
               <Route path="templates" element={<ExploreTemplates />}/>
               <Route path="designs" element={<MyDesigns />}/>
+              <Route path="designs/:designId/plan" element={<ImplementationPlan />}/>
               <Route path="moodboards" element={<Moodboards />}/>
               <Route path="decorators" element={<FindDecorators />}/>
               <Route path="bookings" element={<Bookings />}/>

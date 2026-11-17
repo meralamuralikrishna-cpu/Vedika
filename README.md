@@ -49,6 +49,7 @@ These are recommended QA techniques; no black-box, white-box, or performance tes
 - **Explore Templates** — search, filters, favorites; open in Studio
 - **Bookings** — users submit requests; admins confirm or decline them from the protected Booking approvals page
 - **My Designs / Moodboards / Decorators / Settings** — saved workspace records and empty states
+- **Build plans** — turn a saved design into an editable materials list, sourcing tracker, setup checklist, and downloadable build sheet; quantities are planning prompts, not quotes
 - **EN / తెలుగు** language toggle in the header
 
 Vedika does not ship a vendor directory, market pricing, or payment processing. Starter layouts are editable design examples, not real event records.

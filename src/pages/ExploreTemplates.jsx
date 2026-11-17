@@ -33,7 +33,7 @@ export function ExploreTemplates() {
         });
     }, [q, eventType, theme, favOnly, templateFavorites]);
     return (<div className="p-6 md:p-10 animate-fade-in max-w-6xl mx-auto">
-      <PageHeader kicker="Inspiration" title="Starter layouts" description="Editable layouts to help you begin a design." />
+      <PageHeader kicker="Inspiration" title="Starter layouts" description="Choose a layout, make your own copy in Studio, then save it to My Designs to create a materials and setup plan." />
 
       <div className="flex flex-wrap gap-3 mb-8 items-end">
         <div className="flex-1 min-w-[200px] relative">
@@ -96,7 +96,7 @@ export function ExploreTemplates() {
                       <Button className="w-full" size="sm">Use in Studio</Button>
                     </Link>
                     <Link to={`/decorators?designType=template&designId=${encodeURIComponent(tpl.id)}&designName=${encodeURIComponent(tpl.name)}&eventType=${encodeURIComponent(tpl.eventType)}&style=${encodeURIComponent(tpl.style)}`}>
-                      <Button className="w-full" size="sm" variant="secondary">Find Decorators</Button>
+                      <Button className="w-full" size="sm" variant="secondary">Create event brief</Button>
                     </Link>
                   </div>
                 </CardBody>

@@ -47,9 +47,9 @@ export function FindDecorators() {
   return (
     <div className="p-6 md:p-10 animate-fade-in max-w-6xl mx-auto">
       <PageHeader
-        kicker="Local directory"
-        title="Find Decorators"
-        description="Put together a clear brief to share with decorators and keep your search moving."
+        kicker="Planning tool"
+        title="Event brief"
+        description="Organize your event details and copy a brief to share wherever you choose. Vedika does not list or connect you with decorators."
       />
 
       <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-5 items-start">
@@ -58,7 +58,7 @@ export function FindDecorators() {
             <span className="h-10 w-10 rounded-xl bg-champagne/20 text-forest flex items-center justify-center"><Flower2 className="h-5 w-5" /></span>
             <div>
               <h2 className="font-display text-2xl text-forest">Your decorator brief</h2>
-              <p className="text-xs text-charcoal/55 mt-1">A few details make it easier to compare replies.</p>
+              <p className="text-xs text-charcoal/55 mt-1">Keep the event details and design inspiration you want to share in one place.</p>
             </div>
           </div>
 
@@ -93,18 +93,18 @@ export function FindDecorators() {
         </section>
 
         <aside className="rounded-2xl border border-champagne/40 bg-ivory p-5 md:p-6">
-          <div className="flex items-center gap-2 text-forest mb-3"><Sparkles className="h-4 w-4" /><h2 className="font-display text-xl">Ready to share</h2></div>
-          <p className="text-xs leading-relaxed text-charcoal/55 mb-4">Copy your brief to share with decorators, then submit a venue booking request and track it in your booking history.</p>
+          <div className="flex items-center gap-2 text-forest mb-3"><Sparkles className="h-4 w-4" /><h2 className="font-display text-xl">Your event brief</h2></div>
+          <p className="text-xs leading-relaxed text-charcoal/55 mb-4">Copy this brief and share it yourself. Vedika does not send it to decorators or venues.</p>
           <div className="rounded-xl bg-white/75 border border-sage/25 p-4 mb-4 min-h-36">
             <p className="text-sm text-charcoal whitespace-pre-line leading-relaxed">{brief}</p>
           </div>
           <div className="flex flex-col gap-2">
             <Button onClick={copyBrief} className="w-full"><Clipboard className="h-4 w-4" />Copy brief</Button>
             <Link to={`/bookings?new=1&venue=${encodeURIComponent(location.trim())}&eventType=${encodeURIComponent(eventType)}&notes=${encodeURIComponent(brief)}&designId=${encodeURIComponent(linkedDesign.id)}&designName=${encodeURIComponent(linkedDesign.name)}&designType=${encodeURIComponent(linkedDesign.type)}`} className="inline-flex items-center justify-center gap-2 h-10 rounded-xl border border-sage/40 bg-white/80 px-4 text-sm font-semibold text-forest hover:bg-white transition">
-              Book a venue <ArrowRight className="h-4 w-4" />
+              Create internal request <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <p className="mt-5 pt-4 border-t border-sage/25 flex gap-2 text-[11px] leading-relaxed text-charcoal/50"><MapPin className="h-3.5 w-3.5 shrink-0 mt-0.5" />Decorator profiles are not connected yet, so this brief stays in your browser until you choose to share it.</p>
+          <p className="mt-5 pt-4 border-t border-sage/25 flex gap-2 text-[11px] leading-relaxed text-charcoal/50"><MapPin className="h-3.5 w-3.5 shrink-0 mt-0.5" />No third-party decorators or venues are connected. An internal request is visible to the Vedika admin team only; it does not reserve a venue or contact a provider.</p>
         </aside>
       </div>
     </div>

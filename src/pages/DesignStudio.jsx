@@ -204,7 +204,7 @@ export function DesignStudio() {
         saveDesign(design);
         setActiveDesignId(design.id);
         savedSnapshot.current = currentSnapshot;
-        toast(canSaveData ? 'Design saved to your account' : 'Changes are temporary until you sign in to save your design', canSaveData ? 'success' : 'info');
+        toast(canSaveData ? 'Design saved. Open My Designs to create its build plan.' : 'Changes are temporary until you sign in to save your design', canSaveData ? 'success' : 'info');
     };
     const handleExportJson = () => {
         const payload = {
