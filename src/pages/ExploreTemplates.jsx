@@ -73,7 +73,7 @@ export function ExploreTemplates() {
                 const th = getTheme(tpl.themeId);
                 const fav = templateFavorites.includes(tpl.id);
                 return (<Card key={tpl.id} className="overflow-hidden flex flex-col">
-                <div className="h-36 relative" style={{
+                <div className="relative aspect-[3/2]" style={{
                         background: `linear-gradient(160deg, ${th.palette.backdrop}, ${th.palette.primary} 60%, ${th.palette.platform})`,
                     }}>
                   <img src={tpl.image} alt={tpl.name} loading="lazy" className="absolute inset-0 w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; }}/>
