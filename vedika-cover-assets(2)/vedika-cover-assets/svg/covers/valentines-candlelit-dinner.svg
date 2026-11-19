@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img" aria-label="Valentine's Candlelit Dinner">
+<g data-id="bg" data-type="rect"><rect x="0" y="0" width="1200" height="800" fill="#22100f"/></g>
+<g data-id="halo" data-type="circle"><circle cx="600" cy="353" r="380" fill="#3e1a14"/></g>
+<g data-id="floor" data-type="rect"><rect x="0" y="658" width="1200" height="142" fill="#240f10"/></g>
+<g data-id="curtainL" data-type="path"><path d="M0,0 L120,0 C 165,200 170,420 117,658 L0,658 Z" fill="#8e1f35"/></g>
+<g data-id="curtainR" data-type="path"><path d="M1200,0 L1080,0 C 1035,200 1030,420 1083,658 L1200,658 Z" fill="#8e1f35"/></g>
+<g data-id="tableEdge" data-type="ellipse"><ellipse cx="600" cy="617" rx="380" ry="85" fill="#c9a87a"/></g>
+<g data-id="table" data-type="ellipse"><ellipse cx="600" cy="605" rx="380" ry="85" fill="#f2e4d0" stroke="#c9a87a" stroke-width="5"/></g>
+<g data-id="glowL" data-type="circle"><circle cx="480" cy="408" r="69" fill="#8a6a3c" opacity="0.6"/></g>
+<g data-id="glowR" data-type="circle"><circle cx="720" cy="408" r="69" fill="#8a6a3c" opacity="0.6"/></g>
+<g data-id="candleL" data-type="rect"><rect x="471" y="427" width="19" height="123" fill="#f6e6cc" rx="4"/></g>
+<g data-id="candleR" data-type="rect"><rect x="711" y="427" width="19" height="123" fill="#f6e6cc" rx="4"/></g>
+<g data-id="flameL" data-type="ellipse"><ellipse cx="480" cy="408" rx="8" ry="18" fill="#ffd24a"/></g>
+<g data-id="flameR" data-type="ellipse"><ellipse cx="720" cy="408" rx="8" ry="18" fill="#ffd24a"/></g>
+<g data-id="glassL" data-type="circle"><circle cx="380" cy="569" r="38" fill="none" opacity="0.7" stroke="#e2d3b4" stroke-width="3"/></g>
+<g data-id="glassR" data-type="circle"><circle cx="819" cy="569" r="38" fill="none" opacity="0.7" stroke="#e2d3b4" stroke-width="3"/></g>
+<g data-id="rose1" data-type="circle"><circle cx="540" cy="569" r="22" fill="#b11f3c"/></g>
+<g data-id="rose2" data-type="circle"><circle cx="578" cy="569" r="22" fill="#b11f3c"/></g>
+<g data-id="rose3" data-type="circle"><circle cx="619" cy="569" r="22" fill="#b11f3c"/></g>
+<g data-id="rose4" data-type="circle"><circle cx="646" cy="569" r="22" fill="#b11f3c"/></g>
+<g data-id="petalsL" data-type="dotRow"><circle cx="233" cy="620" r="10" fill="#e8a5b0"/><circle cx="267.3" cy="620" r="10" fill="#e8a5b0"/><circle cx="301.5" cy="620" r="10" fill="#e8a5b0"/><circle cx="335.8" cy="620" r="10" fill="#e8a5b0"/><circle cx="370" cy="620" r="10" fill="#e8a5b0"/></g>
+<g data-id="petalsR" data-type="dotRow"><circle cx="799" cy="620" r="10" fill="#e8a5b0"/><circle cx="832.3" cy="620" r="10" fill="#e8a5b0"/><circle cx="865.5" cy="620" r="10" fill="#e8a5b0"/><circle cx="898.8" cy="620" r="10" fill="#e8a5b0"/><circle cx="932" cy="620" r="10" fill="#e8a5b0"/></g>
+</svg>

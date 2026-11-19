@@ -841,6 +841,38 @@
   z-index: 10;
 }
 
+.cover-studio-app .cover-component-palette {
+  width: 228px;
+  min-width: 228px;
+  max-width: 228px;
+  display: flex;
+  flex-direction: column;
+}
+.cover-component-palette-scroll { flex: 1; overflow: auto; padding: 12px; }
+.cover-component-palette-scroll section { margin-bottom: 20px; }
+.cover-component-palette-scroll h4 { margin: 0 0 9px; color: var(--studio-text-primary); font-size: 12px; font-weight: 700; }
+.cover-component-palette-scroll section > div { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+.cover-component-palette-scroll button { min-width: 0; padding: 7px 4px; border: 1px solid var(--studio-border); border-radius: 8px; background: #fff; cursor: pointer; }
+.cover-component-palette-scroll button:hover { border-color: var(--studio-maroon); background: #fffaf4; }
+.cover-component-palette-scroll button small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 9px; }
+.cover-editor-center { min-width: 0; }
+.cover-canvas-workspace { padding: 24px; }
+.cover-canvas-scale { display: flex; align-items: center; justify-content: center; transform-origin: center; }
+.cover-canvas-scale > svg { display: block; width: min(1200px, calc(100vw - 520px)); height: auto; max-height: calc(100vh - 130px); background: white; box-shadow: 0 12px 34px rgba(31, 33, 30, .18); touch-action: none; }
+.cover-properties-panel { min-width: 250px; width: 250px; max-width: 250px; }
+.cover-properties-panel .studio-props-header { display: grid; gap: 3px; }
+.cover-properties-panel .studio-props-header strong { font-size: 13px; }
+.cover-properties-panel .studio-props-header small { color: var(--studio-text-secondary); font-size: 10px; }
+.cover-props-scroll { display: grid; align-content: start; gap: 10px; overflow: auto; padding: 14px; }
+.cover-props-scroll label { display: grid; gap: 5px; color: var(--studio-text-secondary); font-size: 11px; }
+.cover-prop-input { width: 100%; min-height: 32px; padding: 6px 8px; border: 1px solid var(--studio-border); border-radius: 6px; background: white; color: var(--studio-text-primary); font: inherit; }
+.cover-prop-input[type="color"] { padding: 3px; }
+.cover-layer-actions { display: grid; gap: 6px; }
+.cover-layer-actions button { padding: 7px; border: 1px solid var(--studio-border); border-radius: 6px; background: white; color: var(--studio-text-primary); cursor: pointer; text-align: left; font: inherit; font-size: 11px; }
+.cover-layer-actions button:disabled { opacity: .45; cursor: default; }
+.cover-layer-actions button.danger { color: #a51c35; }
+.cover-floor-toggle { display: flex; align-items: center; gap: 8px; padding: 14px; font-size: 12px; }
+
 .studio-props-header {
   padding: 10px;
   border-bottom: 1px solid var(--studio-border);

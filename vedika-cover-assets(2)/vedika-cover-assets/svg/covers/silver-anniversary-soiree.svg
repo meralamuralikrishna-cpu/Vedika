@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img" aria-label="Silver Anniversary Soirée">
+<g data-id="bg" data-type="rect"><rect x="0" y="0" width="1200" height="800" fill="#f3f1ec"/></g>
+<g data-id="edgeL" data-type="path"><path d="M0,0 C 90,160 100,560 0,800 Z" fill="#e1dfdb"/></g>
+<g data-id="edgeR" data-type="path"><path d="M1200,0 C 1110,160 1100,560 1200,800 Z" fill="#e1dfdb"/></g>
+<g data-id="tableTop" data-type="poly"><polygon points="110,499 1090,499 1200,581 0,581" fill="#fefcf8"/></g>
+<g data-id="tableFront" data-type="rect"><rect x="0" y="581" width="1200" height="219" fill="#fdfbf6"/></g>
+<g data-id="tableEdge" data-type="line"><line x1="0" y1="581" x2="1200" y2="581" stroke="#d8d2c4" stroke-width="4" stroke-linecap="round"/></g>
+<g data-id="dots" data-type="dotRow"><circle cx="120" cy="680" r="10" fill="#c5cad6"/><circle cx="199.9" cy="680" r="10" fill="#c5cad6"/><circle cx="279.8" cy="680" r="10" fill="#c5cad6"/><circle cx="359.7" cy="680" r="10" fill="#c5cad6"/><circle cx="439.6" cy="680" r="10" fill="#c5cad6"/><circle cx="519.5" cy="680" r="10" fill="#c5cad6"/><circle cx="599.5" cy="680" r="10" fill="#c5cad6"/><circle cx="679.4" cy="680" r="10" fill="#c5cad6"/><circle cx="759.3" cy="680" r="10" fill="#c5cad6"/><circle cx="839.2" cy="680" r="10" fill="#c5cad6"/><circle cx="919.1" cy="680" r="10" fill="#c5cad6"/><circle cx="999" cy="680" r="10" fill="#c5cad6"/></g>
+<g data-id="rod" data-type="line"><line x1="600" y1="0" x2="600" y2="139" stroke="#a9b0bb" stroke-width="5" stroke-linecap="round"/></g>
+<g data-id="shade" data-type="poly"><polygon points="459,139 742,139 682,219 519,219" fill="#d6d9df" stroke="#a9b0bb" stroke-width="5"/></g>
+<g data-id="armL" data-type="line"><line x1="516" y1="219" x2="480" y2="351" stroke="#a9b0bb" stroke-width="4" stroke-linecap="round"/></g>
+<g data-id="armR" data-type="line"><line x1="682" y1="219" x2="718" y2="351" stroke="#a9b0bb" stroke-width="4" stroke-linecap="round"/></g>
+<g data-id="armM" data-type="line"><line x1="600" y1="219" x2="600" y2="391" stroke="#a9b0bb" stroke-width="4" stroke-linecap="round"/></g>
+<g data-id="dropL" data-type="circle"><circle cx="480" cy="351" r="14" fill="#ffffff" stroke="#a9b0bb" stroke-width="3"/></g>
+<g data-id="dropR" data-type="circle"><circle cx="718" cy="351" r="14" fill="#ffffff" stroke="#a9b0bb" stroke-width="3"/></g>
+<g data-id="dropM" data-type="circle"><circle cx="600" cy="391" r="16" fill="#ffffff" stroke="#a9b0bb" stroke-width="3"/></g>
+<g data-id="smallL" data-type="circle"><circle cx="540" cy="298" r="8" fill="#ffffff" stroke="#a9b0bb" stroke-width="2"/></g>
+<g data-id="smallR" data-type="circle"><circle cx="660" cy="298" r="8" fill="#ffffff" stroke="#a9b0bb" stroke-width="2"/></g>
+<g data-id="bowlM" data-type="rect"><rect x="540" y="476" width="120" height="48" fill="#c5cdd9" rx="12"/></g>
+<g data-id="bowlL" data-type="rect"><rect x="260" y="490" width="79" height="43" fill="#c5cdd9" rx="10"/></g>
+<g data-id="bowlR" data-type="rect"><rect x="860" y="490" width="79" height="43" fill="#c5cdd9" rx="10"/></g>
+<g data-id="bloomM1" data-type="circle"><circle cx="560" cy="470" r="22" fill="#fceeee"/></g>
+<g data-id="bloomM2" data-type="circle"><circle cx="600" cy="458" r="26" fill="#fceeee"/></g>
+<g data-id="bloomM3" data-type="circle"><circle cx="642" cy="470" r="22" fill="#fceeee"/></g>
+<g data-id="leafL" data-type="circle"><circle cx="528" cy="466" r="9" fill="#6f8f75"/></g>
+<g data-id="leafR" data-type="circle"><circle cx="672" cy="466" r="9" fill="#6f8f75"/></g>
+<g data-id="bloomL" data-type="circle"><circle cx="299" cy="484" r="14" fill="#fceeee"/></g>
+<g data-id="bloomR" data-type="circle"><circle cx="899" cy="484" r="14" fill="#fceeee"/></g>
+</svg>

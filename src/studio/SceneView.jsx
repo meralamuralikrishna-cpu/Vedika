@@ -1,5 +1,6 @@
 import { ELEMENT_MAP } from "./elements";
 import TemplateArt from "./TemplateArt";
+import { renderCoverInner } from "../assets/vedika-cover-assets/src/render.js";
 
 export const CANVAS_W = 800;
 export const CANVAS_H = 600;
@@ -48,6 +49,10 @@ export function ElementShape({ el }) {
 
 // Read-only render: used by template covers, dashboard thumbnails and the static cover generator.
 export default function SceneView({ scene, uid = "scene", ...rest }) {
+  if (Array.isArray(scene.coverElements)) {
+    const cover = { id: scene.coverId ?? uid, name: scene.name ?? 'Event cover', elements: scene.coverElements };
+    return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" {...rest} dangerouslySetInnerHTML={{ __html: renderCoverInner(cover) }} />;
+  }
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox={`0 0 ${CANVAS_W} ${CANVAS_H}`} {...rest}>
       <SceneBackdrop scene={scene} uid={uid} />

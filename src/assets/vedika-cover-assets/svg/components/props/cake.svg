@@ -1,0 +1,3 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400" role="img" aria-label="Cake">
+<rect x="100" y="260" width="200" height="72" fill="#f6c6ce" rx="6"/><rect x="130" y="192" width="140" height="68" fill="#fde8bb" rx="4"/><rect x="160" y="132" width="80" height="60" fill="#cfe0ef" rx="4"/><line x1="200" y1="100" x2="200" y2="132" stroke="#8b5a2b" stroke-width="4" stroke-linecap="round"/><ellipse cx="200" cy="84" rx="8" ry="16" fill="#ffd24a"/>
+</svg>

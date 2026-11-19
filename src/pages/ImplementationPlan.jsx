@@ -7,6 +7,11 @@ import { useApp } from '@/context/AppContext';
 import { useToast } from '@/components/ui/Toast';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { materialLineCost, planMaterialsEstimate } from '@/lib/budget';
+import { formatINR } from '@/lib/utils';
+import { t } from '@/lib/i18n';
+import { coverElementBounds, coverElementName } from '@/studio/coverElements';
+import { componentsById } from '@/assets/vedika-cover-assets/src/components/index.js';
 
 const STARTER_TASKS = [
   'Confirm venue measurements and placement with the venue',
@@ -20,11 +25,11 @@ const STARTER_TASKS = [
 
 function makePlan(design) {
   const grouped = new Map();
-  for (const element of design?.elements ?? []) {
+  for (const element of getDesignElements(design)) {
     const key = element.libraryId || `${element.category}-${element.name}`;
     const item = grouped.get(key);
     if (item) { item.designCount += 1; item.quantity += 1; }
-    else grouped.set(key, { id: key, name: element.name, category: element.category, quantity: 1, designCount: 1, unit: 'pieces', sourced: false, notes: '' });
+    else grouped.set(key, { id: key, name: element.name, category: element.category, quantity: 1, designCount: 1, unit: 'pieces', unitCost: '', sourced: false, notes: '' });
   }
   return {
     materials: [...grouped.values()],
@@ -33,26 +38,48 @@ function makePlan(design) {
   };
 }
 
-function downloadBuildSheet(design, plan) {
+function getDesignElements(design) {
+  if (Array.isArray(design?.scene?.coverElements)) {
+    return design.scene.coverElements.map((element) => {
+      const bounds = coverElementBounds(element);
+      const component = componentsById[element.type];
+      return { ...bounds, x: bounds.x, y: bounds.y, width: bounds.w, height: bounds.h, name: coverElementName(element), category: component?.group ?? 'Scene', libraryId: element.type };
+    });
+  }
+  return design?.elements ?? [];
+}
+
+function downloadBuildSheet(design, plan, estimateTotal) {
   const venuePlan = design.venuePlan;
   const useFeet = venuePlan?.enabled;
   const widthFt = Math.max(1, Number(venuePlan?.widthFt) || 40);
   const depthFt = Math.max(1, Number(venuePlan?.depthFt) || 28);
-  const placements = (design.elements ?? []).map((item, index) => {
-    const x = useFeet ? (item.x / CANVAS_W * widthFt).toFixed(1) : Math.round(item.x);
-    const y = useFeet ? (item.y / CANVAS_H * depthFt).toFixed(1) : Math.round(item.y);
-    const w = useFeet ? (item.width / CANVAS_W * widthFt).toFixed(1) : Math.round(item.width);
-    const h = useFeet ? (item.height / CANVAS_H * depthFt).toFixed(1) : Math.round(item.height);
+  const elements = getDesignElements(design);
+  const canvasW = Array.isArray(design.scene?.coverElements) ? 1200 : CANVAS_W;
+  const canvasH = Array.isArray(design.scene?.coverElements) ? 800 : CANVAS_H;
+  const placements = elements.map((item, index) => {
+    const x = useFeet ? (item.x / canvasW * widthFt).toFixed(1) : Math.round(item.x);
+    const y = useFeet ? (item.y / canvasH * depthFt).toFixed(1) : Math.round(item.y);
+    const w = useFeet ? (item.width / canvasW * widthFt).toFixed(1) : Math.round(item.width);
+    const h = useFeet ? (item.height / canvasH * depthFt).toFixed(1) : Math.round(item.height);
     const unit = useFeet ? 'ft' : 'canvas units';
     return `${index + 1}. ${item.name}: left ${x}, top ${y}, approx. ${w} × ${h} ${unit}`;
+  });
+  const materialLines = plan.materials.map((item) => {
+    const line = materialLineCost(item);
+    const costPart = item.unitCost === '' || item.unitCost == null
+      ? ''
+      : ` | unit ${formatINR(Number(item.unitCost) || 0)} · line ${formatINR(line)}`;
+    return `${item.sourced ? '[x]' : '[ ]'} ${item.quantity} ${item.unit} — ${item.name} (${item.category})${costPart}${item.notes ? ` | ${item.notes}` : ''}`;
   });
   const lines = [
     `VEDIKA EVENT BUILD SHEET`,
     `Design: ${design.name}`,
     `Created: ${new Date().toLocaleDateString()}`,
+    estimateTotal > 0 ? `Illustrative estimate: ${formatINR(estimateTotal)}` : null,
     '',
     'MATERIALS',
-    ...(plan.materials.length ? plan.materials.map((item) => `${item.sourced ? '[x]' : '[ ]'} ${item.quantity} ${item.unit} — ${item.name} (${item.category})${item.notes ? ` | ${item.notes}` : ''}`) : ['No materials listed.']),
+    ...(plan.materials.length ? materialLines : ['No materials listed.']),
     '',
     'PLACEMENT GUIDE (coordinates start at the top-left)',
     ...(placements.length ? placements : ['No elements in the design.']),
@@ -64,8 +91,8 @@ function downloadBuildSheet(design, plan) {
     'NOTES',
     plan.notes || 'None',
     '',
-    'Planning aid only. Verify real measurements, materials, rigging, electrical work, venue rules, and safety requirements before setup.',
-  ];
+    'Planning aid only. Costs are illustrative estimates, not supplier quotes. Verify real measurements, materials, rigging, electrical work, venue rules, and safety requirements before setup.',
+  ].filter((line) => line != null);
   const url = URL.createObjectURL(new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' }));
   const anchor = document.createElement('a');
   anchor.href = url;
@@ -76,9 +103,12 @@ function downloadBuildSheet(design, plan) {
 
 export function ImplementationPlan() {
   const { designId } = useParams();
-  const { designs, saveDesign, canSaveData } = useApp();
+  const { designs, saveDesign, canSaveData, locale } = useApp();
   const { toast } = useToast();
   const design = designs.find((item) => item.id === designId);
+  const placementElements = getDesignElements(design);
+  const placementCanvasW = Array.isArray(design?.scene?.coverElements) ? 1200 : CANVAS_W;
+  const placementCanvasH = Array.isArray(design?.scene?.coverElements) ? 800 : CANVAS_H;
   const planDesignId = useRef(design?.id);
   const [plan, setPlan] = useState(() => design ? (design.implementationPlan || makePlan(design)) : null);
   const [newMaterial, setNewMaterial] = useState('');
@@ -118,6 +148,7 @@ export function ImplementationPlan() {
 
   const completedTasks = useMemo(() => (plan?.tasks ?? []).filter((task) => task.done).length, [plan]);
   const progress = plan?.tasks.length ? Math.round(completedTasks / plan.tasks.length * 100) : 0;
+  const estimateTotal = useMemo(() => planMaterialsEstimate(plan), [plan]);
 
   if (!design || !plan) return <main className="p-8 max-w-2xl mx-auto text-center"><h1 className="font-display text-3xl text-forest">Design not found</h1><p className="text-sm text-charcoal/60 mt-2">Save a design in My Designs before creating its build sheet.</p><Link to="/designs"><Button className="mt-5">Go to My Designs</Button></Link></main>;
 
@@ -134,34 +165,82 @@ export function ImplementationPlan() {
     event.preventDefault();
     const name = newMaterial.trim();
     if (!name) return;
-    changePlan((current) => ({ ...current, materials: [...current.materials, { id: `custom-${uuid()}`, name, category: 'custom', quantity: 1, unit: 'pieces', sourced: false, notes: '' }] }));
+    changePlan((current) => ({ ...current, materials: [...current.materials, { id: `custom-${uuid()}`, name, category: 'custom', quantity: 1, unit: 'pieces', unitCost: '', sourced: false, notes: '' }] }));
     setNewMaterial('');
+  };
+  const updateMaterial = (id, patch) => {
+    changePlan((current) => ({
+      ...current,
+      materials: current.materials.map((entry) => entry.id === id ? { ...entry, ...patch } : entry),
+    }));
   };
 
   return <div className="p-5 md:p-10 animate-fade-in max-w-5xl mx-auto">
     <Link to="/designs" className="inline-flex items-center gap-2 text-xs font-semibold text-forest hover:text-champagne"><ArrowLeft className="h-4 w-4"/> My Designs</Link>
     <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
-      <div><p className="section-kicker">From concept to setup</p><h1 className="font-display text-4xl text-forest tracking-tight">Build plan</h1><p className="text-sm text-charcoal/60 mt-1">{design.name}</p></div>
-      <div className="flex gap-2"><Link to={`/studio?design=${encodeURIComponent(design.id)}`}><Button variant="secondary">Edit design</Button></Link><Button variant="secondary" onClick={() => downloadBuildSheet(design, plan)}><Download className="h-4 w-4"/>Download sheet</Button><Button variant="gold" onClick={savePlan} disabled={!dirty}><Check className="h-4 w-4"/>{dirty ? 'Save plan' : 'Saved'}</Button></div>
+      <div>
+        <p className="section-kicker">From concept to setup</p>
+        <h1 className="font-display text-4xl text-forest tracking-tight">Build plan</h1>
+        <p className="text-sm text-charcoal/60 mt-1">{design.name}</p>
+        {estimateTotal > 0 && (
+          <p className="mt-2 text-sm text-forest">
+            <span className="text-charcoal/55">{t(locale, 'illustrativeEstimate')}: </span>
+            <strong>{formatINR(estimateTotal)}</strong>
+          </p>
+        )}
+      </div>
+      <div className="flex gap-2"><Link to={`/studio?design=${encodeURIComponent(design.id)}`}><Button variant="secondary">Edit design</Button></Link><Button variant="secondary" onClick={() => downloadBuildSheet(design, plan, estimateTotal)}><Download className="h-4 w-4"/>Download sheet</Button><Button variant="gold" onClick={savePlan} disabled={!dirty}><Check className="h-4 w-4"/>{dirty ? 'Save plan' : 'Saved'}</Button></div>
     </div>
 
-    <div className="mt-6 rounded-2xl border border-champagne/30 bg-champagne/10 p-4 text-sm text-charcoal/75"><strong className="text-forest">Use this plan to organize your own setup.</strong> Material counts start from the number of matching elements in the illustration. Adjust quantities to match the real venue and your needs. This is not a supplier quote or a construction plan.</div>
+    <div className="mt-6 rounded-2xl border border-champagne/30 bg-champagne/10 p-4 text-sm text-charcoal/75"><strong className="text-forest">Use this plan to organize your own setup.</strong> Material counts start from the number of matching elements in the illustration. Unit costs are optional planning figures you enter yourself — not supplier quotes.</div>
 
     <section className="mt-6 rounded-2xl border border-sage/30 bg-white/75 p-5 md:p-6 shadow-sm">
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-4"><div><p className="section-kicker">Shopping and sourcing</p><h2 className="font-display text-2xl text-forest">Materials</h2></div><span className="text-xs text-charcoal/55">{plan.materials.filter((item) => item.sourced).length} of {plan.materials.length} sourced</span></div>
-      {plan.materials.length === 0 ? <p className="text-sm text-charcoal/55 mb-4">No canvas elements yet. Add décor in Studio or add supplies below.</p> : <><div className="hidden md:grid md:grid-cols-[1fr_100px_125px_1fr_auto] gap-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-charcoal/45"><span>Design element</span><span>Quantity</span><span>Unit</span><span>Notes</span><span>Status</span></div><div className="space-y-3 mb-5">
-        {plan.materials.map((item) => <div key={item.id} className="grid md:grid-cols-[1fr_100px_125px_1fr_auto] gap-2 items-center rounded-xl bg-sage/8 border border-sage/20 p-3">
-          <div className="min-w-0"><p className="text-sm font-semibold text-forest truncate">{item.name}</p><p className="text-[11px] text-charcoal/50 capitalize">{item.category}{item.designCount > 1 ? ` · ${item.designCount} shown in design` : ''}</p></div>
-          <Input aria-label={`Quantity for ${item.name}`} placeholder="Qty" type="number" min="0" value={item.quantity} onChange={(event) => changePlan((current) => ({ ...current, materials: current.materials.map((entry) => entry.id === item.id ? { ...entry, quantity: Math.max(0, Number(event.target.value)) } : entry) }))}/>
-          <Input aria-label={`Unit for ${item.name}`} placeholder="Unit" value={item.unit} onChange={(event) => changePlan((current) => ({ ...current, materials: current.materials.map((entry) => entry.id === item.id ? { ...entry, unit: event.target.value } : entry) }))}/>
-          <Input aria-label={`Notes for ${item.name}`} placeholder="Color, source, size…" value={item.notes} onChange={(event) => changePlan((current) => ({ ...current, materials: current.materials.map((entry) => entry.id === item.id ? { ...entry, notes: event.target.value } : entry) }))}/>
-          <label className="inline-flex items-center justify-center gap-1.5 text-xs text-forest"><input type="checkbox" checked={item.sourced} onChange={(event) => changePlan((current) => ({ ...current, materials: current.materials.map((entry) => entry.id === item.id ? { ...entry, sourced: event.target.checked } : entry) }))}/> Sourced</label>
-        </div>)}
-      </div></>}
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <div><p className="section-kicker">Shopping and sourcing</p><h2 className="font-display text-2xl text-forest">Materials</h2></div>
+        <div className="flex flex-wrap items-center gap-3 text-xs text-charcoal/55">
+          <span>{plan.materials.filter((item) => item.sourced).length} of {plan.materials.length} sourced</span>
+          {estimateTotal > 0 && <span className="font-semibold text-forest">{t(locale, 'illustrativeEstimate')} · {formatINR(estimateTotal)}</span>}
+        </div>
+      </div>
+      {plan.materials.length === 0 ? <p className="text-sm text-charcoal/55 mb-4">No canvas elements yet. Add décor in Studio or add supplies below.</p> : <>
+        <div className="hidden md:grid md:grid-cols-[minmax(0,1.2fr)_88px_100px_110px_100px_minmax(0,1fr)_auto] gap-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-charcoal/45">
+          <span>Design element</span><span>Quantity</span><span>Unit</span><span>Unit cost</span><span>Line total</span><span>Notes</span><span>Status</span>
+        </div>
+        <div className="space-y-3 mb-5">
+          {plan.materials.map((item) => {
+            const lineTotal = materialLineCost(item);
+            return (
+              <div key={item.id} className="grid md:grid-cols-[minmax(0,1.2fr)_88px_100px_110px_100px_minmax(0,1fr)_auto] gap-2 items-center rounded-xl bg-sage/8 border border-sage/20 p-3">
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-forest truncate">{item.name}</p>
+                  <p className="text-[11px] text-charcoal/50 capitalize">{item.category}{item.designCount > 1 ? ` · ${item.designCount} shown in design` : ''}</p>
+                </div>
+                <Input aria-label={`Quantity for ${item.name}`} placeholder="Qty" type="number" min="0" value={item.quantity} onChange={(event) => updateMaterial(item.id, { quantity: Math.max(0, Number(event.target.value)) })}/>
+                <Input aria-label={`Unit for ${item.name}`} placeholder="Unit" value={item.unit} onChange={(event) => updateMaterial(item.id, { unit: event.target.value })}/>
+                <Input
+                  aria-label={`Unit cost for ${item.name}`}
+                  placeholder="₹"
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={item.unitCost ?? ''}
+                  onChange={(event) => {
+                    const raw = event.target.value;
+                    updateMaterial(item.id, { unitCost: raw === '' ? '' : Math.max(0, Number(raw)) });
+                  }}
+                />
+                <p className="text-sm font-medium text-forest tabular-nums">{lineTotal > 0 ? formatINR(lineTotal) : '—'}</p>
+                <Input aria-label={`Notes for ${item.name}`} placeholder="Color, source, size…" value={item.notes} onChange={(event) => updateMaterial(item.id, { notes: event.target.value })}/>
+                <label className="inline-flex items-center justify-center gap-1.5 text-xs text-forest"><input type="checkbox" checked={item.sourced} onChange={(event) => updateMaterial(item.id, { sourced: event.target.checked })}/> Sourced</label>
+              </div>
+            );
+          })}
+        </div>
+      </>}
       <form onSubmit={addMaterial} className="flex gap-2"><Input aria-label="Add a material" placeholder="Add another material or supply" value={newMaterial} onChange={(event) => setNewMaterial(event.target.value)}/><Button type="submit" variant="secondary" disabled={!newMaterial.trim()}><Plus className="h-4 w-4"/>Add</Button></form>
     </section>
 
-    <section className="mt-5 rounded-2xl border border-sage/30 bg-white/75 p-5 md:p-6 shadow-sm"><p className="section-kicker">From the canvas</p><h2 className="font-display text-2xl text-forest mb-3">Placement guide</h2><p className="text-xs text-charcoal/55 mb-3">Positions start from the top-left. {design.venuePlan?.enabled ? `The floor plan is ${design.venuePlan.widthFt} × ${design.venuePlan.depthFt} ft; sizes shown are approximate.` : 'Canvas coordinates are for reference only and do not represent real-world measurements.'}</p><ul className="grid sm:grid-cols-2 gap-2">{design.elements.map((element, index) => <li key={element.id} className="rounded-lg bg-sage/8 px-3 py-2 text-xs text-charcoal/75"><strong className="text-forest">{index + 1}. {element.name}</strong><br/>{design.venuePlan?.enabled ? `${(element.x / CANVAS_W * (design.venuePlan.widthFt || 40)).toFixed(1)} ft from left · ${(element.y / CANVAS_H * (design.venuePlan.depthFt || 28)).toFixed(1)} ft from top` : `Canvas x ${Math.round(element.x)} · y ${Math.round(element.y)}`}</li>)}</ul>{design.elements.length === 0 && <p className="text-sm text-charcoal/55">Add elements to your design to create a placement guide.</p>}</section>
+    <section className="mt-5 rounded-2xl border border-sage/30 bg-white/75 p-5 md:p-6 shadow-sm"><p className="section-kicker">From the canvas</p><h2 className="font-display text-2xl text-forest mb-3">Placement guide</h2><p className="text-xs text-charcoal/55 mb-3">Positions start from the top-left. {design.venuePlan?.enabled ? `The floor plan is ${design.venuePlan.widthFt} × ${design.venuePlan.depthFt} ft; sizes shown are approximate.` : 'Canvas coordinates are for reference only and do not represent real-world measurements.'}</p><ul className="grid sm:grid-cols-2 gap-2">{placementElements.map((element, index) => <li key={element.id} className="rounded-lg bg-sage/8 px-3 py-2 text-xs text-charcoal/75"><strong className="text-forest">{index + 1}. {element.name}</strong><br/>{design.venuePlan?.enabled ? `${(element.x / placementCanvasW * (design.venuePlan.widthFt || 40)).toFixed(1)} ft from left · ${(element.y / placementCanvasH * (design.venuePlan.depthFt || 28)).toFixed(1)} ft from top` : `Canvas x ${Math.round(element.x)} · y ${Math.round(element.y)}`}</li>)}</ul>{placementElements.length === 0 && <p className="text-sm text-charcoal/55">Add elements to your design to create a placement guide.</p>}</section>
 
     <section className="mt-5 rounded-2xl border border-sage/30 bg-white/75 p-5 md:p-6 shadow-sm">
       <div className="flex items-center justify-between gap-3 mb-4"><div><p className="section-kicker">Setup steps</p><h2 className="font-display text-2xl text-forest">Checklist</h2></div><span className="text-sm font-semibold text-forest">{progress}%</span></div>
@@ -171,7 +250,7 @@ export function ImplementationPlan() {
     </section>
 
     <section className="mt-5 rounded-2xl border border-sage/30 bg-white/75 p-5 md:p-6 shadow-sm"><div className="flex items-center gap-2 mb-3"><ClipboardList className="h-4 w-4 text-champagne"/><h2 className="font-display text-xl text-forest">Event notes</h2></div><textarea className="w-full min-h-28 rounded-xl border border-sage/35 bg-white px-3 py-2 text-sm outline-none focus:border-champagne" placeholder="Venue access, setup timing, people helping, storage, reminders…" value={plan.notes} onChange={(event) => changePlan((current) => ({ ...current, notes: event.target.value }))}/></section>
-    <p className="text-[11px] leading-relaxed text-charcoal/45 mt-5">Verify measurements, load limits, electrical work, flame use, accessibility, and venue rules with qualified people before setup.</p>
+    <p className="text-[11px] leading-relaxed text-charcoal/45 mt-5">Verify measurements, load limits, electrical work, flame use, accessibility, and venue rules with qualified people before setup. Material costs are illustrative planning figures only.</p>
   </div>;
 }
 

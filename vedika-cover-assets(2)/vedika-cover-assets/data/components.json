@@ -1,0 +1,769 @@
+[
+  {
+    "id": "floral-arch",
+    "label": "Floral arch",
+    "group": "backdrops",
+    "defaults": {
+      "cx": 200,
+      "baseY": 385,
+      "legTopY": 175,
+      "rx": 120,
+      "ry": 120,
+      "r": 20,
+      "gap": 30,
+      "color": "#e8a5a8",
+      "bloom": "#f7c6cc",
+      "bloomR": 0,
+      "vine": "#8da88a"
+    },
+    "controls": {
+      "cx": "number",
+      "baseY": "number",
+      "legTopY": "number",
+      "rx": "number",
+      "ry": "number",
+      "r": "number",
+      "gap": "number",
+      "color": "color",
+      "bloom": "color",
+      "bloomR": "number",
+      "vine": "color"
+    }
+  },
+  {
+    "id": "moon-gate",
+    "label": "Moon gate",
+    "group": "backdrops",
+    "defaults": {
+      "cx": 200,
+      "cy": 200,
+      "R": 138,
+      "n": 24,
+      "r": 27,
+      "color": "#b11f3c",
+      "inner": "#f7b8c6"
+    },
+    "controls": {
+      "cx": "number",
+      "cy": "number",
+      "R": "number",
+      "n": "number",
+      "r": "number",
+      "color": "color",
+      "inner": "color"
+    }
+  },
+  {
+    "id": "mandap",
+    "label": "Mandap",
+    "group": "backdrops",
+    "defaults": {
+      "roof": "#1f4b37",
+      "beam": "#e6c27a",
+      "pillar": "#d8b25a",
+      "seat": "#e6c27a"
+    },
+    "controls": {
+      "roof": "color",
+      "beam": "color",
+      "pillar": "color",
+      "seat": "color"
+    }
+  },
+  {
+    "id": "floral-wall",
+    "label": "Floral wall",
+    "group": "backdrops",
+    "defaults": {
+      "base": "#6f8f75",
+      "colors": [
+        "#f0b8c0",
+        "#fffaee",
+        "#f7cad4",
+        "#f3d57a"
+      ]
+    },
+    "controls": {
+      "base": "color",
+      "colors": "list"
+    }
+  },
+  {
+    "id": "drape-panel",
+    "label": "Drape panel",
+    "group": "backdrops",
+    "defaults": {
+      "rail": "#7a6a58",
+      "color": "#f0e4d3",
+      "fold": "#d8c9b0"
+    },
+    "controls": {
+      "rail": "color",
+      "color": "color",
+      "fold": "color"
+    }
+  },
+  {
+    "id": "floral-hoop",
+    "label": "Floral hoop",
+    "group": "backdrops",
+    "defaults": {
+      "ring": "#d9a441",
+      "bloom": "#f0b8c0",
+      "leaf": "#6f8f75"
+    },
+    "controls": {
+      "ring": "color",
+      "bloom": "color",
+      "leaf": "color"
+    }
+  },
+  {
+    "id": "balloon-arch",
+    "label": "Balloon arch",
+    "group": "backdrops",
+    "defaults": {
+      "cx": 200,
+      "cy": 380,
+      "rx": 150,
+      "ry": 305,
+      "n": 15,
+      "r": 30,
+      "pink": "#ff7fb0",
+      "yellow": "#ffd24a",
+      "blue": "#7fd1e8"
+    },
+    "controls": {
+      "cx": "number",
+      "cy": "number",
+      "rx": "number",
+      "ry": "number",
+      "n": "number",
+      "r": "number",
+      "pink": "color",
+      "yellow": "color",
+      "blue": "color"
+    }
+  },
+  {
+    "id": "pillar-pair",
+    "label": "Pillar pair",
+    "group": "backdrops",
+    "defaults": {
+      "pillar": "#d8b25a",
+      "cap": "#e6c27a",
+      "garland": "#f0b8c0"
+    },
+    "controls": {
+      "pillar": "color",
+      "cap": "color",
+      "garland": "color"
+    }
+  },
+  {
+    "id": "swag",
+    "label": "Swag",
+    "group": "fabric",
+    "defaults": {
+      "color": "#f0e4d3",
+      "edge": "#d8c9b0"
+    },
+    "controls": {
+      "color": "color",
+      "edge": "color"
+    }
+  },
+  {
+    "id": "ruffle-panel",
+    "label": "Ruffle panel",
+    "group": "fabric",
+    "defaults": {
+      "color": "#f6c6ce"
+    },
+    "controls": {
+      "color": "color"
+    }
+  },
+  {
+    "id": "silk-ribbon",
+    "label": "Silk ribbon",
+    "group": "fabric",
+    "defaults": {
+      "color": "#c1384f"
+    },
+    "controls": {
+      "color": "color"
+    }
+  },
+  {
+    "id": "curtain",
+    "label": "Curtain",
+    "group": "fabric",
+    "defaults": {
+      "rail": "#7a6a58",
+      "color": "#8e1f4d",
+      "fold": "#6b1238"
+    },
+    "controls": {
+      "rail": "color",
+      "color": "color",
+      "fold": "color"
+    }
+  },
+  {
+    "id": "table-runner",
+    "label": "Table runner",
+    "group": "fabric",
+    "defaults": {
+      "cloth": "#fffaee",
+      "band": "#d9a441",
+      "edge": "#bd8530"
+    },
+    "controls": {
+      "cloth": "color",
+      "band": "color",
+      "edge": "color"
+    }
+  },
+  {
+    "id": "pleated-drape",
+    "label": "Pleated drape",
+    "group": "fabric",
+    "defaults": {
+      "a": "#f0e4d3",
+      "b": "#e6d6c0"
+    },
+    "controls": {
+      "a": "color",
+      "b": "color"
+    }
+  },
+  {
+    "id": "chair-sash",
+    "label": "Chair sash",
+    "group": "fabric",
+    "defaults": {
+      "chair": "#fff9ec",
+      "sash": "#d9a441"
+    },
+    "controls": {
+      "chair": "color",
+      "sash": "color"
+    }
+  },
+  {
+    "id": "tassel-tieback",
+    "label": "Tassel tie-back",
+    "group": "fabric",
+    "defaults": {
+      "color": "#d9a441"
+    },
+    "controls": {
+      "color": "color"
+    }
+  },
+  {
+    "id": "peony",
+    "label": "Peony",
+    "group": "flowers",
+    "defaults": {
+      "outer": "#f0b8c0",
+      "inner": "#f7cad4",
+      "center": "#f3d57a"
+    },
+    "controls": {
+      "outer": "color",
+      "inner": "color",
+      "center": "color"
+    }
+  },
+  {
+    "id": "rose",
+    "label": "Rose",
+    "group": "flowers",
+    "defaults": {
+      "a": "#b11f3c",
+      "b": "#c9314d",
+      "c": "#d9506a",
+      "swirl": "#8e1a2f"
+    },
+    "controls": {
+      "a": "color",
+      "b": "color",
+      "c": "color",
+      "swirl": "color"
+    }
+  },
+  {
+    "id": "marigold",
+    "label": "Marigold",
+    "group": "flowers",
+    "defaults": {
+      "outer": "#f0861c",
+      "inner": "#f7b82a",
+      "center": "#e06f00"
+    },
+    "controls": {
+      "outer": "color",
+      "inner": "color",
+      "center": "color"
+    }
+  },
+  {
+    "id": "eucalyptus",
+    "label": "Eucalyptus",
+    "group": "flowers",
+    "defaults": {
+      "stem": "#6f8f75",
+      "leaf": "#9fb89f"
+    },
+    "controls": {
+      "stem": "color",
+      "leaf": "color"
+    }
+  },
+  {
+    "id": "orchid",
+    "label": "Orchid",
+    "group": "flowers",
+    "defaults": {
+      "petal": "#faf4fa",
+      "edge": "#dbb4d8",
+      "lip": "#d894be",
+      "center": "#f3d57a"
+    },
+    "controls": {
+      "petal": "color",
+      "edge": "color",
+      "lip": "color",
+      "center": "color"
+    }
+  },
+  {
+    "id": "jasmine-strand",
+    "label": "Jasmine strand",
+    "group": "flowers",
+    "defaults": {
+      "stem": "#6f8f75",
+      "bud": "#fffcec"
+    },
+    "controls": {
+      "stem": "color",
+      "bud": "color"
+    }
+  },
+  {
+    "id": "lotus",
+    "label": "Lotus",
+    "group": "flowers",
+    "defaults": {
+      "outer": "#f3b0c8",
+      "mid": "#f5c2d3",
+      "center": "#f9cfdd"
+    },
+    "controls": {
+      "outer": "color",
+      "mid": "color",
+      "center": "color"
+    }
+  },
+  {
+    "id": "pampas",
+    "label": "Pampas",
+    "group": "flowers",
+    "defaults": {
+      "stem": "#d8c69b",
+      "plume": "#efe0c8"
+    },
+    "controls": {
+      "stem": "color",
+      "plume": "color"
+    }
+  },
+  {
+    "id": "sofa",
+    "label": "Sofa",
+    "group": "furniture",
+    "defaults": {
+      "cushion": "#d9bcb0",
+      "body": "#c9a89d",
+      "arm": "#b59084",
+      "leg": "#6b4a3a"
+    },
+    "controls": {
+      "cushion": "color",
+      "body": "color",
+      "arm": "color",
+      "leg": "color"
+    }
+  },
+  {
+    "id": "throne",
+    "label": "Throne",
+    "group": "furniture",
+    "defaults": {
+      "gold": "#d9a441",
+      "back": "#8e1f4d",
+      "seat": "#a32a5c"
+    },
+    "controls": {
+      "gold": "color",
+      "back": "color",
+      "seat": "color"
+    }
+  },
+  {
+    "id": "chiavari-chair",
+    "label": "Chiavari chair",
+    "group": "furniture",
+    "defaults": {
+      "frame": "#d9a441",
+      "seat": "#f2e8d2"
+    },
+    "controls": {
+      "frame": "color",
+      "seat": "color"
+    }
+  },
+  {
+    "id": "round-table",
+    "label": "Round table",
+    "group": "furniture",
+    "defaults": {
+      "cloth": "#f5f0e4",
+      "top": "#fffaee",
+      "edge": "#d8d2c4"
+    },
+    "controls": {
+      "cloth": "color",
+      "top": "color",
+      "edge": "color"
+    }
+  },
+  {
+    "id": "banquet-table",
+    "label": "Banquet table",
+    "group": "furniture",
+    "defaults": {
+      "top": "#fffaee",
+      "edge": "#d8d2c4",
+      "leg": "#e6dcc8"
+    },
+    "controls": {
+      "top": "color",
+      "edge": "color",
+      "leg": "color"
+    }
+  },
+  {
+    "id": "loveseat",
+    "label": "Loveseat",
+    "group": "furniture",
+    "defaults": {
+      "cushion": "#d9475a",
+      "body": "#c0344b",
+      "arm": "#9e2236",
+      "button": "#f3d57a",
+      "buttons": true
+    },
+    "controls": {
+      "cushion": "color",
+      "body": "color",
+      "arm": "color",
+      "button": "color",
+      "buttons": "boolean"
+    }
+  },
+  {
+    "id": "plinth",
+    "label": "Plinth",
+    "group": "furniture",
+    "defaults": {
+      "slab": "#e6dcc8",
+      "body": "#f3efe6",
+      "edge": "#d8d2c4"
+    },
+    "controls": {
+      "slab": "color",
+      "body": "color",
+      "edge": "color"
+    }
+  },
+  {
+    "id": "cocktail-table",
+    "label": "Cocktail table",
+    "group": "furniture",
+    "defaults": {
+      "top": "#d9a441",
+      "base": "#bd8530"
+    },
+    "controls": {
+      "top": "color",
+      "base": "color"
+    }
+  },
+  {
+    "id": "fairy-lights",
+    "label": "Fairy lights",
+    "group": "lights",
+    "defaults": {
+      "wire": "#6b5a38",
+      "bulb": "#ffd88a",
+      "glow": "#fff0d0"
+    },
+    "controls": {
+      "wire": "color",
+      "bulb": "color",
+      "glow": "color"
+    }
+  },
+  {
+    "id": "chandelier",
+    "label": "Chandelier",
+    "group": "lights",
+    "defaults": {
+      "metal": "#a9b0bb",
+      "shade": "#d6d9df",
+      "crystal": "#eef2f9"
+    },
+    "controls": {
+      "metal": "color",
+      "shade": "color",
+      "crystal": "color"
+    }
+  },
+  {
+    "id": "lantern",
+    "label": "Lantern",
+    "group": "lights",
+    "defaults": {
+      "cord": "#6b4a2a",
+      "cap": "#c9a050",
+      "body": "#ff9a2e",
+      "glow": "#ffe6a3"
+    },
+    "controls": {
+      "cord": "color",
+      "cap": "color",
+      "body": "color",
+      "glow": "color"
+    }
+  },
+  {
+    "id": "diya",
+    "label": "Diya",
+    "group": "lights",
+    "defaults": {
+      "glow": "#fff3d6",
+      "glowOpacity": 0.85,
+      "bowl": "#bd8530",
+      "flame": "#ffd24a"
+    },
+    "controls": {
+      "glow": "color",
+      "glowOpacity": "number",
+      "bowl": "color",
+      "flame": "color"
+    }
+  },
+  {
+    "id": "neon-ring",
+    "label": "Neon ring",
+    "group": "lights",
+    "defaults": {
+      "halo": "#fff0d6",
+      "ring": "#ffd685",
+      "fill": "#fffdf8"
+    },
+    "controls": {
+      "halo": "color",
+      "ring": "color",
+      "fill": "color"
+    }
+  },
+  {
+    "id": "string-bulbs",
+    "label": "String bulbs",
+    "group": "lights",
+    "defaults": {
+      "wire": "#444444",
+      "bulb": "#ffd685",
+      "glow": "#fff0d6"
+    },
+    "controls": {
+      "wire": "color",
+      "bulb": "color",
+      "glow": "color"
+    }
+  },
+  {
+    "id": "candle",
+    "label": "Candle",
+    "group": "lights",
+    "defaults": {
+      "wax": "#f6e6cc",
+      "glow": "#fff0d6",
+      "flame": "#ffd24a"
+    },
+    "controls": {
+      "wax": "color",
+      "glow": "color",
+      "flame": "color"
+    }
+  },
+  {
+    "id": "uplight",
+    "label": "Uplight",
+    "group": "lights",
+    "defaults": {
+      "beam": "#fff3dc",
+      "base": "#3a3a3a"
+    },
+    "controls": {
+      "beam": "color",
+      "base": "color"
+    }
+  },
+  {
+    "id": "kalash",
+    "label": "Kalash",
+    "group": "props",
+    "defaults": {
+      "body": "#d9a441",
+      "collar": "#bd8a2f",
+      "ball": "#8fa86b",
+      "top": "#f7b82a",
+      "ballR": 44
+    },
+    "controls": {
+      "body": "color",
+      "collar": "color",
+      "ball": "color",
+      "top": "color",
+      "ballR": "number"
+    }
+  },
+  {
+    "id": "urli-bowl",
+    "label": "Urli bowl",
+    "group": "props",
+    "defaults": {
+      "bowl": "#c98741",
+      "rim": "#e6a95c",
+      "fruit": "#f0861c"
+    },
+    "controls": {
+      "bowl": "color",
+      "rim": "color",
+      "fruit": "color"
+    }
+  },
+  {
+    "id": "brass-diya-set",
+    "label": "Brass diya set",
+    "group": "props",
+    "defaults": {
+      "bowl": "#bd8530",
+      "flame": "#ffd24a"
+    },
+    "controls": {
+      "bowl": "color",
+      "flame": "color"
+    }
+  },
+  {
+    "id": "rangoli",
+    "label": "Rangoli",
+    "group": "props",
+    "defaults": {
+      "cx": 200,
+      "cy": 200,
+      "outer": "#e8457c",
+      "mid": "#f0861c",
+      "inner": "#2d8a6a",
+      "center": "#7b3fa0"
+    },
+    "controls": {
+      "cx": "number",
+      "cy": "number",
+      "outer": "color",
+      "mid": "color",
+      "inner": "color",
+      "center": "color"
+    }
+  },
+  {
+    "id": "cake",
+    "label": "Cake",
+    "group": "props",
+    "defaults": {
+      "bottom": "#f6c6ce",
+      "middle": "#fde8bb",
+      "top": "#cfe0ef",
+      "candle": "#8b5a2b",
+      "flame": "#ffd24a"
+    },
+    "controls": {
+      "bottom": "color",
+      "middle": "color",
+      "top": "color",
+      "candle": "color",
+      "flame": "color"
+    }
+  },
+  {
+    "id": "vase",
+    "label": "Vase",
+    "group": "props",
+    "defaults": {
+      "glass": "#d9e5d8",
+      "edge": "#9bb59d",
+      "collar": "#c8d5c3",
+      "flower1": "#f0b8c0",
+      "flower2": "#fffaf0"
+    },
+    "controls": {
+      "glass": "color",
+      "edge": "color",
+      "collar": "color",
+      "flower1": "color",
+      "flower2": "color"
+    }
+  },
+  {
+    "id": "welcome-sign",
+    "label": "Welcome sign",
+    "group": "props",
+    "defaults": {
+      "frame": "#d9a441",
+      "board": "#fffaee",
+      "text": "#e6dcc8",
+      "leg": "#8b5a2b"
+    },
+    "controls": {
+      "frame": "color",
+      "board": "color",
+      "text": "color",
+      "leg": "color"
+    }
+  },
+  {
+    "id": "flower-basket",
+    "label": "Flower basket",
+    "group": "props",
+    "defaults": {
+      "basket": "#c9a56b",
+      "handle": "#b08a3c",
+      "f1": "#f7b82a",
+      "f2": "#f0b8c0",
+      "f3": "#fffaee"
+    },
+    "controls": {
+      "basket": "color",
+      "handle": "color",
+      "f1": "color",
+      "f2": "color",
+      "f3": "color"
+    }
+  }
+]

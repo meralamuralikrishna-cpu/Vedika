@@ -8,6 +8,7 @@ import { useApp } from '@/context/AppContext';
 import { ELEMENT_MAP } from '@/studio/elements';
 import { getTheme } from '@/data/themes';
 import SceneView from '@/studio/SceneView';
+import { componentsById as COVER_COMPONENTS } from '@/assets/vedika-cover-assets/src/components/index.js';
 import './findDecorators.css';
 
 const SERVICES = ['Ceremony flowers', 'Stage & backdrop', 'Table styling', 'Lighting', 'Draping', 'Setup & teardown'];
@@ -77,7 +78,8 @@ export function FindDecorators() {
   const [contactDetails, setContactDetails] = useState('');
 
   const selectedColors = colors.split(',').map((color) => color.trim()).filter(Boolean);
-  const designCategories = [...new Set((linkedDesign?.scene?.elements ?? []).map((element) => ELEMENT_MAP[element.type]?.category).filter(Boolean))];
+  const linkedElements = linkedDesign?.scene?.coverElements ?? linkedDesign?.scene?.elements ?? [];
+  const designCategories = [...new Set(linkedElements.map((element) => ELEMENT_MAP[element.type]?.category ?? (COVER_COMPONENTS[element.type]?.group ?? '')).filter(Boolean))];
   const designPalette = linkedDesign?.scene?.palette ?? [];
   const designStyle = linkedDesign?.settings?.themeId ? getTheme(linkedDesign.settings.themeId)?.name ?? linkedDesign.settings.themeId : '';
   const brief = useMemo(() => [
@@ -188,11 +190,51 @@ export function FindDecorators() {
     <PageHeader kicker="Planning tool" title="Event brief" description="Plan your celebration one step at a time, then review and share a clear brief." />
 
     <section className="brief-selected-design">
-      <div className="brief-selected-design-heading"><div><span className="brief-selected-design-icon"><Sparkles size={16} /></span><div><small>DESIGN REFERENCE</small><h2>Your Selected Design</h2></div></div>
-        {selectedDesignId && <div className="brief-design-actions">{linkedDesign && <Link to={`/studio?design=${encodeURIComponent(linkedDesign.id)}`} className="brief-design-view">View Design <ArrowRight size={13} /></Link>}<button type="button" className="brief-design-remove" onClick={() => selectDesign('')}><X size={13} />Remove Design</button></div>}
+      <div className="brief-selected-design-heading">
+        <div>
+          <span className="brief-selected-design-icon"><Sparkles size={16} /></span>
+          <div><small>DESIGN REFERENCE</small><h2>Your selected design</h2></div>
+        </div>
+        {selectedDesignId && (
+          <div className="brief-design-actions">
+            {linkedDesign && <Link to={`/studio?design=${encodeURIComponent(linkedDesign.id)}`} className="brief-design-view">View design <ArrowRight size={13} /></Link>}
+            <button type="button" className="brief-design-remove" onClick={() => selectDesign('')}><X size={13} />Remove</button>
+          </div>
+        )}
       </div>
-      {linkedDesign?.scene ? <div className="brief-selected-design-body"><div className="brief-design-preview"><SceneView scene={linkedDesign.scene} uid={`event-brief-${linkedDesign.id}`} aria-hidden="true" /></div><div className="brief-design-details"><strong>{linkedDesign.name}</strong><small>Design ID · {linkedDesign.id}</small><p>{designCategories.length ? designCategories.join(' · ') : 'Decoration design'}{designPalette.length ? ` · ${designPalette.join(', ')}` : ''}{designStyle ? ` · ${designStyle}` : ''}</p><p className="brief-design-customization">{linkedDesign.scene.elements?.length ?? 0} saved decoration elements · {linkedDesign.settings?.themeId ? `Theme: ${designStyle || linkedDesign.settings.themeId}` : 'Customizable in Studio'}</p></div></div> : selectedDesignId ? <div className="brief-design-missing"><div><strong>{linkedDesignName || 'Selected design'}</strong><p>This saved design is unavailable in your current workspace. Its ID will remain attached to the request.</p></div><small>Design ID · {selectedDesignId}</small></div> : <div className="brief-design-missing"><p>No design selected. You can continue with your event preferences or add one from your saved designs.</p></div>}
-      {changingDesign ? <div className="brief-design-change"><label className="brief-field"><span>Choose a saved design</span><select value={selectedDesignId} onChange={(event) => selectDesign(event.target.value)}><option value="">No design selected</option>{designs.map((design) => <option key={design.id} value={design.id}>{design.name}</option>)}</select></label><button type="button" onClick={() => setChangingDesign(false)}>Cancel</button></div> : <button type="button" className="brief-design-change-trigger" onClick={() => setChangingDesign(true)}>{selectedDesignId ? 'Change Design' : 'Select a saved design'} <ArrowRight size={13} /></button>}
+      {linkedDesign?.scene ? (
+        <div className="brief-selected-design-body">
+          <div className="brief-design-preview"><SceneView scene={linkedDesign.scene} uid={`event-brief-${linkedDesign.id}`} aria-hidden="true" /></div>
+          <div className="brief-design-details">
+            <strong>{linkedDesign.name}</strong>
+            <small title={linkedDesign.id}>Design ID · {linkedDesign.id}</small>
+            <p>{designCategories.length ? designCategories.join(' · ') : 'Decoration design'}{designStyle ? ` · ${designStyle}` : ''}</p>
+            <p className="brief-design-customization">{linkedElements.length} decoration elements{designPalette.length ? ` · ${designPalette.length} palette colors` : ''}</p>
+          </div>
+        </div>
+      ) : selectedDesignId ? (
+        <div className="brief-design-missing">
+          <div><strong>{linkedDesignName || 'Selected design'}</strong><p>This saved design is unavailable in your current workspace. Its ID will remain attached to the request.</p></div>
+          <small title={selectedDesignId}>ID · {selectedDesignId}</small>
+        </div>
+      ) : (
+        <div className="brief-design-missing brief-design-empty"><p>No design selected yet. Continue with preferences, or attach one from your saved designs.</p></div>
+      )}
+      {changingDesign ? (
+        <div className="brief-design-change">
+          <label className="brief-field"><span>Choose a saved design</span>
+            <select value={selectedDesignId} onChange={(event) => selectDesign(event.target.value)}>
+              <option value="">No design selected</option>
+              {designs.map((design) => <option key={design.id} value={design.id}>{design.name}</option>)}
+            </select>
+          </label>
+          <button type="button" onClick={() => setChangingDesign(false)}>Cancel</button>
+        </div>
+      ) : (
+        <button type="button" className="brief-design-change-trigger" onClick={() => setChangingDesign(true)}>
+          {selectedDesignId ? 'Change design' : 'Select a saved design'} <ArrowRight size={13} />
+        </button>
+      )}
     </section>
 
     <nav className="brief-stepper" aria-label="Event brief progress">
@@ -222,7 +264,7 @@ export function FindDecorators() {
           </section>}
 
           {step === 2 && <div className="brief-decoration-step">
-            <fieldset className="brief-choice-section"><legend>Services you may need <small>Select all that apply</small></legend><div className="brief-service-grid">{SERVICES.map((service) => { const selected = services.includes(service); return <button key={service} type="button" aria-pressed={selected} onClick={() => toggleService(service)} className={`brief-service-card${selected ? ' is-selected' : ''}`}><span className="brief-choice-check">{selected && <Check size={13} />}</span><span className="brief-service-icon"><Flower2 size={17} /></span><strong>{service}</strong></button>; })}</div></fieldset>
+            <fieldset className="brief-choice-section"><legend>Services you may need <small>Select all that apply</small></legend><div className="brief-service-grid">{SERVICES.map((service) => { const selected = services.includes(service); return <button key={service} type="button" aria-pressed={selected} onClick={() => toggleService(service)} className={`brief-service-card${selected ? ' is-selected' : ''}`}>{selected && <span className="brief-choice-check"><Check size={13} /></span>}<span className="brief-service-icon"><Flower2 size={17} /></span><strong>{service}</strong></button>; })}</div></fieldset>
             <fieldset className="brief-choice-section"><legend>Decoration style <small>Choose the closest match</small></legend><div className="brief-style-options">{STYLES.map((option) => <button key={option} type="button" aria-pressed={style === option} onClick={() => setStyle(style === option ? '' : option)} className={style === option ? 'is-selected' : ''}>{option}</button>)}</div></fieldset>
             <fieldset className="brief-choice-section"><legend>Preferred colors <small>Select swatches or add a custom color</small></legend><div className="brief-color-options">{COLORS.map(([name, color]) => <button key={color} type="button" title={name} aria-label={`${name}${selectedColors.includes(name) ? ', selected' : ''}`} aria-pressed={selectedColors.includes(name)} onClick={() => toggleColor(name)} className={selectedColors.includes(name) ? 'is-selected' : ''}><i style={{ backgroundColor: color }} />{selectedColors.includes(name) && <Check size={12} />}</button>)}<label className="brief-custom-color" title="Add a custom color"><input type="color" value={customColor} onChange={(event) => { setCustomColor(event.target.value); if (!selectedColors.includes(event.target.value)) setColors([...selectedColors, event.target.value].join(', ')); }} /><span>Custom</span></label></div>{selectedColors.length > 0 && <p className="brief-selected-colors"><Palette size={13} />{selectedColors.join(' · ')}</p>}</fieldset>
           </div>}
@@ -234,15 +276,22 @@ export function FindDecorators() {
             <details className="brief-advanced-details"><summary>Additional venue & accessibility details <ChevronDown size={16} /></summary><div className="brief-advanced-fields"><TextField label="Venue access and setup window" optional placeholder="e.g. Access from 8 AM; setup must finish by 2 PM" value={accessTime} onChange={(event) => setAccessTime(event.target.value)} /><TextField label="Venue restrictions" optional placeholder="e.g. No drilling, open flames, or hanging fixtures" value={venueRestrictions} onChange={(event) => setVenueRestrictions(event.target.value)} /><TextField label="Accessibility requirements" optional placeholder="e.g. Keep a step-free path and wide walkways" value={accessibility} onChange={(event) => setAccessibility(event.target.value)} /><div className="brief-budget-row"><label className="brief-field"><span>Preferred contact method <small>Optional</small></span><select value={contactPreference} onChange={(event) => setContactPreference(event.target.value)}><option value="">Not specified</option><option>Email</option><option>Phone</option><option>WhatsApp</option></select></label><Field label="Contact details" optional placeholder="Email or phone number" value={contactDetails} onChange={(event) => setContactDetails(event.target.value)} /></div></div></details>
           </section>}
 
-          <footer className="brief-step-actions">{step > 1 ? <Button variant="secondary" onClick={() => goToStep(step - 1)}><ArrowLeft size={15} />Back</Button> : <span className="brief-optional-note">* Required · Other details are optional.</span>}<Button onClick={continueStep}>{step === 3 ? 'Review your brief' : 'Continue'}<ArrowRight size={15} /></Button></footer>
+          <footer className="brief-step-actions">{step > 1 ? <Button variant="secondary" onClick={() => goToStep(step - 1)}><ArrowLeft size={15} />Back</Button> : <span className="brief-optional-note">* Required · Other details are optional.</span>}<Button className="brief-primary-action" onClick={continueStep}>{step === 3 ? 'Review your brief' : 'Continue'}<ArrowRight size={15} /></Button></footer>
         </> : <>
           <header className="brief-step-heading"><span className="brief-step-kicker">FINAL REVIEW</span><h2>Your event brief</h2><p>Review the details below. You can edit any step before copying, downloading, or submitting an internal request.</p></header>
           <div className="brief-review-sections">
             <section className="brief-review-section"><div><span>01</span><h3>Event overview</h3><button type="button" onClick={() => goToStep(1)}>Edit</button></div><dl><ReviewLine label="Occasion" value={eventType} /><ReviewLine label="Date" value={eventDate} /><ReviewLine label="Time" value={eventTime} /><ReviewLine label="Venue or city" value={location.trim()} /><ReviewLine label="Guests" value={guestCount} /><ReviewLine label="Setting" value={setting} /></dl></section>
-            <section className="brief-review-section"><div><span>02</span><h3>Decoration preferences</h3><button type="button" onClick={() => goToStep(2)}>Edit</button></div><dl><ReviewLine label="Services" value={services.join(', ')} /><ReviewLine label="Style" value={style} /><ReviewLine label="Colors" value={selectedColors.join(', ')} /><ReviewLine label="Linked design" value={linkedDesignName} /></dl></section>
+            <section className="brief-review-section"><div><span>02</span><h3>Decoration preferences</h3><button type="button" onClick={() => goToStep(2)}>Edit</button></div><dl><ReviewLine label="Services" value={services.join(', ') || 'To discuss'} /><ReviewLine label="Style" value={style} /><ReviewLine label="Colors" value={selectedColors.join(', ')} /><ReviewLine label="Linked design" value={linkedDesignName} /></dl></section>
             <section className="brief-review-section"><div><span>03</span><h3>Budget & requirements</h3><button type="button" onClick={() => goToStep(3)}>Edit</button></div><dl><ReviewLine label="Budget" value={budgetLine} /><ReviewLine label="Includes" value={budgetScope} /><ReviewLine label="Additional requirements" value={requirements.trim()} /><ReviewLine label="Venue access" value={accessTime.trim()} /><ReviewLine label="Venue restrictions" value={venueRestrictions.trim()} /><ReviewLine label="Accessibility" value={accessibility.trim()} /><ReviewLine label="Contact method" value={contactPreference} /><ReviewLine label="Contact details" value={contactDetails.trim()} /></dl></section>
           </div>
-          <footer className="brief-step-actions brief-review-tools"><Button variant="secondary" onClick={() => goToStep(3)}><ArrowLeft size={15} />Back to budget</Button><Button variant="secondary" onClick={copyBrief}><Clipboard size={14} />Copy brief</Button><Button variant="secondary" onClick={downloadBrief}><Download size={14} />Download brief</Button><Link to={requestUrl} className="brief-request-button">Create internal request <ArrowRight size={15} /></Link></footer>
+          <footer className="brief-step-actions brief-review-tools">
+            <Button variant="secondary" onClick={() => goToStep(3)}><ArrowLeft size={15} />Back</Button>
+            <div className="brief-review-actions">
+              <Button variant="secondary" onClick={copyBrief}><Clipboard size={14} />Copy</Button>
+              <Button variant="secondary" onClick={downloadBrief}><Download size={14} />Download</Button>
+              <Link to={requestUrl} className="brief-request-button">Create internal request <ArrowRight size={15} /></Link>
+            </div>
+          </footer>
         </>}
       </main>
 

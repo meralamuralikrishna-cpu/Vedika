@@ -1,15 +1,16 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, ExternalLink, Images, Link2, Plus, Trash2, Upload, X } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Images, Link2, Plus, Upload, X } from 'lucide-react';
 import { v4 as uuid } from 'uuid';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { THEMES } from '@/studio/themes';
 import { ELEMENTS } from '@/studio/elements';
 import { resolveTemplateCover } from '@/data/templateCovers';
-import { templates } from '@/data/templates';
 import { createSharedDesign, shareUrl } from '@/lib/share';
+import { buildInspirationEntries, resolveMoodboardMedia } from '@/lib/moodboard';
 import MoodboardCard from './MoodboardCard';
+import MoodboardCollage from './MoodboardCollage';
 import './moodboards.css';
 
 const dateLabel = (value) => {
@@ -31,16 +32,50 @@ function MoodboardForm({ board, designs, onSave }) {
   const [themeId, setThemeId] = useState(matched?.id ?? (existingPalette.length ? 'custom' : THEMES[0].id));
   const [budget, setBudget] = useState(board?.budget ?? '');
   const [designIds, setDesignIds] = useState(board?.designIds ?? []);
+  const coverChoices = useMemo(() => {
+    const entries = buildInspirationEntries(board ?? { items: [], designIds, inspirations: [] }, designs.filter((design) => designIds.includes(design.id)));
+    return entries
+      .map((entry) => {
+        if (entry.type === 'image' && entry.item?.src) return { id: entry.id, label: entry.title, value: entry.item.src };
+        if (entry.cover) return { id: entry.id, label: entry.title, value: entry.cover };
+        return null;
+      })
+      .filter(Boolean);
+  }, [board, designs, designIds]);
 
   const submit = (event) => {
     event.preventDefault();
     if (!name.trim()) return;
     const selected = THEMES.find((theme) => theme.id === themeId);
-    onSave({ id: board?.id, name: name.trim(), eventType, eventDate, note: note.trim(), coverImage, palette: selected?.palette ?? existingPalette, budget: budget === '' ? '' : Number(budget), referenceUrl: referenceUrl.trim(), designIds });
+    onSave({
+      id: board?.id,
+      name: name.trim(),
+      eventType,
+      eventDate,
+      note: note.trim(),
+      coverImage,
+      coverMode: coverImage ? 'image' : 'mosaic',
+      palette: selected?.palette ?? existingPalette,
+      budget: budget === '' ? '' : Number(budget),
+      referenceUrl: referenceUrl.trim(),
+      designIds,
+    });
   };
 
   return <form id="moodboard-form" className="mb-form" onSubmit={submit}>
-    <div className="mb-form-cover">{coverImage ? <img src={resolveTemplateCover(coverImage)} alt="Moodboard cover preview" /> : <div className="mb-cover-placeholder"><Images size={24} /><span>Collection cover</span></div>}</div>
+    <div className="mb-form-cover">
+      {coverImage ? <img src={resolveMoodboardMedia(coverImage)} alt="Moodboard cover preview" /> : <div className="mb-cover-placeholder"><Images size={24} /><span>Auto mosaic from board</span></div>}
+      {coverChoices.length > 0 && (
+        <div className="mb-form-cover-picks">
+          <button type="button" className={!coverImage ? 'is-active' : ''} onClick={() => setCoverImage('')}>Mosaic</button>
+          {coverChoices.slice(0, 6).map((choice) => (
+            <button type="button" key={choice.id} className={coverImage === choice.value ? 'is-active' : ''} onClick={() => setCoverImage(choice.value)} title={choice.label}>
+              <img src={resolveMoodboardMedia(choice.value)} alt="" />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
     <div className="mb-form-fields">
       <label>Moodboard Name<input autoFocus required maxLength={80} value={name} onChange={(event) => setName(event.target.value)} placeholder="e.g. Garden ceremony ideas" /></label>
       <div className="mb-form-row"><label>Event Type<select value={eventType} onChange={(event) => setEventType(event.target.value)}>{eventTypes.map((type) => <option key={type}>{type}</option>)}</select></label><label>Event Date<input type="date" value={eventDate} onChange={(event) => setEventDate(event.target.value)} /></label></div>
@@ -73,16 +108,28 @@ function resizeImage(file) {
   });
 }
 
-function MoodboardWorkspace({ board, designs, onClose, onUpdate }) {
+function MoodboardWorkspace({ board, designs, onUpdate }) {
   const [note, setNote] = useState(board.note ?? board.notes ?? '');
   const [paletteName, setPaletteName] = useState('');
   const [colors, setColors] = useState(['#A8B5A0', '#C5A46D', '#FAF7F2', '#CFA09C']);
   const [elementId, setElementId] = useState(ELEMENTS[0]?.id ?? '');
   const [message, setMessage] = useState('');
   const items = board.items ?? [];
-  const linkedDesigns = designs.filter((design) => (board.designIds ?? []).includes(design.id));
-  const shareItems = [...items, ...linkedDesigns.map((design) => ({ id: `design-${design.id}`, type: 'design', title: design.name, category: 'Studio design' }))];
+  const inspirations = buildInspirationEntries(board, designs);
+  const shareItems = inspirations.map((entry) => ({
+    id: entry.id,
+    type: entry.type,
+    title: entry.title,
+    category: entry.badge,
+    cover: entry.cover,
+    src: entry.item?.src,
+  }));
+
   const updateItems = (nextItems) => onUpdate(board.id, { items: nextItems });
+
+  const updateTiles = useCallback((tiles) => {
+    onUpdate(board.id, { collage: { tiles } });
+  }, [board.id, onUpdate]);
 
   const addImage = async (event) => {
     const files = Array.from(event.target.files ?? []);
@@ -92,7 +139,7 @@ function MoodboardWorkspace({ board, designs, onClose, onUpdate }) {
     try {
       const uploads = await Promise.all(files.map(async (file) => ({ id: uuid(), type: 'image', title: file.name.replace(/\.[^.]+$/, ''), src: await resizeImage(file), savedAt: new Date().toISOString() })));
       updateItems([...items, ...uploads]);
-      setMessage(`${uploads.length} reference image${uploads.length === 1 ? '' : 's'} added.`);
+      setMessage(`${uploads.length} reference image${uploads.length === 1 ? '' : 's'} added to the collage.`);
     } catch { setMessage('Could not read that image. Try another file.'); }
   };
 
@@ -114,7 +161,19 @@ function MoodboardWorkspace({ board, designs, onClose, onUpdate }) {
         designId: `moodboard:${board.id}`,
         name: board.name ?? board.title,
         elements: [],
-        settings: { moodboardSnapshot: { name: board.name ?? board.title, eventType: board.eventType, eventDate: board.eventDate, note, palette: board.palette ?? board.colors ?? [], palettes: board.palettes ?? [], items: shareItems } },
+        settings: {
+          moodboardSnapshot: {
+            name: board.name ?? board.title,
+            eventType: board.eventType,
+            eventDate: board.eventDate,
+            note,
+            palette: board.palette ?? board.colors ?? [],
+            palettes: board.palettes ?? [],
+            items: shareItems,
+            collage: board.collage ?? null,
+            coverImage: board.coverImage ?? '',
+          },
+        },
         venuePlan: {},
       });
       const url = shareUrl(share.id);
@@ -124,27 +183,35 @@ function MoodboardWorkspace({ board, designs, onClose, onUpdate }) {
     } catch (error) { setMessage(error instanceof Error ? error.message : 'Could not share the collection.'); }
   };
 
-  const moveItem = (index, delta) => {
-    const next = [...items];
-    const target = index + delta;
-    if (target < 0 || target >= next.length) return;
-    [next[index], next[target]] = [next[target], next[index]];
-    updateItems(next);
+  const removeEntry = (tile, entry) => {
+    if (!entry) return;
+    if (entry.kind === 'design') {
+      onUpdate(board.id, { designIds: (board.designIds ?? []).filter((id) => id !== entry.refId) });
+      return;
+    }
+    if (entry.kind === 'inspiration') {
+      onUpdate(board.id, { inspirations: (board.inspirations ?? []).filter((idea) => idea.id !== entry.id) });
+      return;
+    }
+    updateItems(items.filter((item) => item.id !== entry.id));
   };
 
   return <div className="mb-detail-workspace">
-    <div className="mb-detail-toolbar"><div><span className="mb-eyebrow">{board.eventType || 'Event'}{board.eventDate ? ` · ${dateLabel(board.eventDate)}` : ''}</span><p>{items.length + linkedDesigns.length} saved references · Updated {dateLabel(board.updatedAt ?? board.createdAt)}</p></div><Button variant="secondary" size="sm" onClick={shareBoard}><Link2 size={14} />Share Moodboard</Button></div>
+    <div className="mb-detail-toolbar"><div><span className="mb-eyebrow">{board.eventType || 'Event'}{board.eventDate ? ` · ${dateLabel(board.eventDate)}` : ''}</span><p>{inspirations.length} on the board · Updated {dateLabel(board.updatedAt ?? board.createdAt)}</p></div><Button variant="secondary" size="sm" onClick={shareBoard}><Link2 size={14} />Share Moodboard</Button></div>
     {message && <p className="mb-share-message" role="status">{message}</p>}
-    <div className="mb-detail-actions"><label className="mb-upload-action"><Upload size={14} />Upload Reference Images<input type="file" accept="image/*" multiple onChange={addImage} /></label><label className="mb-detail-add-element">Add decoration element<select value={elementId} onChange={(event) => setElementId(event.target.value)}>{ELEMENTS.map((element) => <option key={element.id} value={element.id}>{element.name} · {element.category}</option>)}</select></label><Button size="sm" variant="secondary" onClick={addElement}><Plus size={14} />Add Element</Button></div>
-    {items.length || linkedDesigns.length ? <div className="mb-detail-grid">{items.map((item, index) => {
-      const template = item.templateId ? templates.find((entry) => entry.id === item.templateId) : null;
-      const cover = item.type === 'image' ? item.src : item.cover ?? template?.cover;
-      return <article className="mb-detail-item" key={item.id}>
-        <div className="mb-detail-item-preview">{cover ? <img src={item.type === 'image' ? cover : resolveTemplateCover(cover)} alt="" /> : item.type === 'element' ? <span className="mb-element-swatch" style={{ backgroundColor: item.color }} /> : <div className="mb-cover-placeholder"><Images size={18} /></div>}</div>
-        <div className="mb-detail-item-copy"><strong>{item.title}</strong><small>{item.type === 'template' ? `Template · ${item.category}` : item.type === 'element' ? `Decoration · ${item.category}` : 'Reference image'}</small></div>
-        <div className="mb-detail-item-actions"><button type="button" disabled={index === 0} aria-label="Move item up" onClick={() => moveItem(index, -1)}><ArrowLeft size={13} /></button><button type="button" disabled={index === items.length - 1} aria-label="Move item down" onClick={() => moveItem(index, 1)}><ArrowRight size={13} /></button><button type="button" aria-label={`Remove ${item.title}`} onClick={() => updateItems(items.filter((entry) => entry.id !== item.id))}><Trash2 size={13} /></button></div>
-      </article>;
-    })}{linkedDesigns.map((design) => <article className="mb-detail-item" key={`design-${design.id}`}><div className="mb-detail-item-preview"><img src={resolveTemplateCover(design.coverImage)} alt="" /></div><div className="mb-detail-item-copy"><strong>{design.name}</strong><small>Saved Studio design</small></div><a className="mb-detail-open" href={`/studio?design=${encodeURIComponent(design.id)}`} aria-label={`Open ${design.name} in Studio`}><ExternalLink size={14} /></a></article>)}</div> : <div className="mb-detail-empty"><Images size={26} /><p>No inspiration saved yet. Upload a reference or add a decoration element.</p></div>}
+    <div className="mb-detail-actions">
+      <label className="mb-upload-action"><Upload size={14} />Upload images<input type="file" accept="image/*" multiple onChange={addImage} /></label>
+      <label className="mb-detail-add-element">Add element<select value={elementId} onChange={(event) => setElementId(event.target.value)}>{ELEMENTS.map((element) => <option key={element.id} value={element.id}>{element.name} · {element.category}</option>)}</select></label>
+      <Button size="sm" variant="secondary" onClick={addElement}><Plus size={14} />Add to collage</Button>
+    </div>
+    <MoodboardCollage
+      board={board}
+      designs={designs}
+      coverImage={board.coverImage}
+      onUpdateTiles={updateTiles}
+      onRemoveEntry={removeEntry}
+      onSetCover={(value) => onUpdate(board.id, { coverImage: value, coverMode: value ? 'image' : 'mosaic' })}
+    />
     <section className="mb-detail-section"><div className="mb-detail-section-heading"><div><span className="mb-eyebrow">Your personal palettes</span><h3>Color stories</h3></div></div><div className="mb-palette-list">{board.palette?.length > 0 && <div className="mb-saved-palette"><strong>Collection palette</strong><div>{board.palette.map((color) => <i key={color} style={{ backgroundColor: color }} />)}</div></div>}{(board.palettes ?? []).map((palette) => <div className="mb-saved-palette" key={palette.id}><strong>{palette.name}</strong><div>{palette.colors.map((color, index) => <i key={`${color}-${index}`} style={{ backgroundColor: color }} />)}</div><button type="button" aria-label={`Remove ${palette.name}`} onClick={() => onUpdate(board.id, { palettes: (board.palettes ?? []).filter((entry) => entry.id !== palette.id) })}><X size={13} /></button></div>)}</div><div className="mb-palette-create"><input aria-label="Palette name" value={paletteName} onChange={(event) => setPaletteName(event.target.value)} placeholder="Palette name" /><div>{colors.map((color, index) => <input key={index} type="color" aria-label={`Palette color ${index + 1}`} value={color} onChange={(event) => setColors((current) => current.map((entry, i) => i === index ? event.target.value : entry))} />)}</div><Button size="sm" variant="secondary" onClick={addPalette}><Plus size={13} />Save palette</Button></div></section>
     <section className="mb-detail-section"><div className="mb-detail-section-heading"><div><span className="mb-eyebrow">Collection notes</span><h3>Keep the details</h3></div><Button size="sm" onClick={() => { onUpdate(board.id, { note, notes: note }); setMessage('Notes saved.'); }}>Save Notes</Button></div><textarea className="mb-detail-notes" value={note} maxLength={1000} onChange={(event) => setNote(event.target.value)} placeholder="Add your event notes, vendor ideas, or details to remember…" />{board.referenceUrl && <a className="mb-detail-reference" href={board.referenceUrl} target="_blank" rel="noreferrer">Open saved reference <ExternalLink size={13} /></a>}</section>
   </div>;
@@ -170,13 +237,13 @@ export default function Moodboards({ moodboards = [], designs = [], canSaveData 
     try { onCreate(draft); setEditingBoard(null); setFormOpen(false); setSaveError(''); }
     catch { setSaveError('This moodboard could not be saved. Please try again.'); }
   };
-  const updateBoard = (id, patch) => {
+  const updateBoard = useCallback((id, patch) => {
     const board = moodboards.find((entry) => entry.id === id);
     if (board) onUpdate({ ...board, ...patch, updatedAt: new Date().toISOString() });
-  };
+  }, [moodboards, onUpdate]);
   const editorModal = <Modal open={formOpen} onClose={() => { setFormOpen(false); setEditingBoard(null); setSaveError(''); }} title={editingBoard?.id ? 'Edit Moodboard' : 'Create New Moodboard'} size="lg" footer={<><Button type="button" variant="secondary" onClick={() => { setFormOpen(false); setEditingBoard(null); setSaveError(''); }}>Cancel</Button><Button type="submit" form="moodboard-form">{editingBoard?.id ? 'Save Changes' : 'Create Moodboard'}</Button></>}><MoodboardForm key={editingBoard?.id ?? 'new'} board={editingBoard} designs={designs} onSave={saveForm} />{saveError && <p className="mb-form-error" role="alert">{saveError}</p>}</Modal>;
 
-  if (selectedBoard) return <div className="moodboards-page"><main className="mb-main mb-detail-page"><button type="button" className="mb-detail-back" onClick={closeBoard}><ArrowLeft size={15} />All moodboards</button><div className="mb-detail-page-heading"><div><span className="mb-eyebrow">{selectedBoard.eventType ?? 'Personal collection'}</span><h1>{selectedBoard.name ?? selectedBoard.title}</h1><p>{selectedBoard.note ?? selectedBoard.notes ?? 'Your saved inspiration workspace.'}</p></div><Button variant="secondary" onClick={() => editBoard(selectedBoard)}>Edit collection details</Button></div><MoodboardWorkspace key={selectedBoard.id} board={selectedBoard} designs={designs} onUpdate={updateBoard} /></main>{editorModal}</div>;
+  if (selectedBoard) return <div className="moodboards-page"><main className="mb-main mb-detail-page"><button type="button" className="mb-detail-back" onClick={closeBoard}><ArrowLeft size={15} />All moodboards</button><div className="mb-detail-page-heading"><div><span className="mb-eyebrow">{selectedBoard.eventType ?? 'Personal collection'}</span><h1>{selectedBoard.name ?? selectedBoard.title}</h1><p>{selectedBoard.note ?? selectedBoard.notes ?? 'Arrange references on a free collage canvas.'}</p></div><Button variant="secondary" onClick={() => editBoard(selectedBoard)}>Edit collection details</Button></div><MoodboardWorkspace key={selectedBoard.id} board={selectedBoard} designs={designs} onUpdate={updateBoard} /></main>{editorModal}</div>;
 
   return <div className="moodboards-page">
     <header className="mb-hero"><img className="mb-hero-image" src={resolveTemplateCover('Sage Garden Reception.png')} alt="" /><div className="mb-hero-wash" /><div className="mb-hero-content"><nav className="mb-breadcrumb" aria-label="Breadcrumb"><button onClick={() => navigate('/')}>Home</button><span>/</span><span>Creative Studio</span><span>/</span><span aria-current="page">Moodboards</span></nav><div className="mb-hero-layout"><div><span className="mb-hero-kicker">Your inspiration, gathered in one place</span><h1>Moodboard Collections</h1><p>Build personal collections of reference images, decoration elements, color palettes, and event notes.</p></div><div className="mb-hero-actions"><Button onClick={() => { setSaveError(''); setEditingBoard(null); setFormOpen(true); }}><Plus size={16} />Create New Moodboard</Button></div></div></div></header>

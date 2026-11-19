@@ -400,7 +400,7 @@ const NEW_STARTER_TEMPLATES = NEW_TEMPLATES.map((template) => ({
   themeId: NEW_TEMPLATE_THEME_IDS[template.theme] ?? 'blush-romance',
   tags: template.tags,
   image: template.image,
-  fallbackImage: template.image.replace(/\.svg$/i, '.png'),
+  fallbackImage: typeof template.image === 'string' ? template.image.replace(/\.svg$/i, '.png') : undefined,
   settings: { ...DEFAULT_SETTINGS, themeId: NEW_TEMPLATE_THEME_IDS[template.theme] ?? 'blush-romance' },
   elements: [],
 }));

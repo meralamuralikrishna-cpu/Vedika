@@ -1,0 +1,192 @@
+[
+  {
+    "id": "bg",
+    "label": "Gradient background",
+    "defaults": {
+      "x": 0,
+      "y": 0,
+      "w": 1200,
+      "h": 800,
+      "dir": "v",
+      "stops": [
+        [
+          0,
+          "#ffffff"
+        ],
+        [
+          1,
+          "#000000"
+        ]
+      ],
+      "cx": 600,
+      "cy": 400,
+      "r": 600
+    }
+  },
+  {
+    "id": "rect",
+    "label": "Rectangle",
+    "defaults": {
+      "x": 0,
+      "y": 0,
+      "w": 100,
+      "h": 100,
+      "fill": "#cccccc",
+      "rx": 0
+    }
+  },
+  {
+    "id": "circle",
+    "label": "Circle",
+    "defaults": {
+      "cx": 0,
+      "cy": 0,
+      "r": 10,
+      "fill": "#cccccc"
+    }
+  },
+  {
+    "id": "ellipse",
+    "label": "Ellipse",
+    "defaults": {
+      "cx": 0,
+      "cy": 0,
+      "rx": 10,
+      "ry": 6,
+      "fill": "#cccccc"
+    }
+  },
+  {
+    "id": "poly",
+    "label": "Polygon",
+    "defaults": {
+      "points": [],
+      "fill": "#cccccc"
+    }
+  },
+  {
+    "id": "path",
+    "label": "Path",
+    "defaults": {
+      "d": "",
+      "fill": "none"
+    }
+  },
+  {
+    "id": "line",
+    "label": "Line",
+    "defaults": {
+      "x1": 0,
+      "y1": 0,
+      "x2": 10,
+      "y2": 10,
+      "stroke": "#999999",
+      "w": 3
+    }
+  },
+  {
+    "id": "stars",
+    "label": "Star dots",
+    "defaults": {
+      "items": [],
+      "fill": "#ffffff"
+    }
+  },
+  {
+    "id": "dotRow",
+    "label": "Dot row",
+    "defaults": {
+      "x0": 0,
+      "x1": 100,
+      "y": 0,
+      "n": 5,
+      "r": 10,
+      "fill": "#ffd24a"
+    }
+  },
+  {
+    "id": "ringGarland",
+    "label": "Ring garland",
+    "defaults": {
+      "cx": 600,
+      "cy": 400,
+      "R": 200,
+      "n": 24,
+      "r": 24,
+      "a0": 0,
+      "a1": 360,
+      "from": "#b11f3c",
+      "to": "#b11f3c",
+      "inner": "",
+      "innerK": 0.7
+    }
+  },
+  {
+    "id": "swagGarland",
+    "label": "Marigold swag",
+    "defaults": {
+      "x0": -20,
+      "x1": 1220,
+      "step": 22,
+      "baseY": 125,
+      "amp": 100,
+      "peakX": 579,
+      "period": 740,
+      "rows": [
+        {
+          "dy": 0,
+          "r": 24,
+          "fill": "#f0861c"
+        },
+        {
+          "dy": 20,
+          "r": 16,
+          "fill": "#f7b82a"
+        }
+      ]
+    }
+  },
+  {
+    "id": "gate",
+    "label": "Marigold gate",
+    "defaults": {
+      "x0": 400,
+      "x1": 800,
+      "topY": 300,
+      "baseY": 650,
+      "r": 40,
+      "dot": 17,
+      "step": 22,
+      "fill": "#f0861c"
+    }
+  },
+  {
+    "id": "scallops",
+    "label": "Scalloped band",
+    "defaults": {
+      "y": 200,
+      "x0": 0,
+      "x1": 1200,
+      "r": 40,
+      "gap": 60,
+      "rectH": 80,
+      "dir": "up",
+      "fill": "#9fb89f"
+    }
+  },
+  {
+    "id": "strand",
+    "label": "Hanging strand",
+    "defaults": {
+      "x": 0,
+      "y0": 0,
+      "y1": 100,
+      "r": 12,
+      "step": 20,
+      "fills": [
+        "#f0861c",
+        "#f7b82a"
+      ]
+    }
+  }
+]

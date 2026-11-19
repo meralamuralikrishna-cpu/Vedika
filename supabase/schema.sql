@@ -46,7 +46,7 @@ create policy "Users can update their own data" on public.user_data
 comment on table public.user_data is
   'Private Vedika workspace data, stored as one JSON document per authenticated user.';
 comment on column public.user_data.payload is
-  'JSON object containing designs, moodboards, profile, favorites, locale, notifications, and active design.';
+  'JSON object containing designs, moodboards, budgets, profile, favorites, locale, notifications, and active design.';
 
 -- Booking requests are separate so authorized admins can review requests across accounts.
 create table if not exists public.booking_requests (
@@ -125,6 +125,10 @@ create policy "Owners can delete their booking requests" on public.booking_reque
 
 comment on table public.booking_requests is
   'User booking requests. Admin access is granted only by the trusted app_metadata role claim; status_note explains admin decisions.';
+
+-- Remove the former admin email notification if it was installed previously.
+drop trigger if exists notify_admin_new_booking_request on public.booking_requests;
+drop function if exists public.notify_admin_new_booking_request();
 
 -- Share links are stored separately because guests can read and comment without
 -- an account. The unguessable UUID share id is the public link credential.

@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowRight,
-  Check,
   Compass,
   ExternalLink,
   Flower2,
@@ -16,6 +15,9 @@ import { DesignCanvas } from '@/components/studio/DesignCanvas';
 import { DEFAULT_SETTINGS } from '@/data/themes';
 import { AVAILABLE_TEMPLATE_COVERS, resolveTemplateCover } from '@/data/templateCovers';
 import { getMySharedDesigns } from '@/lib/share';
+import { budgetAllocated } from '@/lib/budget';
+import { buildInspirationEntries, collectMosaicTiles, resolveMoodboardMedia } from '@/lib/moodboard';
+import { formatINR } from '@/lib/utils';
 import './dashboard.css';
 
 const copy = {
@@ -29,10 +31,14 @@ const copy = {
     startText: 'Begin with a blank canvas or find a starting point in the template library.',
     startDesigning: 'Start Designing', inspiration: 'Find Your Inspiration',
     inspirationText: 'Discover beautiful decoration concepts for your next celebration.',
-    collections: 'Your Collections', collectionText: 'Ideas and collaborations, all in one place.',
+    collections: 'Your Collections', collectionText: 'Moodboards, budgets, and shared looks — gathered in one place.',
     myMoodboards: 'My Moodboards', viewMoodboards: 'View Moodboards',
     savedIdeas: 'saved inspirations', noMoodboards: 'Your moodboard collection is ready for its first idea.',
-    createMoodboard: 'Create a Moodboard', recentlyShared: 'Recently Shared',
+    createMoodboard: 'Create a Moodboard',
+    eventBudget: 'Event Budget', viewBudget: 'Open Budget', createBudget: 'Plan a Budget',
+    noBudget: 'Set a total and track décor spend as your plans take shape.',
+    remaining: 'remaining', ofTotal: 'of', totalLabel: 'total', allocated: 'allocated', overBudget: 'over plan',
+    recentlyShared: 'Recently Shared',
     viewShared: 'View Shared Design', noShares: 'Shared designs will appear here when you create a guest link.',
     shareUnavailable: 'Shared links are available when signed in with a connected account.',
     shareLoading: 'Loading shared designs…', shareError: 'Shared designs could not be loaded.',
@@ -53,10 +59,14 @@ const copy = {
     category: 'వేడుక రకం', startTitle: 'మీ సృజనాత్మక ప్రయాణం ఇక్కడ మొదలవుతుంది.',
     startText: 'ఖాళీ కాన్వాస్‌తో లేదా టెంప్లేట్‌తో ప్రారంభించండి.', startDesigning: 'డిజైన్ ప్రారంభించండి',
     inspiration: 'మీకు ప్రేరణ', inspirationText: 'తదుపరి వేడుక కోసం అందమైన అలంకరణ ఆలోచనలు చూడండి.',
-    collections: 'మీ సేకరణలు', collectionText: 'ఆలోచనలు మరియు సహకారాలు ఒకేచోట.',
+    collections: 'మీ సేకరణలు', collectionText: 'మూడ్‌బోర్డులు, బడ్జెట్లు, షేర్ చేసిన లుక్‌లు — ఒకేచోట.',
     myMoodboards: 'నా మూడ్‌బోర్డులు', viewMoodboards: 'మూడ్‌బోర్డులు చూడండి',
     savedIdeas: 'సేవ్ చేసిన ప్రేరణలు', noMoodboards: 'మీ మూడ్‌బోర్డ్‌లో మొదటి ఆలోచనను జోడించండి.',
-    createMoodboard: 'మూడ్‌బోర్డ్ సృష్టించండి', recentlyShared: 'ఇటీవల షేర్ చేసినవి',
+    createMoodboard: 'మూడ్‌బోర్డ్ సృష్టించండి',
+    eventBudget: 'ఈవెంట్ బడ్జెట్', viewBudget: 'బడ్జెట్ తెరవండి', createBudget: 'బడ్జెట్ ప్లాన్ చేయండి',
+    noBudget: 'మొత్తం నిర్ణయించి అలంకరణ ఖర్చును ట్రాక్ చేయండి.',
+    remaining: 'మిగిలినది', ofTotal: 'లో', totalLabel: 'మొత్తం', allocated: 'కేటాయించినది', overBudget: 'ప్లాన్ కంటే ఎక్కువ',
+    recentlyShared: 'ఇటీవల షేర్ చేసినవి',
     viewShared: 'షేర్ చేసిన డిజైన్ చూడండి', noShares: 'అతిథి లింక్ సృష్టించినప్పుడు డిజైన్లు ఇక్కడ కనిపిస్తాయి.',
     shareUnavailable: 'కనెక్ట్ చేసిన ఖాతాతో సైన్ ఇన్ చేసినప్పుడు షేర్ లింకులు కనిపిస్తాయి.',
     shareLoading: 'షేర్ చేసిన డిజైన్లు లోడ్ అవుతున్నాయి…', shareError: 'షేర్ చేసిన డిజైన్లను లోడ్ చేయలేకపోయాం.',
@@ -69,6 +79,70 @@ const copy = {
     openStudio: 'స్టూడియో తెరవండి', explore: 'చూడండి', create: 'సృష్టించండి',
   },
 };
+
+function formatBudgetMoney(amount, currency = 'INR') {
+  if (currency === 'INR') return formatINR(amount);
+  return new Intl.NumberFormat(undefined, { style: 'currency', currency, maximumFractionDigits: 0 }).format(amount);
+}
+
+function BudgetPreview({ budget, designs, text }) {
+  if (!budget) {
+    return (
+      <div className="dash-budget-preview is-empty" aria-hidden="true">
+        <div className="dash-budget-glow" />
+        <div className="dash-budget-empty-mark">
+          <span /><span /><span />
+        </div>
+        <p>{text.noBudget}</p>
+      </div>
+    );
+  }
+
+  const total = Number(budget.totalBudget) || 0;
+  const allocated = budgetAllocated(budget, designs);
+  const remaining = total - allocated;
+  const over = total > 0 && remaining < 0;
+  const pct = total > 0 ? Math.min(100, Math.round((allocated / total) * 100)) : 0;
+  const radius = 54;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (circumference * (total > 0 ? Math.min(pct, 100) : 0)) / 100;
+  const hero = total > 0
+    ? formatBudgetMoney(Math.abs(remaining), budget.currency || 'INR')
+    : allocated > 0
+      ? formatBudgetMoney(allocated, budget.currency || 'INR')
+      : '—';
+  const heroLabel = total > 0 ? (over ? text.overBudget : text.remaining) : text.allocated;
+
+  return (
+    <div className={`dash-budget-preview${over ? ' is-over' : ''}`} aria-hidden="true">
+      <div className="dash-budget-glow" />
+      <div className="dash-budget-ring-wrap">
+        <svg className="dash-budget-ring" viewBox="0 0 128 128">
+          <circle className="dash-budget-ring-track" cx="64" cy="64" r={radius} />
+          <circle
+            className="dash-budget-ring-value"
+            cx="64"
+            cy="64"
+            r={radius}
+            strokeDasharray={circumference}
+            strokeDashoffset={total > 0 ? offset : circumference}
+          />
+        </svg>
+        <div className="dash-budget-ring-copy">
+          <strong>{hero}</strong>
+          <small>{heroLabel}</small>
+        </div>
+      </div>
+      {total > 0 && (
+        <p className="dash-budget-footnote">
+          {formatBudgetMoney(allocated, budget.currency || 'INR')} {text.allocated}
+          {' · '}
+          {formatBudgetMoney(total, budget.currency || 'INR')} {text.totalLabel}
+        </p>
+      )}
+    </div>
+  );
+}
 
 const inspirationItems = AVAILABLE_TEMPLATE_COVERS.slice(0, 6).map((template) => ({
   title: template.title,
@@ -94,6 +168,83 @@ function ScenePreview({ scene, label, className = '' }) {
   );
 }
 
+function SharedDesignPreview({ latestShare, shareDesign }) {
+  const previewRef = useRef(null);
+  const [zoom, setZoom] = useState(0.35);
+
+  useEffect(() => {
+    const element = previewRef.current;
+    if (!element || shareDesign?.scene) return undefined;
+    const updateZoom = () => {
+      const styles = getComputedStyle(element);
+      const padX = (Number.parseFloat(styles.paddingLeft) || 0) + (Number.parseFloat(styles.paddingRight) || 0);
+      const padY = (Number.parseFloat(styles.paddingTop) || 0) + (Number.parseFloat(styles.paddingBottom) || 0);
+      const width = Math.max(element.clientWidth - padX, 1);
+      const height = Math.max(element.clientHeight - padY, 1);
+      setZoom(Math.min(width / 800, height / 600, 1) || 0.35);
+    };
+    updateZoom();
+    const observer = new ResizeObserver(updateZoom);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [shareDesign?.scene]);
+
+  if (shareDesign?.scene) {
+    return (
+      <div className="dash-shared-preview-scene" aria-hidden="true">
+        <SceneView scene={shareDesign.scene} uid={`dash-share-${latestShare.id}`} />
+      </div>
+    );
+  }
+
+  return (
+    <div ref={previewRef} className="dash-shared-preview-canvas" aria-hidden="true">
+      <DesignCanvas elements={latestShare.elements} selectedId={null} settings={{ ...DEFAULT_SETTINGS, ...(latestShare.settings ?? {}) }} venuePlan={latestShare.venuePlan} zoom={zoom} preview hideChrome onSelect={() => {}} onUpdateElement={() => {}} />
+    </div>
+  );
+}
+
+function MoodboardPreview({ moodboard, designs, emptyLabel }) {
+  const mosaic = collectMosaicTiles(moodboard, designs, 4);
+  const coverSrc = moodboard?.coverImage ? resolveMoodboardMedia(moodboard.coverImage) : '';
+
+  if (coverSrc && moodboard?.coverMode !== 'mosaic') {
+    return (
+      <div className="dash-collection-media">
+        <img className="dash-collection-media-blur" src={coverSrc} alt="" aria-hidden="true" />
+        <img className="dash-collection-media-full" src={coverSrc} alt="" loading="lazy" />
+      </div>
+    );
+  }
+
+  if (mosaic.length > 0) {
+    return (
+      <div className={`dash-scene-mosaic count-${Math.min(mosaic.length, 4)}`} aria-hidden="true">
+        {mosaic.slice(0, 4).map((tile) => {
+          if (tile.mode === 'scene') {
+            return <SceneView key={tile.key} scene={tile.scene} uid={`dash-mb-${moodboard.id}-${tile.key}`} />;
+          }
+          if (tile.mode === 'swatch') {
+            return <span key={tile.key} className="dash-mosaic-swatch" style={{ backgroundColor: tile.color }} />;
+          }
+          return <img key={tile.key} src={tile.src} alt="" loading="lazy" />;
+        })}
+      </div>
+    );
+  }
+
+  if (coverSrc) {
+    return (
+      <div className="dash-collection-media">
+        <img className="dash-collection-media-blur" src={coverSrc} alt="" aria-hidden="true" />
+        <img className="dash-collection-media-full" src={coverSrc} alt="" loading="lazy" />
+      </div>
+    );
+  }
+
+  return <div className="dash-collection-placeholder"><Images size={23} /><span>{emptyLabel}</span></div>;
+}
+
 function SectionHeading({ title, description, action }) {
   return (
     <div className="dash-section-heading">
@@ -104,9 +255,9 @@ function SectionHeading({ title, description, action }) {
 }
 
 export default function DashboardOverview({
-  locale = 'en', designs = [], moodboards = [], canSaveData = false,
+  locale = 'en', designs = [], moodboards = [], budgets = [], canSaveData = false,
   onOpenDesign, onNewDesign, onBrowseTemplates, onViewAllDesigns, onViewMoodboards,
-  onCreateMoodboard, onOpenShared, onExploreCategory,
+  onCreateMoodboard, onViewBudget, onCreateBudget, onOpenShared, onExploreCategory,
 }) {
   const text = copy[locale] ?? copy.en;
   const [sharedDesigns, setSharedDesigns] = useState([]);
@@ -114,6 +265,8 @@ export default function DashboardOverview({
   const recent = useMemo(() => [...designs]
     .sort((a, b) => new Date(b.updatedAt ?? b.createdAt ?? 0) - new Date(a.updatedAt ?? a.createdAt ?? 0))
     .slice(0, 3), [designs]);
+  const latestBudget = useMemo(() => [...budgets]
+    .sort((a, b) => new Date(b.updatedAt ?? b.createdAt ?? 0) - new Date(a.updatedAt ?? a.createdAt ?? 0))[0], [budgets]);
 
   useEffect(() => {
     let active = true;
@@ -134,13 +287,8 @@ export default function DashboardOverview({
   }, [canSaveData]);
 
   const moodboard = moodboards[0];
-  const moodboardScenes = moodboard
-    ? (moodboard.scenes?.length
-      ? moodboard.scenes
-      : designs.filter((design) => (moodboard.designIds ?? []).includes(design.id)).map((design) => design.scene).filter(Boolean))
-    : [];
   const moodboardColors = moodboard?.palette ?? moodboard?.colors ?? [];
-  const savedIdeaCount = moodboardScenes.length || moodboard?.designIds?.length || 0;
+  const savedIdeaCount = moodboard ? buildInspirationEntries(moodboard, designs).length : 0;
   const latestShare = sharedDesigns[0];
   const shareDesign = latestShare && designs.find((design) => design.id === latestShare.designId);
 
@@ -210,28 +358,80 @@ export default function DashboardOverview({
 
       <section className="dash-section">
         <SectionHeading title={text.collections} description={text.collectionText} />
-        <div className="dash-collection-grid">
-          <article className="dash-collection-card">
+        <div className="dash-collection-grid dash-collection-grid-three">
+          <article
+            className="dash-collection-card is-clickable"
+            role="button"
+            tabIndex={0}
+            aria-label={moodboard ? `${text.viewMoodboards}: ${moodboard?.name ?? moodboard?.title ?? text.myMoodboards}` : text.createMoodboard}
+            onClick={moodboard ? onViewMoodboards : onCreateMoodboard}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                (moodboard ? onViewMoodboards : onCreateMoodboard)?.();
+              }
+            }}
+          >
             <div className="dash-collection-preview">
-              {moodboard ? (
-                <img src={resolveTemplateCover(moodboard.coverImage)} alt="" loading="lazy" />
-              ) : <div className="dash-collection-placeholder"><Images size={23} /><span>{text.noMoodboards}</span></div>}
+              {moodboard
+                ? <MoodboardPreview moodboard={moodboard} designs={designs} emptyLabel={text.noMoodboards} />
+                : <div className="dash-collection-placeholder"><Images size={23} /><span>{text.noMoodboards}</span></div>}
             </div>
             <div className="dash-collection-body">
               <div><p className="dash-card-kicker">{text.myMoodboards}</p><h3>{moodboard?.name ?? moodboard?.title ?? text.noMoodboards}</h3>
                 {moodboard && <p>{savedIdeaCount} {text.savedIdeas}</p>}
               </div>
-              <button className="dash-button dash-button-secondary" onClick={moodboard ? onViewMoodboards : onCreateMoodboard}>{moodboard ? text.viewMoodboards : text.createMoodboard}<ArrowRight size={15} /></button>
+              <span className="dash-button dash-button-secondary" aria-hidden="true">{moodboard ? text.viewMoodboards : text.createMoodboard}<ArrowRight size={15} /></span>
             </div>
             {moodboardColors.length > 0 && <div className="dash-palette-strip" aria-label="Moodboard palette">{moodboardColors.slice(0, 6).map((color) => <i key={color} style={{ backgroundColor: color }} />)}</div>}
           </article>
 
-          <article className="dash-collection-card">
+          <article
+            className="dash-collection-card is-clickable"
+            role="button"
+            tabIndex={0}
+            aria-label={latestBudget ? `${text.viewBudget}: ${latestBudget.name}` : text.createBudget}
+            onClick={latestBudget ? onViewBudget : onCreateBudget}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                (latestBudget ? onViewBudget : onCreateBudget)?.();
+              }
+            }}
+          >
+            <div className="dash-collection-preview">
+              <BudgetPreview budget={latestBudget} designs={designs} text={text} />
+            </div>
+            <div className="dash-collection-body">
+              <div>
+                <p className="dash-card-kicker">{text.eventBudget}</p>
+                <h3>{latestBudget?.name ?? text.createBudget}</h3>
+                {latestBudget
+                  ? <p>{(latestBudget.designIds?.length || 0)} linked · {(latestBudget.categories?.length || 0)} categories</p>
+                  : <p>{text.noBudget}</p>}
+              </div>
+              <span className="dash-button dash-button-secondary" aria-hidden="true">
+                {latestBudget ? text.viewBudget : text.createBudget}<ArrowRight size={15} />
+              </span>
+            </div>
+          </article>
+
+          <article
+            className={`dash-collection-card${latestShare ? ' is-clickable' : ''}`}
+            role={latestShare ? 'button' : undefined}
+            tabIndex={latestShare ? 0 : undefined}
+            aria-label={latestShare ? `${text.viewShared}: ${latestShare.name}` : undefined}
+            onClick={latestShare ? () => onOpenShared(latestShare) : undefined}
+            onKeyDown={latestShare ? ((event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                onOpenShared?.(latestShare);
+              }
+            }) : undefined}
+          >
             <div className="dash-collection-preview dash-shared-preview">
-              {shareDesign?.scene ? <SceneView scene={shareDesign.scene} uid={`dash-share-${latestShare.id}`} aria-hidden="true" /> : latestShare?.elements?.length ? (
-                <div className="dash-shared-preview-canvas" aria-hidden="true">
-                  <DesignCanvas elements={latestShare.elements} selectedId={null} settings={{ ...DEFAULT_SETTINGS, ...(latestShare.settings ?? {}) }} venuePlan={latestShare.venuePlan} zoom={0.35} preview hideChrome onSelect={() => {}} onUpdateElement={() => {}} />
-                </div>
+              {latestShare?.elements?.length ? (
+                <SharedDesignPreview latestShare={latestShare} shareDesign={shareDesign} />
               ) : latestShare ? (
                 <div className="dash-collection-placeholder"><Sparkles size={23} /><span>{text.previewUnavailable}</span></div>
               ) : (
@@ -242,7 +442,7 @@ export default function DashboardOverview({
               <div><p className="dash-card-kicker">{text.recentlyShared}</p><h3>{latestShare?.name ?? text.noShares}</h3>
                 {latestShare && <p className="dash-share-status"><span className={`status-${latestShare.status || 'pending'}`} />{text[latestShare.status] ?? latestShare.status ?? text.pending}{latestShare.comments?.length ? ` · ${latestShare.comments.length} ${text.comments}` : ''}</p>}
               </div>
-              {latestShare && <button className="dash-button dash-button-secondary" onClick={() => onOpenShared(latestShare)}>{text.viewShared}<ExternalLink size={14} /></button>}
+              {latestShare && <span className="dash-button dash-button-secondary" aria-hidden="true">{text.viewShared}<ExternalLink size={14} /></span>}
             </div>
           </article>
         </div>

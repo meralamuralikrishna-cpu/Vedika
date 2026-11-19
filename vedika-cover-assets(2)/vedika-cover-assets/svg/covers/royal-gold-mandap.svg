@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img" aria-label="Royal Gold Mandap">
+<g data-id="bg" data-type="rect"><rect x="0" y="0" width="1200" height="800" fill="#2a1c12"/></g>
+<g data-id="floor" data-type="rect"><rect x="0" y="600" width="1200" height="200" fill="#4a3020"/></g>
+<g data-id="glowL" data-type="ellipse"><ellipse cx="140" cy="680" rx="120" ry="28" fill="#5b3f27"/></g>
+<g data-id="glowR" data-type="ellipse"><ellipse cx="1060" cy="680" rx="120" ry="28" fill="#5b3f27"/></g>
+<g data-id="stars" data-type="stars"><circle cx="80" cy="120" r="8" fill="#8f7d62"/><circle cx="180" cy="200" r="6" fill="#8f7d62"/><circle cx="1120" cy="120" r="8" fill="#8f7d62"/><circle cx="1020" cy="200" r="6" fill="#8f7d62"/></g>
+<g data-id="rod" data-type="line"><line x1="600" y1="40" x2="600" y2="140" stroke="#d8b25a" stroke-width="6" stroke-linecap="round"/></g>
+<g data-id="shade" data-type="poly"><polygon points="476,137 724,137 678,248 522,248" fill="#b8934a" stroke="#d6b26a" stroke-width="6"/></g>
+<g data-id="orbTop" data-type="circle"><circle cx="600" cy="160" r="40" fill="#e3cc8e" opacity="0.85"/></g>
+<g data-id="orbBottom" data-type="circle"><circle cx="600" cy="285" r="40" fill="#e3cc8e" opacity="0.85"/></g>
+<g data-id="roof" data-type="poly"><polygon points="300,232 600,140 900,232" fill="#1f4b37"/></g>
+<g data-id="beam" data-type="rect"><rect x="300" y="232" width="600" height="16" fill="#e6c27a"/></g>
+<g data-id="valance" data-type="path"><path d="M330 248 Q 400 345 500 250 Q 600 345 700 250 Q 800 345 870 248 Z" fill="#2d6b4e"/></g>
+<g data-id="valanceTrim" data-type="path"><path d="M330 248 Q 400 345 500 250 Q 600 345 700 250 Q 800 345 870 248" fill="none" stroke="#e6c27a" stroke-width="6" stroke-linecap="round"/></g>
+<g data-id="pillarL" data-type="rect"><rect x="290" y="240" width="40" height="385" fill="#d8b25a"/></g>
+<g data-id="baseL" data-type="rect"><rect x="280" y="624" width="60" height="24" fill="#e6c27a"/></g>
+<g data-id="pillarR" data-type="rect"><rect x="870" y="240" width="40" height="385" fill="#d8b25a"/></g>
+<g data-id="baseR" data-type="rect"><rect x="860" y="624" width="60" height="24" fill="#e6c27a"/></g>
+<g data-id="platform" data-type="rect"><rect x="380" y="580" width="440" height="60" fill="#e6c27a"/></g>
+<g data-id="cushion" data-type="rect"><rect x="410" y="524" width="380" height="56" fill="#f2ead6"/></g>
+</svg>

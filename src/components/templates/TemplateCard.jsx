@@ -1,4 +1,5 @@
 import SceneView from "../../studio/SceneView";
+import CoverView from "../../assets/vedika-cover-assets/src/react/CoverView.jsx";
 import SaveToMoodboardButton from "@/components/workspace/SaveToMoodboardButton";
 import { ELEMENT_MAP } from "../../studio/elements";
 
@@ -7,8 +8,10 @@ export default function TemplateCard({ template, isFavorite, onToggleFavorite, o
   const elementNames = [...new Set((template.scene?.elements ?? []).map((element) => ELEMENT_MAP[element.type]?.name ?? element.type))].slice(0, 4);
   return (
     <article className="tpl-card">
-      <button className="tpl-cover" onClick={() => onOpen(template)} aria-label={`Open ${title} in editor`}>
-        {template.cover ? (
+      <button className={`tpl-cover${template.coverData ? ' tpl-cover--wide' : ''}`} onClick={() => onOpen(template)} aria-label={`Open ${title} in editor`}>
+        {template.coverData ? (
+          <CoverView cover={template.coverData} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        ) : template.cover ? (
           <img src={template.cover} alt="" aria-hidden="true" />
         ) : (
           <SceneView scene={template.scene} uid={`sc-${template.id}`} aria-hidden="true" />
@@ -34,7 +37,7 @@ export default function TemplateCard({ template, isFavorite, onToggleFavorite, o
           <span>{elementCount} elements</span>
           <button className="tpl-open" onClick={() => onOpen(template)}>Open in editor</button>
         </div>
-        <SaveToMoodboardButton className="tpl-save-moodboard" item={{ type: 'template', templateId: template.id, title, category, cover: template.cover, theme, elementCount }} />
+        <SaveToMoodboardButton className="tpl-save-moodboard" item={{ type: 'template', templateId: template.id, title, category, cover: template.cover, theme, elementCount, scene: template.scene }} />
       </div>
     </article>
   );

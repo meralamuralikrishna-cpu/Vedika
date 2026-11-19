@@ -4,6 +4,7 @@ import { defaultVenue } from "../studio/useSceneEditor";
 import { THEMES } from "../studio/themes";
 import { newTemplates as suppliedTemplates } from "../../vedika-new-templates/newTemplates.js";
 import { newTemplates as batchTwoTemplates } from "../../vedika-templates-batch-2/newTemplates.js";
+import { coverAssetTemplates } from "./coverAssetTemplates";
 
 const suppliedCovers = import.meta.glob("../../vedika-new-templates/covers/*.svg", {
   eager: true,
@@ -16,7 +17,7 @@ const batchTwoCovers = import.meta.glob("../../vedika-templates-batch-2/covers/*
   import: "default",
 });
 
-export const TEMPLATE_CATEGORIES = ["Wedding", "Haldi", "Sangeet", "Reception", "Birthday", "Baby shower", "Corporate", "Engagement", "Mehendi", "Navratri", "Anniversary", "Housewarming", "Diwali", "Naming ceremony", "Eid", "Christmas", "Puja", "Bridal shower", "Graduation", "Holi"];
+export const TEMPLATE_CATEGORIES = ["Birthday", "Wedding", "Diwali", "Engagement", "Reception", "Haldi", "Mehendi", "Sangeet", "Anniversary", "Baby shower", "Valentine's", "Corporate", "Navratri", "Housewarming", "Naming ceremony", "Eid", "Christmas", "Puja", "Bridal shower", "Graduation", "Holi", "Dinner"];
 const theme = (id) => THEMES.find((t) => t.id === id);
 // element tuple: [type, x, y, w, h, color, rotation?]
 const build = (id, name, themeId, els, venue = {}) => {
@@ -81,4 +82,4 @@ const adaptSuppliedTemplate = (item, covers, batch) => {
 const extraTemplates = suppliedTemplates.map((item) => adaptSuppliedTemplate(item, suppliedCovers, 1));
 const batchTwoAppTemplates = batchTwoTemplates.map((item) => adaptSuppliedTemplate(item, batchTwoCovers, 2));
 
-export const templates = [...bundledTemplates, ...extraTemplates, ...batchTwoAppTemplates];
+export const templates = [...bundledTemplates, ...extraTemplates, ...batchTwoAppTemplates, ...coverAssetTemplates];

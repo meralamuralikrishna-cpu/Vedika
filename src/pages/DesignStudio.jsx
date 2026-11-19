@@ -12,6 +12,7 @@ import { createSharedDesign, shareUrl } from '@/lib/share';
 import { useToast } from '@/components/ui/Toast';
 
 function toLegacyElements(scene) {
+  if (Array.isArray(scene.coverElements)) return scene.coverElements;
   return scene.elements.map((element, index) => {
     const definition = ELEMENT_MAP[element.type];
     return {
@@ -89,7 +90,7 @@ export function DesignStudio() {
         updatedAt: now,
         thumbnailTheme: currentSettings?.themeId ?? existing?.thumbnailTheme ?? DEFAULT_SETTINGS.themeId,
         elements: toLegacyElements(scene),
-        settings: currentSettings ? { ...(existing?.settings ?? DEFAULT_SETTINGS), ...currentSettings } : (existing?.settings ?? { ...DEFAULT_SETTINGS }),
+        settings: { ...(existing?.settings ?? DEFAULT_SETTINGS), ...(currentSettings ?? {}), ...(Array.isArray(scene.coverElements) ? { coverScene: { name: scene.name, coverId: scene.coverId, coverElements: scene.coverElements } } : {}) },
         venuePlan: {
           ...scene.venue,
           widthFt: Number(scene.venue.widthM || 12) * 3.28084,

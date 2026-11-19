@@ -2,6 +2,7 @@ import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { addShareComment, getSharedDesign, setShareStatus } from '@/lib/share';
 import { DesignCanvas } from '@/components/studio/DesignCanvas';
+import SceneView from '@/studio/SceneView';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
@@ -153,7 +154,7 @@ export function ShareView() {
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-sage/25 bg-white/75 px-4 py-3">
             <p className="text-xs text-charcoal/60">{share.settings?.moodboardSnapshot ? 'Read-only moodboard collection. Leave a comment or request changes below.' : 'Read-only design preview. Leave a comment or request changes below.'}</p>
           </div>
-          {share.settings?.moodboardSnapshot ? <MoodboardSharePreview snapshot={share.settings.moodboardSnapshot} /> : <DesignCanvas elements={share.elements} selectedId={null} settings={share.settings} venuePlan={share.venuePlan} zoom={1} preview onSelect={() => {}} onUpdateElement={() => {}} />}
+          {share.settings?.moodboardSnapshot ? <MoodboardSharePreview snapshot={share.settings.moodboardSnapshot} /> : share.settings?.coverScene ? <SceneView scene={share.settings.coverScene} className="w-full h-auto" aria-label={share.settings.coverScene.name} /> : <DesignCanvas elements={share.elements} selectedId={null} settings={share.settings} venuePlan={share.venuePlan} zoom={1} preview onSelect={() => {}} onUpdateElement={() => {}} />}
         </section>
 
         <div className="grid md:grid-cols-[1fr_280px] gap-6 items-start">

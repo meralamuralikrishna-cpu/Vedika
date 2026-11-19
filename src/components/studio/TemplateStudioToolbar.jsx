@@ -56,6 +56,7 @@ export default function StudioToolbar({
   preview,
   onPreview,
   onPNG,
+  onSVG,
   onJSON,
   onShare,
   onSave,
@@ -155,7 +156,7 @@ export default function StudioToolbar({
         </div>
       </div>
 
-      {/* RIGHT: Export PNG, Export JSON, Share, Save */}
+      {/* RIGHT: Export PNG/SVG/JSON, Share, Save */}
       <div className="studio-toolbar-right">
         <button
           type="button"
@@ -166,6 +167,16 @@ export default function StudioToolbar({
           <ImageIcon className="h-3.5 w-3.5 text-[#82908A]" />
           <span>Export PNG</span>
         </button>
+
+        {onSVG && <button
+          type="button"
+          className="studio-action-btn"
+          onClick={onSVG}
+          title="Download editable SVG"
+        >
+          <Download className="h-3.5 w-3.5 text-[#82908A]" />
+          <span>Export SVG</span>
+        </button>}
 
         <button
           type="button"

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" role="img" aria-label="Ivory Elegance Dinner">
+<g data-id="bg" data-type="rect"><rect x="0" y="0" width="1200" height="800" fill="#fbf7ee"/></g>
+<g data-id="wave" data-type="path"><path d="M0,200 C 200,100 420,120 560,190 S 1000,230 1200,150 L1200,540 L0,540 Z" fill="#f3ede2"/></g>
+<g data-id="waveLine" data-type="path"><path d="M0,200 C 200,100 420,120 560,190 S 1000,230 1200,150" fill="none" stroke="#e6dcc8" stroke-width="4" stroke-linecap="round"/></g>
+<g data-id="tableTop" data-type="poly"><polygon points="178,459 1018,459 1200,538 0,538" fill="#fffaee"/></g>
+<g data-id="tableFront" data-type="rect"><rect x="0" y="538" width="1200" height="262" fill="#fcf8ee"/></g>
+<g data-id="tableEdge" data-type="line"><line x1="0" y1="538" x2="1200" y2="538" stroke="#e6dcc8" stroke-width="4" stroke-linecap="round"/></g>
+<g data-id="candleL" data-type="rect"><rect x="300" y="408" width="10" height="62" fill="#c9a878"/></g>
+<g data-id="candleM" data-type="rect"><rect x="586" y="363" width="10" height="107" fill="#c9a878"/></g>
+<g data-id="candleR" data-type="rect"><rect x="888" y="404" width="10" height="66" fill="#c9a878"/></g>
+<g data-id="flameL" data-type="ellipse"><ellipse cx="305" cy="396" rx="5" ry="10" fill="#ffd24a"/></g>
+<g data-id="flameM" data-type="ellipse"><ellipse cx="591" cy="351" rx="5" ry="10" fill="#ffd24a"/></g>
+<g data-id="flameR" data-type="ellipse"><ellipse cx="893" cy="392" rx="5" ry="10" fill="#ffd24a"/></g>
+<g data-id="bowlL" data-type="rect"><rect x="430" y="476" width="120" height="52" fill="#e8e1d0" rx="14" stroke="#d8d2c4" stroke-width="3"/></g>
+<g data-id="bowlR" data-type="rect"><rect x="660" y="476" width="120" height="52" fill="#e8e1d0" rx="14" stroke="#d8d2c4" stroke-width="3"/></g>
+<g data-id="bloomL1" data-type="circle"><circle cx="470" cy="470" r="24" fill="#fffaf0"/></g>
+<g data-id="bloomL2" data-type="circle"><circle cx="500" cy="462" r="26" fill="#fffaf0"/></g>
+<g data-id="bloomL3" data-type="circle"><circle cx="530" cy="472" r="22" fill="#fffaf0"/></g>
+<g data-id="bloomR1" data-type="circle"><circle cx="700" cy="470" r="24" fill="#fffaf0"/></g>
+<g data-id="bloomR2" data-type="circle"><circle cx="730" cy="462" r="26" fill="#fffaf0"/></g>
+<g data-id="bloomR3" data-type="circle"><circle cx="760" cy="472" r="22" fill="#fffaf0"/></g>
+<g data-id="plateOuter" data-type="circle"><circle cx="600" cy="656" r="56" fill="none" stroke="#c9b99a" stroke-width="3"/></g>
+<g data-id="plateInner" data-type="circle"><circle cx="600" cy="656" r="38" fill="none" stroke="#c9b99a" stroke-width="3"/></g>
+<g data-id="napkinL" data-type="ellipse"><ellipse cx="226" cy="640" rx="19" ry="40" fill="none" stroke="#c9b99a" stroke-width="3"/></g>
+<g data-id="napkinR" data-type="ellipse"><ellipse cx="989" cy="640" rx="19" ry="40" fill="none" stroke="#c9b99a" stroke-width="3"/></g>
+</svg>

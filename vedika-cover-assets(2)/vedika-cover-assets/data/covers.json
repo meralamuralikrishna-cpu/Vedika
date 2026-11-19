@@ -1,0 +1,2572 @@
+[
+  {
+    "id": "birthday-balloon-bash",
+    "name": "Birthday Balloon Bash",
+    "category": "Birthday",
+    "theme": "Teal & Candy",
+    "tags": [
+      "birthday",
+      "balloons",
+      "cake",
+      "kids"
+    ],
+    "floorPlanReady": false,
+    "elementCount": 9,
+    "elements": [
+      {
+        "id": "sky",
+        "type": "bg",
+        "stops": [
+          [
+            0,
+            "#0e7d92"
+          ],
+          [
+            1,
+            "#0a4f68"
+          ]
+        ],
+        "dir": "d"
+      },
+      {
+        "id": "arch",
+        "type": "balloon-arch",
+        "x": 200,
+        "y": 200,
+        "s": 1,
+        "cx": 605,
+        "cy": 668,
+        "rx": 520,
+        "ry": 540,
+        "n": 26,
+        "r": 46,
+        "blue": "#f3eee6"
+      },
+      {
+        "id": "floor",
+        "type": "rect",
+        "x": 0,
+        "y": 660,
+        "w": 1200,
+        "h": 140,
+        "fill": "#07374d"
+      },
+      {
+        "id": "plate",
+        "type": "rect",
+        "x": 466,
+        "y": 548,
+        "w": 281,
+        "h": 26,
+        "fill": "#f3eee6"
+      },
+      {
+        "id": "cakeBottom",
+        "type": "rect",
+        "x": 507,
+        "y": 459,
+        "w": 199,
+        "h": 89,
+        "fill": "#ff7fb0",
+        "rx": 6
+      },
+      {
+        "id": "cakeTop",
+        "type": "rect",
+        "x": 548,
+        "y": 387,
+        "w": 117,
+        "h": 72,
+        "fill": "#ffd24a",
+        "rx": 5
+      },
+      {
+        "id": "candle",
+        "type": "line",
+        "x1": 607,
+        "y1": 358,
+        "x2": 607,
+        "y2": 387,
+        "stroke": "#f6e7b0",
+        "w": 4
+      },
+      {
+        "id": "flame",
+        "type": "ellipse",
+        "cx": 607,
+        "cy": 346,
+        "rx": 6,
+        "ry": 13,
+        "fill": "#ffd24a"
+      },
+      {
+        "id": "sparkles",
+        "type": "stars",
+        "items": [
+          [
+            252,
+            533,
+            6
+          ],
+          [
+            972,
+            552,
+            6
+          ],
+          [
+            314,
+            295,
+            6
+          ],
+          [
+            914,
+            314,
+            6
+          ]
+        ],
+        "fill": "#f6e7b0"
+      }
+    ]
+  },
+  {
+    "id": "blush-arch-ceremony",
+    "name": "Blush Arch Ceremony",
+    "category": "Wedding",
+    "theme": "Blush & Sage",
+    "tags": [
+      "wedding",
+      "arch",
+      "ceremony",
+      "outdoor"
+    ],
+    "floorPlanReady": false,
+    "elementCount": 6,
+    "elements": [
+      {
+        "id": "sky",
+        "type": "bg",
+        "stops": [
+          [
+            0,
+            "#f6e5df"
+          ],
+          [
+            1,
+            "#ece9df"
+          ]
+        ],
+        "dir": "v"
+      },
+      {
+        "id": "hillBack",
+        "type": "path",
+        "d": "M0,540 C 220,450 430,500 640,550 S 1000,650 1200,500 L1200,800 L0,800 Z",
+        "fill": "#bcc8b0"
+      },
+      {
+        "id": "hillFront",
+        "type": "path",
+        "d": "M0,690 C 260,590 520,640 800,690 S 1100,610 1200,640 L1200,800 L0,800 Z",
+        "fill": "#8fa88a"
+      },
+      {
+        "id": "drape",
+        "type": "path",
+        "d": "M339,668 Q 520,430 596,205 Q 680,430 879,668 Z",
+        "fill": "#f8f1e2",
+        "opacity": 0.95
+      },
+      {
+        "id": "arch",
+        "type": "floral-arch",
+        "x": 200,
+        "y": 200,
+        "s": 1,
+        "cx": 600,
+        "baseY": 676,
+        "legTopY": 360,
+        "rx": 228,
+        "ry": 190,
+        "r": 24,
+        "gap": 34,
+        "bloomR": 11,
+        "bloom": "#f7cfd4",
+        "vine": ""
+      },
+      {
+        "id": "plank",
+        "type": "rect",
+        "x": 300,
+        "y": 684,
+        "w": 600,
+        "h": 18,
+        "fill": "#e8d9c0",
+        "rx": 9
+      }
+    ]
+  },
+  {
+    "id": "diwali-glow-courtyard",
+    "name": "Diwali Glow Courtyard",
+    "category": "Diwali",
+    "theme": "Twilight & Marigold",
+    "tags": [
+      "diwali",
+      "lanterns",
+      "marigold",
+      "diyas"
+    ],
+    "floorPlanReady": false,
+    "elementCount": 17,
+    "elements": [
+      {
+        "id": "sky",
+        "type": "bg",
+        "stops": [
+          [
+            0,
+            "#241651"
+          ],
+          [
+            0.55,
+            "#5b2a47"
+          ],
+          [
+            1,
+            "#8f3b2e"
+          ]
+        ],
+        "dir": "v"
+      },
+      {
+        "id": "floor",
+        "type": "rect",
+        "x": 0,
+        "y": 641,
+        "w": 1200,
+        "h": 159,
+        "fill": "#3b1913"
+      },
+      {
+        "id": "gate",
+        "type": "gate",
+        "x0": 406,
+        "x1": 806,
+        "topY": 302,
+        "baseY": 656,
+        "r": 40,
+        "dot": 17,
+        "step": 22,
+        "fill": "#f0861c"
+      },
+      {
+        "id": "kalash",
+        "type": "kalash",
+        "x": 607,
+        "y": 568,
+        "s": 0.8,
+        "ball": "#2d8a6a",
+        "top": "",
+        "ballR": 30
+      },
+      {
+        "id": "cord0",
+        "type": "line",
+        "x1": 226,
+        "y1": 0,
+        "x2": 226,
+        "y2": 122,
+        "stroke": "#d9a441",
+        "w": 3
+      },
+      {
+        "id": "lantern0",
+        "type": "rect",
+        "x": 196,
+        "y": 122,
+        "w": 60,
+        "h": 105,
+        "fill": "#ff9a2e",
+        "rx": 18
+      },
+      {
+        "id": "lanternGlow0",
+        "type": "rect",
+        "x": 209,
+        "y": 136,
+        "w": 34,
+        "h": 77,
+        "fill": "#ffe6a3",
+        "rx": 10
+      },
+      {
+        "id": "cord1",
+        "type": "line",
+        "x1": 607,
+        "y1": 0,
+        "x2": 607,
+        "y2": 80,
+        "stroke": "#d9a441",
+        "w": 3
+      },
+      {
+        "id": "lantern1",
+        "type": "rect",
+        "x": 577,
+        "y": 80,
+        "w": 60,
+        "h": 105,
+        "fill": "#ff9a2e",
+        "rx": 18
+      },
+      {
+        "id": "lanternGlow1",
+        "type": "rect",
+        "x": 590,
+        "y": 94,
+        "w": 34,
+        "h": 77,
+        "fill": "#ffe6a3",
+        "rx": 10
+      },
+      {
+        "id": "cord2",
+        "type": "line",
+        "x1": 987,
+        "y1": 0,
+        "x2": 987,
+        "y2": 142,
+        "stroke": "#d9a441",
+        "w": 3
+      },
+      {
+        "id": "lantern2",
+        "type": "rect",
+        "x": 957,
+        "y": 142,
+        "w": 60,
+        "h": 105,
+        "fill": "#ff9a2e",
+        "rx": 18
+      },
+      {
+        "id": "lanternGlow2",
+        "type": "rect",
+        "x": 970,
+        "y": 156,
+        "w": 34,
+        "h": 77,
+        "fill": "#ffe6a3",
+        "rx": 10
+      },
+      {
+        "id": "glowL",
+        "type": "circle",
+        "cx": 120,
+        "cy": 705,
+        "r": 51,
+        "fill": "#8a5a2a",
+        "opacity": 0.55
+      },
+      {
+        "id": "glowR",
+        "type": "circle",
+        "cx": 1032,
+        "cy": 705,
+        "r": 51,
+        "fill": "#8a5a2a",
+        "opacity": 0.55
+      },
+      {
+        "id": "diyasL",
+        "type": "dotRow",
+        "x0": 65,
+        "x1": 346,
+        "y": 710,
+        "n": 6,
+        "r": 15,
+        "fill": "#ffd24a"
+      },
+      {
+        "id": "diyasR",
+        "type": "dotRow",
+        "x0": 826,
+        "x1": 1107,
+        "y": 710,
+        "n": 6,
+        "r": 15,
+        "fill": "#ffd24a"
+      }
+    ]
+  },
+  {
+    "id": "engagement-ring-night",
+    "name": "Engagement Ring Night",
+    "category": "Engagement",
+    "theme": "Midnight & Blush",
+    "tags": [
+      "engagement",
+      "ring",
+      "night",
+      "romantic"
+    ],
+    "floorPlanReady": false,
+    "elementCount": 9,
+    "elements": [
+      {
+        "id": "bg",
+        "type": "rect",
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 800,
+        "fill": "#0e0d0b"
+      },
+      {
+        "id": "floor",
+        "type": "rect",
+        "x": 0,
+        "y": 680,
+        "w": 1200,
+        "h": 120,
+        "fill": "#1b1612"
+      },
+      {
+        "id": "halo",
+        "type": "circle",
+        "cx": 600,
+        "cy": 382,
+        "r": 338,
+        "fill": "#251d12"
+      },
+      {
+        "id": "goldGlow",
+        "type": "path",
+        "d": "M885 382 A285 285 0 0 1 600 667",
+        "fill": "none",
+        "stroke": "#ffd685",
+        "sw": 26,
+        "opacity": 0.22
+      },
+      {
+        "id": "goldArc",
+        "type": "path",
+        "d": "M885 382 A285 285 0 0 1 600 667",
+        "fill": "none",
+        "stroke": "#ffd685",
+        "sw": 8
+      },
+      {
+        "id": "blooms",
+        "type": "ringGarland",
+        "cx": 600,
+        "cy": 382,
+        "R": 283,
+        "n": 30,
+        "r": 29,
+        "a0": 92,
+        "a1": 360,
+        "from": "#e8a5a8",
+        "to": "#f7ead8"
+      },
+      {
+        "id": "vine",
+        "type": "ringGarland",
+        "cx": 600,
+        "cy": 382,
+        "R": 283,
+        "n": 22,
+        "r": 6,
+        "a0": 175,
+        "a1": 290,
+        "from": "#6f8f75",
+        "to": "#6f8f75"
+      },
+      {
+        "id": "diamond",
+        "type": "poly",
+        "points": [
+          [
+            600,
+            344
+          ],
+          [
+            634,
+            382
+          ],
+          [
+            600,
+            420
+          ],
+          [
+            566,
+            382
+          ]
+        ],
+        "fill": "#ececec"
+      },
+      {
+        "id": "stars",
+        "type": "stars",
+        "items": [
+          [
+            120,
+            159,
+            5
+          ],
+          [
+            1080,
+            219,
+            5
+          ],
+          [
+            180,
+            600,
+            5
+          ],
+          [
+            1039,
+            581,
+            5
+          ]
+        ],
+        "fill": "#b8a67a"
+      }
+    ]
+  },
+  {
+    "id": "ivory-elegance-dinner",
+    "name": "Ivory Elegance Dinner",
+    "category": "Reception",
+    "theme": "Ivory & Taupe",
+    "tags": [
+      "dinner",
+      "ivory",
+      "candles",
+      "table"
+    ],
+    "floorPlanReady": false,
+    "elementCount": 24,
+    "elements": [
+      {
+        "id": "bg",
+        "type": "rect",
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 800,
+        "fill": "#fbf7ee"
+      },
+      {
+        "id": "wave",
+        "type": "path",
+        "d": "M0,200 C 200,100 420,120 560,190 S 1000,230 1200,150 L1200,540 L0,540 Z",
+        "fill": "#f3ede2"
+      },
+      {
+        "id": "waveLine",
+        "type": "path",
+        "d": "M0,200 C 200,100 420,120 560,190 S 1000,230 1200,150",
+        "fill": "none",
+        "stroke": "#e6dcc8",
+        "sw": 4
+      },
+      {
+        "id": "tableTop",
+        "type": "poly",
+        "points": [
+          [
+            178,
+            459
+          ],
+          [
+            1018,
+            459
+          ],
+          [
+            1200,
+            538
+          ],
+          [
+            0,
+            538
+          ]
+        ],
+        "fill": "#fffaee"
+      },
+      {
+        "id": "tableFront",
+        "type": "rect",
+        "x": 0,
+        "y": 538,
+        "w": 1200,
+        "h": 262,
+        "fill": "#fcf8ee"
+      },
+      {
+        "id": "tableEdge",
+        "type": "line",
+        "x1": 0,
+        "y1": 538,
+        "x2": 1200,
+        "y2": 538,
+        "stroke": "#e6dcc8",
+        "w": 4
+      },
+      {
+        "id": "candleL",
+        "type": "rect",
+        "x": 300,
+        "y": 408,
+        "w": 10,
+        "h": 62,
+        "fill": "#c9a878"
+      },
+      {
+        "id": "candleM",
+        "type": "rect",
+        "x": 586,
+        "y": 363,
+        "w": 10,
+        "h": 107,
+        "fill": "#c9a878"
+      },
+      {
+        "id": "candleR",
+        "type": "rect",
+        "x": 888,
+        "y": 404,
+        "w": 10,
+        "h": 66,
+        "fill": "#c9a878"
+      },
+      {
+        "id": "flameL",
+        "type": "ellipse",
+        "cx": 305,
+        "cy": 396,
+        "rx": 5,
+        "ry": 10,
+        "fill": "#ffd24a"
+      },
+      {
+        "id": "flameM",
+        "type": "ellipse",
+        "cx": 591,
+        "cy": 351,
+        "rx": 5,
+        "ry": 10,
+        "fill": "#ffd24a"
+      },
+      {
+        "id": "flameR",
+        "type": "ellipse",
+        "cx": 893,
+        "cy": 392,
+        "rx": 5,
+        "ry": 10,
+        "fill": "#ffd24a"
+      },
+      {
+        "id": "bowlL",
+        "type": "rect",
+        "x": 430,
+        "y": 476,
+        "w": 120,
+        "h": 52,
+        "fill": "#e8e1d0",
+        "rx": 14,
+        "stroke": "#d8d2c4",
+        "sw": 3
+      },
+      {
+        "id": "bowlR",
+        "type": "rect",
+        "x": 660,
+        "y": 476,
+        "w": 120,
+        "h": 52,
+        "fill": "#e8e1d0",
+        "rx": 14,
+        "stroke": "#d8d2c4",
+        "sw": 3
+      },
+      {
+        "id": "bloomL1",
+        "type": "circle",
+        "cx": 470,
+        "cy": 470,
+        "r": 24,
+        "fill": "#fffaf0"
+      },
+      {
+        "id": "bloomL2",
+        "type": "circle",
+        "cx": 500,
+        "cy": 462,
+        "r": 26,
+        "fill": "#fffaf0"
+      },
+      {
+        "id": "bloomL3",
+        "type": "circle",
+        "cx": 530,
+        "cy": 472,
+        "r": 22,
+        "fill": "#fffaf0"
+      },
+      {
+        "id": "bloomR1",
+        "type": "circle",
+        "cx": 700,
+        "cy": 470,
+        "r": 24,
+        "fill": "#fffaf0"
+      },
+      {
+        "id": "bloomR2",
+        "type": "circle",
+        "cx": 730,
+        "cy": 462,
+        "r": 26,
+        "fill": "#fffaf0"
+      },
+      {
+        "id": "bloomR3",
+        "type": "circle",
+        "cx": 760,
+        "cy": 472,
+        "r": 22,
+        "fill": "#fffaf0"
+      },
+      {
+        "id": "plateOuter",
+        "type": "circle",
+        "cx": 600,
+        "cy": 656,
+        "r": 56,
+        "fill": "none",
+        "stroke": "#c9b99a",
+        "sw": 3
+      },
+      {
+        "id": "plateInner",
+        "type": "circle",
+        "cx": 600,
+        "cy": 656,
+        "r": 38,
+        "fill": "none",
+        "stroke": "#c9b99a",
+        "sw": 3
+      },
+      {
+        "id": "napkinL",
+        "type": "ellipse",
+        "cx": 226,
+        "cy": 640,
+        "rx": 19,
+        "ry": 40,
+        "fill": "none",
+        "stroke": "#c9b99a",
+        "sw": 3
+      },
+      {
+        "id": "napkinR",
+        "type": "ellipse",
+        "cx": 989,
+        "cy": 640,
+        "rx": 19,
+        "ry": 40,
+        "fill": "none",
+        "stroke": "#c9b99a",
+        "sw": 3
+      }
+    ]
+  },
+  {
+    "id": "marigold-courtyard",
+    "name": "Marigold Courtyard",
+    "category": "Haldi",
+    "theme": "Marigold & Cream",
+    "tags": [
+      "haldi",
+      "marigold",
+      "courtyard",
+      "garland"
+    ],
+    "floorPlanReady": false,
+    "elementCount": 10,
+    "elements": [
+      {
+        "id": "sky",
+        "type": "bg",
+        "stops": [
+          [
+            0,
+            "#f6dfa7"
+          ],
+          [
+            1,
+            "#f3e9d2"
+          ]
+        ],
+        "dir": "v"
+      },
+      {
+        "id": "beam",
+        "type": "rect",
+        "x": 0,
+        "y": 79,
+        "w": 1200,
+        "h": 31,
+        "fill": "#7a4e2d"
+      },
+      {
+        "id": "coneL",
+        "type": "poly",
+        "points": [
+          [
+            120,
+            110
+          ],
+          [
+            41,
+            658
+          ],
+          [
+            281,
+            658
+          ]
+        ],
+        "fill": "#f8f3e4"
+      },
+      {
+        "id": "coneR",
+        "type": "poly",
+        "points": [
+          [
+            1076,
+            110
+          ],
+          [
+            922,
+            658
+          ],
+          [
+            1162,
+            658
+          ]
+        ],
+        "fill": "#f8f3e4"
+      },
+      {
+        "id": "sun",
+        "type": "circle",
+        "cx": 600,
+        "cy": 499,
+        "r": 99,
+        "fill": "#f5db96"
+      },
+      {
+        "id": "floor",
+        "type": "rect",
+        "x": 0,
+        "y": 658,
+        "w": 1200,
+        "h": 142,
+        "fill": "#d8b88a"
+      },
+      {
+        "id": "marigoldRow",
+        "type": "dotRow",
+        "x0": 237,
+        "x1": 943,
+        "y": 720,
+        "n": 17,
+        "r": 26,
+        "fill": "#f0861c"
+      },
+      {
+        "id": "diyaL",
+        "type": "diya",
+        "x": 499,
+        "y": 629,
+        "s": 0.38,
+        "glowOpacity": 0
+      },
+      {
+        "id": "diyaR",
+        "type": "diya",
+        "x": 699,
+        "y": 629,
+        "s": 0.38,
+        "glowOpacity": 0
+      },
+      {
+        "id": "swag",
+        "type": "swagGarland",
+        "baseY": 97,
+        "amp": 70,
+        "peakX": 600,
+        "period": 740
+      }
+    ]
+  },
+  {
+    "id": "mehendi-courtyard-bloom",
+    "name": "Mehendi Courtyard Bloom",
+    "category": "Mehendi",
+    "theme": "Sky & Marigold",
+    "tags": [
+      "mehendi",
+      "marigold",
+      "courtyard",
+      "chowki"
+    ],
+    "floorPlanReady": false,
+    "elementCount": 15,
+    "elements": [
+      {
+        "id": "sky",
+        "type": "bg",
+        "stops": [
+          [
+            0,
+            "#c3e1f0"
+          ],
+          [
+            1,
+            "#ece9dc"
+          ]
+        ],
+        "dir": "v",
+        "h": 646
+      },
+      {
+        "id": "beam",
+        "type": "rect",
+        "x": 0,
+        "y": 86,
+        "w": 1200,
+        "h": 20,
+        "fill": "#8c5a35"
+      },
+      {
+        "id": "pillarL",
+        "type": "rect",
+        "x": 0,
+        "y": 111,
+        "w": 79,
+        "h": 535,
+        "fill": "#faf6e8"
+      },
+      {
+        "id": "pillarR",
+        "type": "rect",
+        "x": 1119,
+        "y": 111,
+        "w": 81,
+        "h": 535,
+        "fill": "#faf6e8"
+      },
+      {
+        "id": "floor",
+        "type": "rect",
+        "x": 0,
+        "y": 646,
+        "w": 1200,
+        "h": 154,
+        "fill": "#e3c9a0"
+      },
+      {
+        "id": "strand1",
+        "type": "strand",
+        "x": 206,
+        "y0": 103,
+        "y1": 291,
+        "r": 13,
+        "step": 20
+      },
+      {
+        "id": "strand2",
+        "type": "strand",
+        "x": 365,
+        "y0": 103,
+        "y1": 245,
+        "r": 13,
+        "step": 20
+      },
+      {
+        "id": "strand3",
+        "type": "strand",
+        "x": 845,
+        "y0": 103,
+        "y1": 245,
+        "r": 13,
+        "step": 20
+      },
+      {
+        "id": "strand4",
+        "type": "strand",
+        "x": 1006,
+        "y0": 103,
+        "y1": 291,
+        "r": 13,
+        "step": 20
+      },
+      {
+        "id": "swag",
+        "type": "swagGarland",
+        "baseY": 100,
+        "amp": 60,
+        "peakX": 439,
+        "period": 640,
+        "rows": [
+          {
+            "dy": 0,
+            "r": 22,
+            "fill": "#f0861c"
+          },
+          {
+            "dy": 18,
+            "r": 15,
+            "fill": "#f7b82a"
+          }
+        ]
+      },
+      {
+        "id": "chowkiTop",
+        "type": "rect",
+        "x": 487,
+        "y": 309,
+        "w": 240,
+        "h": 18,
+        "fill": "#c97a3d",
+        "rx": 9
+      },
+      {
+        "id": "chowkiBody",
+        "type": "poly",
+        "points": [
+          [
+            549,
+            327
+          ],
+          [
+            668,
+            327
+          ],
+          [
+            679,
+            449
+          ],
+          [
+            521,
+            449
+          ]
+        ],
+        "fill": "#d9884a"
+      },
+      {
+        "id": "rangoli",
+        "type": "rangoli",
+        "x": 603,
+        "y": 708,
+        "s": 0.6
+      },
+      {
+        "id": "diyaL",
+        "type": "diya",
+        "x": 223,
+        "y": 667,
+        "s": 0.3,
+        "glowOpacity": 0
+      },
+      {
+        "id": "diyaR",
+        "type": "diya",
+        "x": 991,
+        "y": 667,
+        "s": 0.3,
+        "glowOpacity": 0
+      }
+    ]
+  },
+  {
+    "id": "sage-garden-reception",
+    "name": "Sage Garden Reception",
+    "category": "Reception",
+    "theme": "Sage Green",
+    "tags": [
+      "reception",
+      "sage",
+      "garden",
+      "vases"
+    ],
+    "floorPlanReady": false,
+    "elementCount": 22,
+    "elements": [
+      {
+        "id": "bg",
+        "type": "rect",
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 800,
+        "fill": "#6e8f74"
+      },
+      {
+        "id": "top",
+        "type": "rect",
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 165,
+        "fill": "#35523f"
+      },
+      {
+        "id": "bandA",
+        "type": "scallops",
+        "y": 165,
+        "r": 42,
+        "gap": 62,
+        "rectH": 95,
+        "fill": "#9fb89f"
+      },
+      {
+        "id": "mid",
+        "type": "rect",
+        "x": 0,
+        "y": 260,
+        "w": 1200,
+        "h": 70,
+        "fill": "#7f9f84"
+      },
+      {
+        "id": "bandB",
+        "type": "scallops",
+        "y": 330,
+        "r": 46,
+        "gap": 70,
+        "rectH": 110,
+        "fill": "#4f7557"
+      },
+      {
+        "id": "lower",
+        "type": "rect",
+        "x": 0,
+        "y": 440,
+        "w": 1200,
+        "h": 60,
+        "fill": "#7f9f84"
+      },
+      {
+        "id": "glowL",
+        "type": "circle",
+        "cx": 120,
+        "cy": 456,
+        "r": 80,
+        "fill": "#cfd5a0",
+        "opacity": 0.75
+      },
+      {
+        "id": "glowM",
+        "type": "circle",
+        "cx": 600,
+        "cy": 447,
+        "r": 93,
+        "fill": "#cfd5a0",
+        "opacity": 0.75
+      },
+      {
+        "id": "glowR",
+        "type": "circle",
+        "cx": 1080,
+        "cy": 456,
+        "r": 80,
+        "fill": "#cfd5a0",
+        "opacity": 0.75
+      },
+      {
+        "id": "table",
+        "type": "poly",
+        "points": [
+          [
+            211,
+            490
+          ],
+          [
+            982,
+            490
+          ],
+          [
+            1200,
+            578
+          ],
+          [
+            0,
+            578
+          ]
+        ],
+        "fill": "#e8eee1"
+      },
+      {
+        "id": "tableFront",
+        "type": "rect",
+        "x": 0,
+        "y": 578,
+        "w": 1200,
+        "h": 222,
+        "fill": "#eaf0e3"
+      },
+      {
+        "id": "tableEdge",
+        "type": "line",
+        "x1": 0,
+        "y1": 578,
+        "x2": 1200,
+        "y2": 578,
+        "stroke": "#c2cfba",
+        "w": 4
+      },
+      {
+        "id": "vaseL",
+        "type": "vase",
+        "x": 288,
+        "y": 528,
+        "s": 0.4,
+        "flower1": "#fffaee",
+        "flower2": "#fffaee"
+      },
+      {
+        "id": "vaseM",
+        "type": "vase",
+        "x": 600,
+        "y": 528,
+        "s": 0.4,
+        "flower1": "#fffaee",
+        "flower2": "#fffaee"
+      },
+      {
+        "id": "vaseR",
+        "type": "vase",
+        "x": 912,
+        "y": 528,
+        "s": 0.4,
+        "flower1": "#fffaee",
+        "flower2": "#fffaee"
+      },
+      {
+        "id": "dot0",
+        "type": "circle",
+        "cx": 120,
+        "cy": 658,
+        "r": 31,
+        "fill": "#ccdac8"
+      },
+      {
+        "id": "dot1",
+        "type": "circle",
+        "cx": 259,
+        "cy": 658,
+        "r": 31,
+        "fill": "#ccdac8"
+      },
+      {
+        "id": "dot2",
+        "type": "circle",
+        "cx": 398,
+        "cy": 658,
+        "r": 31,
+        "fill": "#ccdac8"
+      },
+      {
+        "id": "dot3",
+        "type": "circle",
+        "cx": 537,
+        "cy": 658,
+        "r": 31,
+        "fill": "#ccdac8"
+      },
+      {
+        "id": "dot4",
+        "type": "circle",
+        "cx": 676,
+        "cy": 658,
+        "r": 31,
+        "fill": "#ccdac8"
+      },
+      {
+        "id": "dot5",
+        "type": "circle",
+        "cx": 815,
+        "cy": 658,
+        "r": 31,
+        "fill": "#ccdac8"
+      },
+      {
+        "id": "dot6",
+        "type": "circle",
+        "cx": 954,
+        "cy": 658,
+        "r": 31,
+        "fill": "#ccdac8"
+      }
+    ]
+  },
+  {
+    "id": "sangeet-night-lights",
+    "name": "Sangeet Night Lights",
+    "category": "Sangeet",
+    "theme": "Violet Night",
+    "tags": [
+      "sangeet",
+      "night",
+      "spotlight",
+      "throne"
+    ],
+    "floorPlanReady": false,
+    "elementCount": 12,
+    "elements": [
+      {
+        "id": "sky",
+        "type": "bg",
+        "stops": [
+          [
+            0,
+            "#1d1450"
+          ],
+          [
+            0.6,
+            "#3b1860"
+          ],
+          [
+            1,
+            "#4a1a62"
+          ]
+        ],
+        "dir": "d"
+      },
+      {
+        "id": "beamL",
+        "type": "poly",
+        "points": [
+          [
+            0,
+            84
+          ],
+          [
+            0,
+            168
+          ],
+          [
+            600,
+            341
+          ],
+          [
+            600,
+            250
+          ]
+        ],
+        "fill": "#8f80d0",
+        "opacity": 0.28
+      },
+      {
+        "id": "beamR",
+        "type": "poly",
+        "points": [
+          [
+            1200,
+            84
+          ],
+          [
+            1200,
+            168
+          ],
+          [
+            600,
+            341
+          ],
+          [
+            600,
+            250
+          ]
+        ],
+        "fill": "#8f80d0",
+        "opacity": 0.28
+      },
+      {
+        "id": "spot",
+        "type": "poly",
+        "points": [
+          [
+            600,
+            302
+          ],
+          [
+            34,
+            662
+          ],
+          [
+            1183,
+            662
+          ]
+        ],
+        "fill": "#6a2a78",
+        "opacity": 0.8
+      },
+      {
+        "id": "floor",
+        "type": "rect",
+        "x": 0,
+        "y": 662,
+        "w": 1200,
+        "h": 138,
+        "fill": "#130a2e"
+      },
+      {
+        "id": "throneFrame",
+        "type": "rect",
+        "x": 401,
+        "y": 442,
+        "w": 398,
+        "h": 220,
+        "fill": "#d9a441",
+        "rx": 70
+      },
+      {
+        "id": "stubL",
+        "type": "rect",
+        "x": 392,
+        "y": 612,
+        "w": 30,
+        "h": 50,
+        "fill": "#d9a441"
+      },
+      {
+        "id": "stubR",
+        "type": "rect",
+        "x": 778,
+        "y": 612,
+        "w": 30,
+        "h": 50,
+        "fill": "#d9a441"
+      },
+      {
+        "id": "throneInner",
+        "type": "rect",
+        "x": 437,
+        "y": 470,
+        "w": 326,
+        "h": 192,
+        "fill": "#8e1f4d",
+        "rx": 50
+      },
+      {
+        "id": "stageDots",
+        "type": "dotRow",
+        "x0": 513,
+        "x1": 662,
+        "y": 691,
+        "n": 6,
+        "r": 8,
+        "fill": "#ffd24a"
+      },
+      {
+        "id": "wire",
+        "type": "path",
+        "d": "M0 93 C 140 190, 360 180, 600 74 S 1000 -60, 1200 20",
+        "fill": "none",
+        "stroke": "#fbf3e0",
+        "sw": 4
+      },
+      {
+        "id": "bulbs",
+        "type": "stars",
+        "items": [
+          [
+            79,
+            134,
+            10
+          ],
+          [
+            199,
+            187,
+            10
+          ],
+          [
+            339,
+            207,
+            10
+          ],
+          [
+            480,
+            168,
+            10
+          ],
+          [
+            600,
+            79,
+            10
+          ],
+          [
+            720,
+            168,
+            10
+          ],
+          [
+            859,
+            207,
+            10
+          ],
+          [
+            999,
+            187,
+            10
+          ],
+          [
+            1119,
+            135,
+            10
+          ]
+        ],
+        "fill": "#fbf3e0"
+      }
+    ]
+  },
+  {
+    "id": "silver-anniversary-soiree",
+    "name": "Silver Anniversary Soirée",
+    "category": "Anniversary",
+    "theme": "Silver & White",
+    "tags": [
+      "anniversary",
+      "silver",
+      "chandelier",
+      "table"
+    ],
+    "floorPlanReady": false,
+    "elementCount": 27,
+    "elements": [
+      {
+        "id": "bg",
+        "type": "rect",
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 800,
+        "fill": "#f3f1ec"
+      },
+      {
+        "id": "edgeL",
+        "type": "path",
+        "d": "M0,0 C 90,160 100,560 0,800 Z",
+        "fill": "#e1dfdb"
+      },
+      {
+        "id": "edgeR",
+        "type": "path",
+        "d": "M1200,0 C 1110,160 1100,560 1200,800 Z",
+        "fill": "#e1dfdb"
+      },
+      {
+        "id": "tableTop",
+        "type": "poly",
+        "points": [
+          [
+            110,
+            499
+          ],
+          [
+            1090,
+            499
+          ],
+          [
+            1200,
+            581
+          ],
+          [
+            0,
+            581
+          ]
+        ],
+        "fill": "#fefcf8"
+      },
+      {
+        "id": "tableFront",
+        "type": "rect",
+        "x": 0,
+        "y": 581,
+        "w": 1200,
+        "h": 219,
+        "fill": "#fdfbf6"
+      },
+      {
+        "id": "tableEdge",
+        "type": "line",
+        "x1": 0,
+        "y1": 581,
+        "x2": 1200,
+        "y2": 581,
+        "stroke": "#d8d2c4",
+        "w": 4
+      },
+      {
+        "id": "dots",
+        "type": "dotRow",
+        "x0": 120,
+        "x1": 999,
+        "y": 680,
+        "n": 12,
+        "r": 10,
+        "fill": "#c5cad6"
+      },
+      {
+        "id": "rod",
+        "type": "line",
+        "x1": 600,
+        "y1": 0,
+        "x2": 600,
+        "y2": 139,
+        "stroke": "#a9b0bb",
+        "w": 5
+      },
+      {
+        "id": "shade",
+        "type": "poly",
+        "points": [
+          [
+            459,
+            139
+          ],
+          [
+            742,
+            139
+          ],
+          [
+            682,
+            219
+          ],
+          [
+            519,
+            219
+          ]
+        ],
+        "fill": "#d6d9df",
+        "stroke": "#a9b0bb",
+        "sw": 5
+      },
+      {
+        "id": "armL",
+        "type": "line",
+        "x1": 516,
+        "y1": 219,
+        "x2": 480,
+        "y2": 351,
+        "stroke": "#a9b0bb",
+        "w": 4
+      },
+      {
+        "id": "armR",
+        "type": "line",
+        "x1": 682,
+        "y1": 219,
+        "x2": 718,
+        "y2": 351,
+        "stroke": "#a9b0bb",
+        "w": 4
+      },
+      {
+        "id": "armM",
+        "type": "line",
+        "x1": 600,
+        "y1": 219,
+        "x2": 600,
+        "y2": 391,
+        "stroke": "#a9b0bb",
+        "w": 4
+      },
+      {
+        "id": "dropL",
+        "type": "circle",
+        "cx": 480,
+        "cy": 351,
+        "r": 14,
+        "fill": "#ffffff",
+        "stroke": "#a9b0bb",
+        "sw": 3
+      },
+      {
+        "id": "dropR",
+        "type": "circle",
+        "cx": 718,
+        "cy": 351,
+        "r": 14,
+        "fill": "#ffffff",
+        "stroke": "#a9b0bb",
+        "sw": 3
+      },
+      {
+        "id": "dropM",
+        "type": "circle",
+        "cx": 600,
+        "cy": 391,
+        "r": 16,
+        "fill": "#ffffff",
+        "stroke": "#a9b0bb",
+        "sw": 3
+      },
+      {
+        "id": "smallL",
+        "type": "circle",
+        "cx": 540,
+        "cy": 298,
+        "r": 8,
+        "fill": "#ffffff",
+        "stroke": "#a9b0bb",
+        "sw": 2
+      },
+      {
+        "id": "smallR",
+        "type": "circle",
+        "cx": 660,
+        "cy": 298,
+        "r": 8,
+        "fill": "#ffffff",
+        "stroke": "#a9b0bb",
+        "sw": 2
+      },
+      {
+        "id": "bowlM",
+        "type": "rect",
+        "x": 540,
+        "y": 476,
+        "w": 120,
+        "h": 48,
+        "fill": "#c5cdd9",
+        "rx": 12
+      },
+      {
+        "id": "bowlL",
+        "type": "rect",
+        "x": 260,
+        "y": 490,
+        "w": 79,
+        "h": 43,
+        "fill": "#c5cdd9",
+        "rx": 10
+      },
+      {
+        "id": "bowlR",
+        "type": "rect",
+        "x": 860,
+        "y": 490,
+        "w": 79,
+        "h": 43,
+        "fill": "#c5cdd9",
+        "rx": 10
+      },
+      {
+        "id": "bloomM1",
+        "type": "circle",
+        "cx": 560,
+        "cy": 470,
+        "r": 22,
+        "fill": "#fceeee"
+      },
+      {
+        "id": "bloomM2",
+        "type": "circle",
+        "cx": 600,
+        "cy": 458,
+        "r": 26,
+        "fill": "#fceeee"
+      },
+      {
+        "id": "bloomM3",
+        "type": "circle",
+        "cx": 642,
+        "cy": 470,
+        "r": 22,
+        "fill": "#fceeee"
+      },
+      {
+        "id": "leafL",
+        "type": "circle",
+        "cx": 528,
+        "cy": 466,
+        "r": 9,
+        "fill": "#6f8f75"
+      },
+      {
+        "id": "leafR",
+        "type": "circle",
+        "cx": 672,
+        "cy": 466,
+        "r": 9,
+        "fill": "#6f8f75"
+      },
+      {
+        "id": "bloomL",
+        "type": "circle",
+        "cx": 299,
+        "cy": 484,
+        "r": 14,
+        "fill": "#fceeee"
+      },
+      {
+        "id": "bloomR",
+        "type": "circle",
+        "cx": 899,
+        "cy": 484,
+        "r": 14,
+        "fill": "#fceeee"
+      }
+    ]
+  },
+  {
+    "id": "soft-baby-shower-garden",
+    "name": "Soft Baby Shower Garden",
+    "category": "Baby shower",
+    "theme": "Soft Pastel",
+    "tags": [
+      "baby shower",
+      "pastel",
+      "balloons",
+      "pampas"
+    ],
+    "floorPlanReady": false,
+    "elementCount": 14,
+    "elements": [
+      {
+        "id": "top",
+        "type": "rect",
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 260,
+        "fill": "#c8d8c0"
+      },
+      {
+        "id": "scallops",
+        "type": "scallops",
+        "y": 215,
+        "dir": "down",
+        "r": 36,
+        "gap": 54,
+        "rectH": 65,
+        "fill": "#dce8d5"
+      },
+      {
+        "id": "mid",
+        "type": "rect",
+        "x": 0,
+        "y": 252,
+        "w": 1200,
+        "h": 346,
+        "fill": "#f7f0ea"
+      },
+      {
+        "id": "floor",
+        "type": "rect",
+        "x": 0,
+        "y": 598,
+        "w": 1200,
+        "h": 202,
+        "fill": "#efe3d5"
+      },
+      {
+        "id": "mat",
+        "type": "rect",
+        "x": 502,
+        "y": 641,
+        "w": 357,
+        "h": 21,
+        "fill": "#e5d7c3",
+        "rx": 10
+      },
+      {
+        "id": "s1",
+        "type": "line",
+        "x1": 341,
+        "y1": 658,
+        "x2": 259,
+        "y2": 516,
+        "stroke": "#cbb89a",
+        "w": 3
+      },
+      {
+        "id": "s2",
+        "type": "line",
+        "x1": 341,
+        "y1": 658,
+        "x2": 380,
+        "y2": 446,
+        "stroke": "#cbb89a",
+        "w": 3
+      },
+      {
+        "id": "s3",
+        "type": "line",
+        "x1": 341,
+        "y1": 658,
+        "x2": 478,
+        "y2": 527,
+        "stroke": "#cbb89a",
+        "w": 3
+      },
+      {
+        "id": "s4",
+        "type": "line",
+        "x1": 341,
+        "y1": 658,
+        "x2": 339,
+        "y2": 573,
+        "stroke": "#cbb89a",
+        "w": 3
+      },
+      {
+        "id": "b1",
+        "type": "circle",
+        "cx": 259,
+        "cy": 422,
+        "r": 94,
+        "fill": "#f6c6ce"
+      },
+      {
+        "id": "b2",
+        "type": "circle",
+        "cx": 380,
+        "cy": 362,
+        "r": 84,
+        "fill": "#cfe0ef"
+      },
+      {
+        "id": "b3",
+        "type": "circle",
+        "cx": 478,
+        "cy": 447,
+        "r": 80,
+        "fill": "#fde8bb"
+      },
+      {
+        "id": "b4",
+        "type": "circle",
+        "cx": 339,
+        "cy": 499,
+        "r": 74,
+        "fill": "#e6dcf0"
+      },
+      {
+        "id": "pampas",
+        "type": "pampas",
+        "x": 880,
+        "y": 442,
+        "s": 1.25,
+        "sx": 0.7
+      }
+    ]
+  },
+  {
+    "id": "valentines-candlelit-dinner",
+    "name": "Valentine's Candlelit Dinner",
+    "category": "Valentine's",
+    "theme": "Crimson & Candlelight",
+    "tags": [
+      "valentine",
+      "candles",
+      "dinner",
+      "romantic"
+    ],
+    "floorPlanReady": false,
+    "elementCount": 21,
+    "elements": [
+      {
+        "id": "bg",
+        "type": "rect",
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 800,
+        "fill": "#22100f"
+      },
+      {
+        "id": "halo",
+        "type": "circle",
+        "cx": 600,
+        "cy": 353,
+        "r": 380,
+        "fill": "#3e1a14"
+      },
+      {
+        "id": "floor",
+        "type": "rect",
+        "x": 0,
+        "y": 658,
+        "w": 1200,
+        "h": 142,
+        "fill": "#240f10"
+      },
+      {
+        "id": "curtainL",
+        "type": "path",
+        "d": "M0,0 L120,0 C 165,200 170,420 117,658 L0,658 Z",
+        "fill": "#8e1f35"
+      },
+      {
+        "id": "curtainR",
+        "type": "path",
+        "d": "M1200,0 L1080,0 C 1035,200 1030,420 1083,658 L1200,658 Z",
+        "fill": "#8e1f35"
+      },
+      {
+        "id": "tableEdge",
+        "type": "ellipse",
+        "cx": 600,
+        "cy": 617,
+        "rx": 380,
+        "ry": 85,
+        "fill": "#c9a87a"
+      },
+      {
+        "id": "table",
+        "type": "ellipse",
+        "cx": 600,
+        "cy": 605,
+        "rx": 380,
+        "ry": 85,
+        "fill": "#f2e4d0",
+        "stroke": "#c9a87a",
+        "sw": 5
+      },
+      {
+        "id": "glowL",
+        "type": "circle",
+        "cx": 480,
+        "cy": 408,
+        "r": 69,
+        "fill": "#8a6a3c",
+        "opacity": 0.6
+      },
+      {
+        "id": "glowR",
+        "type": "circle",
+        "cx": 720,
+        "cy": 408,
+        "r": 69,
+        "fill": "#8a6a3c",
+        "opacity": 0.6
+      },
+      {
+        "id": "candleL",
+        "type": "rect",
+        "x": 471,
+        "y": 427,
+        "w": 19,
+        "h": 123,
+        "fill": "#f6e6cc",
+        "rx": 4
+      },
+      {
+        "id": "candleR",
+        "type": "rect",
+        "x": 711,
+        "y": 427,
+        "w": 19,
+        "h": 123,
+        "fill": "#f6e6cc",
+        "rx": 4
+      },
+      {
+        "id": "flameL",
+        "type": "ellipse",
+        "cx": 480,
+        "cy": 408,
+        "rx": 8,
+        "ry": 18,
+        "fill": "#ffd24a"
+      },
+      {
+        "id": "flameR",
+        "type": "ellipse",
+        "cx": 720,
+        "cy": 408,
+        "rx": 8,
+        "ry": 18,
+        "fill": "#ffd24a"
+      },
+      {
+        "id": "glassL",
+        "type": "circle",
+        "cx": 380,
+        "cy": 569,
+        "r": 38,
+        "fill": "none",
+        "stroke": "#e2d3b4",
+        "sw": 3,
+        "opacity": 0.7
+      },
+      {
+        "id": "glassR",
+        "type": "circle",
+        "cx": 819,
+        "cy": 569,
+        "r": 38,
+        "fill": "none",
+        "stroke": "#e2d3b4",
+        "sw": 3,
+        "opacity": 0.7
+      },
+      {
+        "id": "rose1",
+        "type": "circle",
+        "cx": 540,
+        "cy": 569,
+        "r": 22,
+        "fill": "#b11f3c"
+      },
+      {
+        "id": "rose2",
+        "type": "circle",
+        "cx": 578,
+        "cy": 569,
+        "r": 22,
+        "fill": "#b11f3c"
+      },
+      {
+        "id": "rose3",
+        "type": "circle",
+        "cx": 619,
+        "cy": 569,
+        "r": 22,
+        "fill": "#b11f3c"
+      },
+      {
+        "id": "rose4",
+        "type": "circle",
+        "cx": 646,
+        "cy": 569,
+        "r": 22,
+        "fill": "#b11f3c"
+      },
+      {
+        "id": "petalsL",
+        "type": "dotRow",
+        "x0": 233,
+        "x1": 370,
+        "y": 620,
+        "n": 5,
+        "r": 10,
+        "fill": "#e8a5b0"
+      },
+      {
+        "id": "petalsR",
+        "type": "dotRow",
+        "x0": 799,
+        "x1": 932,
+        "y": 620,
+        "n": 5,
+        "r": 10,
+        "fill": "#e8a5b0"
+      }
+    ]
+  },
+  {
+    "id": "valentines-sweetheart-stage",
+    "name": "Valentine's Sweetheart Stage",
+    "category": "Valentine's",
+    "theme": "Rose & Noir",
+    "tags": [
+      "valentine",
+      "stage",
+      "ring",
+      "loveseat"
+    ],
+    "floorPlanReady": false,
+    "elementCount": 9,
+    "elements": [
+      {
+        "id": "glow",
+        "type": "bg",
+        "stops": [
+          [
+            0,
+            "#4e1522"
+          ],
+          [
+            0.55,
+            "#2a0f17"
+          ],
+          [
+            1,
+            "#150a10"
+          ]
+        ],
+        "dir": "radial",
+        "cx": 600,
+        "cy": 380,
+        "r": 620
+      },
+      {
+        "id": "floor",
+        "type": "rect",
+        "x": 0,
+        "y": 641,
+        "w": 1200,
+        "h": 159,
+        "fill": "#2a0f17"
+      },
+      {
+        "id": "stars",
+        "type": "stars",
+        "items": [
+          [
+            79,
+            79,
+            5
+          ],
+          [
+            219,
+            139,
+            5
+          ],
+          [
+            358,
+            58,
+            5
+          ],
+          [
+            500,
+            38,
+            5
+          ],
+          [
+            699,
+            38,
+            5
+          ],
+          [
+            840,
+            58,
+            5
+          ],
+          [
+            979,
+            139,
+            5
+          ],
+          [
+            1119,
+            79,
+            5
+          ],
+          [
+            120,
+            298,
+            5
+          ],
+          [
+            1080,
+            298,
+            5
+          ]
+        ],
+        "fill": "#ffd685"
+      },
+      {
+        "id": "ring",
+        "type": "ringGarland",
+        "cx": 600,
+        "cy": 370,
+        "R": 245,
+        "n": 28,
+        "r": 29,
+        "a0": 105,
+        "a1": 435,
+        "from": "#b11f3c",
+        "to": "#b11f3c",
+        "inner": "#d9506a",
+        "innerK": 0.8
+      },
+      {
+        "id": "ringDots",
+        "type": "ringGarland",
+        "cx": 600,
+        "cy": 370,
+        "R": 212,
+        "n": 64,
+        "r": 3.5,
+        "a0": 0,
+        "a1": 360,
+        "from": "#f5e7c8",
+        "to": "#f5e7c8"
+      },
+      {
+        "id": "seatBody",
+        "type": "rect",
+        "x": 449,
+        "y": 594,
+        "w": 302,
+        "h": 86,
+        "fill": "#a32436",
+        "rx": 24
+      },
+      {
+        "id": "seatCushion",
+        "type": "rect",
+        "x": 470,
+        "y": 540,
+        "w": 260,
+        "h": 74,
+        "fill": "#c0344b",
+        "rx": 30
+      },
+      {
+        "id": "flameL",
+        "type": "ellipse",
+        "cx": 339,
+        "cy": 674,
+        "rx": 8,
+        "ry": 14,
+        "fill": "#ffc84a"
+      },
+      {
+        "id": "flameR",
+        "type": "ellipse",
+        "cx": 859,
+        "cy": 674,
+        "rx": 8,
+        "ry": 14,
+        "fill": "#ffc84a"
+      }
+    ]
+  },
+  {
+    "id": "royal-gold-mandap",
+    "name": "Royal Gold Mandap",
+    "category": "Wedding",
+    "theme": "Emerald & Gold",
+    "tags": [
+      "wedding",
+      "mandap",
+      "gold",
+      "royal"
+    ],
+    "floorPlanReady": false,
+    "elementCount": 19,
+    "elements": [
+      {
+        "id": "bg",
+        "type": "rect",
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 800,
+        "fill": "#2a1c12"
+      },
+      {
+        "id": "floor",
+        "type": "rect",
+        "x": 0,
+        "y": 600,
+        "w": 1200,
+        "h": 200,
+        "fill": "#4a3020"
+      },
+      {
+        "id": "glowL",
+        "type": "ellipse",
+        "cx": 140,
+        "cy": 680,
+        "rx": 120,
+        "ry": 28,
+        "fill": "#5b3f27"
+      },
+      {
+        "id": "glowR",
+        "type": "ellipse",
+        "cx": 1060,
+        "cy": 680,
+        "rx": 120,
+        "ry": 28,
+        "fill": "#5b3f27"
+      },
+      {
+        "id": "stars",
+        "type": "stars",
+        "items": [
+          [
+            80,
+            120,
+            8
+          ],
+          [
+            180,
+            200,
+            6
+          ],
+          [
+            1120,
+            120,
+            8
+          ],
+          [
+            1020,
+            200,
+            6
+          ]
+        ],
+        "fill": "#8f7d62"
+      },
+      {
+        "id": "rod",
+        "type": "line",
+        "x1": 600,
+        "y1": 40,
+        "x2": 600,
+        "y2": 140,
+        "stroke": "#d8b25a",
+        "w": 6
+      },
+      {
+        "id": "shade",
+        "type": "poly",
+        "points": [
+          [
+            476,
+            137
+          ],
+          [
+            724,
+            137
+          ],
+          [
+            678,
+            248
+          ],
+          [
+            522,
+            248
+          ]
+        ],
+        "fill": "#b8934a",
+        "stroke": "#d6b26a",
+        "sw": 6
+      },
+      {
+        "id": "orbTop",
+        "type": "circle",
+        "cx": 600,
+        "cy": 160,
+        "r": 40,
+        "fill": "#e3cc8e",
+        "opacity": 0.85
+      },
+      {
+        "id": "orbBottom",
+        "type": "circle",
+        "cx": 600,
+        "cy": 285,
+        "r": 40,
+        "fill": "#e3cc8e",
+        "opacity": 0.85
+      },
+      {
+        "id": "roof",
+        "type": "poly",
+        "points": [
+          [
+            300,
+            232
+          ],
+          [
+            600,
+            140
+          ],
+          [
+            900,
+            232
+          ]
+        ],
+        "fill": "#1f4b37"
+      },
+      {
+        "id": "beam",
+        "type": "rect",
+        "x": 300,
+        "y": 232,
+        "w": 600,
+        "h": 16,
+        "fill": "#e6c27a"
+      },
+      {
+        "id": "valance",
+        "type": "path",
+        "d": "M330 248 Q 400 345 500 250 Q 600 345 700 250 Q 800 345 870 248 Z",
+        "fill": "#2d6b4e"
+      },
+      {
+        "id": "valanceTrim",
+        "type": "path",
+        "d": "M330 248 Q 400 345 500 250 Q 600 345 700 250 Q 800 345 870 248",
+        "fill": "none",
+        "stroke": "#e6c27a",
+        "sw": 6
+      },
+      {
+        "id": "pillarL",
+        "type": "rect",
+        "x": 290,
+        "y": 240,
+        "w": 40,
+        "h": 385,
+        "fill": "#d8b25a"
+      },
+      {
+        "id": "baseL",
+        "type": "rect",
+        "x": 280,
+        "y": 624,
+        "w": 60,
+        "h": 24,
+        "fill": "#e6c27a"
+      },
+      {
+        "id": "pillarR",
+        "type": "rect",
+        "x": 870,
+        "y": 240,
+        "w": 40,
+        "h": 385,
+        "fill": "#d8b25a"
+      },
+      {
+        "id": "baseR",
+        "type": "rect",
+        "x": 860,
+        "y": 624,
+        "w": 60,
+        "h": 24,
+        "fill": "#e6c27a"
+      },
+      {
+        "id": "platform",
+        "type": "rect",
+        "x": 380,
+        "y": 580,
+        "w": 440,
+        "h": 60,
+        "fill": "#e6c27a"
+      },
+      {
+        "id": "cushion",
+        "type": "rect",
+        "x": 410,
+        "y": 524,
+        "w": 380,
+        "h": 56,
+        "fill": "#f2ead6"
+      }
+    ]
+  }
+]

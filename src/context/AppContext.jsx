@@ -23,6 +23,7 @@ export function AppProvider({ children }) {
                 setCloudReady(false);
                 setDesigns([]);
                 setMoodboards([]);
+                setBudgets([]);
                 setBookings([]);
                 setNotifications([]);
                 setTemplateFavorites([]);
@@ -44,14 +45,8 @@ export function AppProvider({ children }) {
     const [sidebarCollapsed, setSidebarCollapsedState] = useState(false);
     const [mobileNavOpen, setMobileNavOpen] = useState(false);
     const [designs, setDesigns] = useState([]);
-    const [moodboards, setMoodboards] = useState(() => {
-        try {
-            if (typeof localStorage === 'undefined') return [];
-            const stored = JSON.parse(localStorage.getItem('vedika-moodboards') || '[]');
-            return Array.isArray(stored) ? stored : [];
-        }
-        catch { return []; }
-    });
+    const [moodboards, setMoodboards] = useState([]);
+    const [budgets, setBudgets] = useState([]);
     const [bookings, setBookings] = useState([]);
     const [notifications, setNotifications] = useState([]);
     const [profile, setProfileState] = useState(DEFAULT_PROFILE);
@@ -59,10 +54,6 @@ export function AppProvider({ children }) {
     const [templateFavorites, setTemplateFavorites] = useState([]);
     const [decoratorFavorites, setDecoratorFavorites] = useState([]);
     const [activeDesignId, setActiveDesignIdState] = useState(null);
-    useEffect(() => {
-        try { localStorage.setItem('vedika-moodboards', JSON.stringify(moodboards)); }
-        catch (error) { console.warn('Could not persist moodboards on this device', error); }
-    }, [moodboards]);
     useEffect(() => {
         if (!supabase || !user) { setCloudReady(false); return; }
         let alive = true;
@@ -87,6 +78,7 @@ export function AppProvider({ children }) {
             if (p) {
                 setDesigns((p.designs ?? []).filter((item) => !item.isDemo && !item.id?.startsWith('design-seed-')));
                 setMoodboards((p.moodboards ?? []).filter((item) => !item.isDemo));
+                setBudgets(Array.isArray(p.budgets) ? p.budgets : []);
                 setProfileState({ ...DEFAULT_PROFILE, ...p.profile, email: user.email ?? p.profile?.email ?? DEFAULT_PROFILE.email });
                 setWorkspace({ ...DEFAULT_WORKSPACE, ...p.workspace });
                 setTemplateFavorites(p.templateFavorites ?? []);
@@ -97,6 +89,7 @@ export function AppProvider({ children }) {
             } else {
                 setDesigns([]);
                 setMoodboards([]);
+                setBudgets([]);
                 setNotifications([]);
                 setTemplateFavorites([]);
                 setDecoratorFavorites([]);
@@ -110,7 +103,7 @@ export function AppProvider({ children }) {
     }, [user?.id, loadAttempt]);
     useEffect(() => {
         if (!supabase || !user || !cloudReady || cloudError) return;
-        const payload = { designs, moodboards, profile, workspace, templateFavorites, decoratorFavorites, locale, notifications, activeDesignId };
+        const payload = { designs, moodboards, budgets, profile, workspace, templateFavorites, decoratorFavorites, locale, notifications, activeDesignId };
         setCloudSaveStatus('saving');
         const timer = setTimeout(async () => {
             const { error } = await supabase.from('user_data').upsert({ user_id: user.id, payload, updated_at: new Date().toISOString() });
@@ -120,7 +113,7 @@ export function AppProvider({ children }) {
             } else setCloudSaveStatus('saved');
         }, 500);
         return () => clearTimeout(timer);
-    }, [user?.id, cloudReady, cloudError, designs, moodboards, profile, workspace, templateFavorites, decoratorFavorites, locale, notifications, activeDesignId]);
+    }, [user?.id, cloudReady, cloudError, designs, moodboards, budgets, profile, workspace, templateFavorites, decoratorFavorites, locale, notifications, activeDesignId]);
     const signIn = useCallback(async (email, password) => {
         if (!supabase) return { error: 'Account sign-in is unavailable. Configure the Supabase URL and publishable key, then restart the app.' };
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -185,6 +178,20 @@ export function AppProvider({ children }) {
     const toggleMoodboardFavorite = useCallback((id) => {
         setMoodboards((prev) => prev.map((m) => (m.id === id ? { ...m, isFavorite: !m.isFavorite } : m)));
     }, []);
+    const saveBudget = useCallback((budget) => {
+        setBudgets((prev) => {
+            const idx = prev.findIndex((item) => item.id === budget.id);
+            if (idx >= 0) {
+                const next = [...prev];
+                next[idx] = budget;
+                return next;
+            }
+            return [budget, ...prev];
+        });
+    }, []);
+    const deleteBudget = useCallback((id) => {
+        setBudgets((prev) => prev.filter((item) => item.id !== id));
+    }, []);
     const saveBooking = useCallback(async (booking) => {
         const saved = await createBookingRequest(booking);
         setBookings((prev) => [saved, ...prev]);
@@ -229,6 +236,9 @@ export function AppProvider({ children }) {
         saveMoodboard,
         deleteMoodboard,
         toggleMoodboardFavorite,
+        budgets,
+        saveBudget,
+        deleteBudget,
         bookings,
         saveBooking,
         setBookingStatus,
@@ -276,6 +286,9 @@ export function AppProvider({ children }) {
         saveMoodboard,
         deleteMoodboard,
         toggleMoodboardFavorite,
+        budgets,
+        saveBudget,
+        deleteBudget,
         bookings,
         saveBooking,
         setBookingStatus,

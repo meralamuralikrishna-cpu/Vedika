@@ -9,7 +9,7 @@ import { Wordmark } from '@/components/brand/Wordmark';
 
 export function Overview() {
   const navigate = useNavigate();
-  const { locale, designs, moodboards, canSaveData, setActiveDesignId } = useApp();
+  const { locale, designs, moodboards, budgets, canSaveData, setActiveDesignId } = useApp();
 
   return (
     <div className="animate-fade-in">
@@ -37,6 +37,7 @@ export function Overview() {
           locale={locale}
           designs={designs}
           moodboards={moodboards}
+          budgets={budgets}
           canSaveData={canSaveData}
           onOpenDesign={(design) => {
             setActiveDesignId(design.id);
@@ -47,6 +48,8 @@ export function Overview() {
           onViewAllDesigns={() => navigate('/designs')}
           onViewMoodboards={() => navigate('/moodboards')}
           onCreateMoodboard={() => navigate('/moodboards')}
+          onViewBudget={() => navigate('/budget')}
+          onCreateBudget={() => navigate('/budget')}
           onOpenShared={(share) => navigate(`/share/${encodeURIComponent(share.id)}`)}
           onExploreCategory={(category) => navigate(`/templates?category=${encodeURIComponent(category)}`)}
         />

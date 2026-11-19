@@ -12,6 +12,7 @@
 .tpl-grid { display:grid; gap:22px; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); }
 .tpl-card { position:relative; background:var(--paper); border:1px solid var(--line); border-radius:14px; overflow:hidden; display:flex; flex-direction:column; }
 .tpl-cover { position:relative; padding:0; border:0; background:none; cursor:pointer; aspect-ratio:4/3; display:block; width:100%; }
+.tpl-cover--wide { aspect-ratio:3/2; }
 .tpl-cover img, .tpl-cover svg { width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease; }
 .tpl-cover:hover img, .tpl-cover:hover svg { transform:scale(1.04); }
 .tpl-badge { position:absolute; left:10px; bottom:10px; background:rgba(255,250,243,.94); color:var(--ink); font-size:12px; font-weight:600; padding:4px 9px; border-radius:6px; }

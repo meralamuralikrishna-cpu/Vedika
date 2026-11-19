@@ -6,6 +6,7 @@ import StudioToolbar from './TemplateStudioToolbar';
 import ElementPalette from './ElementPalette';
 import PropertiesPanel from './TemplateStudioPropertiesPanel';
 import { DEFAULT_SETTINGS } from '@/data/themes';
+import CoverDesignEditor from './CoverDesignEditor';
 import './studio.css';
 
 export default function DesignStudio({
@@ -76,6 +77,10 @@ export default function DesignStudio({
   const handleFit = useCallback(() => {
     setZoom(0.95);
   }, []);
+
+  if (initialScene?.coverElements) {
+    return <CoverDesignEditor initialScene={initialScene} initialSettings={initialSettings} onSave={onSave} onShare={onShare} onClose={onClose} />;
+  }
 
   return (
     <div className="studio-app-container">
